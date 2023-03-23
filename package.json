@@ -1,0 +1,19 @@
+{
+  "name": "cinelog",
+  "version": "1.0.0",
+  "description": "Final Project Codebase for Group 37",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/parth-panchal/cineLog.git"
+  },
+  "author": "Atharva Parte, Jayanth Dannana, Parshottan Seenanan, Parth Panchal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/parth-panchal/cineLog/issues"
+  },
+  "homepage": "https://github.com/parth-panchal/cineLog#readme"
+}
