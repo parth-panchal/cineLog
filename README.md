@@ -1,6 +1,7 @@
 # cineLog
 
 ## Description
+
 This is the group Project for CS 546 Web Programming I @ Stevens Institute of Technology
 Repository to house final project codebase for 2023S CS546
 
