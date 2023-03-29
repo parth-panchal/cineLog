@@ -1,15 +1,15 @@
 # cineLog
 
 ## Description
-
+This is the group Project for CS 546 Web Programming I @ Stevens Institute of Technology
 Repository to house final project codebase for 2023S CS546
 
 ## Group Members
 
-- Atharva Parte
-- Jayanth Dannana
-- Parshotan Seenanan
-- Parth Panchal
+- [Atharva Parte](https://github.com/atharvaa9)
+- [Jayanth Dannana](https://github.com/Djayanth15)
+- [Parshotan Seenanan](https://github.com/parshsee)
+- [Parth Panchal](https://github.com/parth-panchal)
 
 ## Technologies
 
@@ -18,6 +18,13 @@ Repository to house final project codebase for 2023S CS546
 - MongoDB
 
 ## References
+
+### Dependencies
+
+- MongoDB Driver
+- Express
+- Axios
+- Dotenv
 
 ### APIs Used
 
