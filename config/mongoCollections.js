@@ -16,4 +16,4 @@ const getCollectionFn = (collection) => {
 // TODO:
 // Add DB Collections
 export const users= getCollectionFn('users');
-export const trendingMovies= getCollectionFn('trending movies');
+export const trendingMovies= getCollectionFn('trending');
