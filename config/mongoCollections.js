@@ -1,4 +1,4 @@
-import { dbConnection } from './mongoConnection.js';
+import { dbConnection } from "./mongoConnection.js";
 
 const getCollectionFn = (collection) => {
   let _col = undefined;
@@ -15,5 +15,6 @@ const getCollectionFn = (collection) => {
 
 // TODO:
 // Add DB Collections
-export const users= getCollectionFn('users');
-export const trendingMovies= getCollectionFn('trending');
+export const users = getCollectionFn("users");
+export const activity = getCollectionFn("activity");
+export const trendingMovies = getCollectionFn("trending");
