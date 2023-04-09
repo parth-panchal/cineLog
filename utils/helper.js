@@ -11,6 +11,11 @@ const params = {
 	api_key: process.env.API_KEY
 };
 
+/*
+Given movieTitle: String
+Calls TheMovieDB API endpoint to search for a movie name
+Returns data: Object, contains array with movies matching (or similar) to movieTitle
+*/
 const searchMovie = async (movieTitle) => {
 	const endpoint = '/search/movie';
 
@@ -21,6 +26,11 @@ const searchMovie = async (movieTitle) => {
 	return data;
 };
 
+/*
+Given movieId: int
+Calls TheMovieDB API endpoint to search for movie info
+Returns data: Object, contains movie information fields
+*/
 const getMovieInfo = async (movieId) => {
 	const endpoint = `/movie/${movieId}`;
 
@@ -29,6 +39,11 @@ const getMovieInfo = async (movieId) => {
 	return data;
 };
 
+/*
+Given movieId: int
+Calls TheMovieDB API endpoint to get recommendations
+Returns data: Object, contains array with movies relevant to movieTitle
+*/
 const getRecommendations = async (movieId) => {
 	const endpoint = `/movie/${movieId}/recommendations`;
 
