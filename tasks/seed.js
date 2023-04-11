@@ -57,14 +57,15 @@ try {
 } catch (e) {
   console.log(e);
 }
-try {
-  let parth = await activity.getLogsByUsername("parthpanchal");
-  let activity_to_delete = parth[0]._id.toString();
-  let change = await activity.deleteLog(activity_to_delete);
-  console.log(change);
-} catch (e) {
-  console.log(e);
-}
+// we don't need this anymore since we're now using the userId instead of username
+// try {
+//   let parth = await activity.getLogsByUsername("parthpanchal");
+//   let activity_to_delete = parth[0]._id.toString();
+//   let change = await activity.deleteLog(activity_to_delete);
+//   console.log(change);
+// } catch (e) {
+//   console.log(e);
+// }
 try {
 } catch (e) {
   console.log(e);
