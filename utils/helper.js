@@ -34,9 +34,13 @@ Returns data: Object, contains movie information fields
 const getMovieInfo = async (movieId) => {
 	const endpoint = `/movie/${movieId}`;
 
-	const { data } = await axios.get(BASE_URL + endpoint, { params });
-
-	return data;
+	try {
+		const { data } = await axios.get(BASE_URL + endpoint, { params });
+		return data;
+	} catch (error) {
+		// console.log(error);
+		throw "Error: Movie not found";
+	}
 };
 
 /*
@@ -48,6 +52,7 @@ const getRecommendations = async (movieId) => {
 	const endpoint = `/movie/${movieId}/recommendations`;
 
 	const { data } = await axios.get(BASE_URL + endpoint, { params });
+	console.log("HERE");
 
 	return data;
 };
