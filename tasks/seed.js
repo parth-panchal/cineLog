@@ -42,7 +42,7 @@ try {
 }
 try {
   let newLog = await activity.createLog(
-    550,
+    0, //this is the case I was talking about. This messes with axios badly. It just throws the entire error body that is returned from the server.
     "parthpanchal",
     "This is a review",
     5,
