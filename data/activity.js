@@ -8,19 +8,17 @@ import { trending } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
 import * as validation from "../utils/validation.js";
 
-const createLog = async (movieId, username, review, rating, date) => {
-  validation.checkProvided(movieId, username, review, rating);
-  movieId = validation.checkMovieId(movieId);
-  // i guess we don't need to check username here, since we're just using it to link the activity to the user...still keeping it here just in case
-  username = validation.checkUsername(username);
-  // do we need to have a check here to also see if the username exists in the database, or will that be taken care of during the session creation?
+const createLog = async (movieId, userId, review, rating, date) => {
+  validation.checkProvided(movieId, userId, review, rating);
+  movieId = validation.checkMovieId(movieId, "Movie ID");
+  userId = validation.checkId(userId, "User ID"); // need to add check here from user data functions to see if user exists?
   review = validation.checkString(review, "Review");
   rating = validation.checkRating(rating, "Rating");
   date = validation.checkDate(date, "Date");
 
   let newLog = {
     movieId: movieId,
-    username: username,
+    userId: userId,
     review: review,
     rating: rating,
     date: date,
@@ -44,10 +42,10 @@ const getLogById = async (activityId) => {
 };
 
 // Get all activity logs for a given username
-const getLogsByUsername = async (username) => {
-  // need to add check here from user data functions to see if user exists
+const getLogsByUserId = async (userId) => {
+  // need to add check here from user data functions to see if user exists?
   const logs = await activity();
-  return await logs.find({ username: username }).toArray();
+  return await logs.find({ _id: new ObjectId(userId) }).toArray();
 };
 
 const getAllLogs = async () => {
@@ -57,11 +55,11 @@ const getAllLogs = async () => {
 };
 
 // Edit an activity log
-const editLog = async (activityId, movieId, username, review, rating, date) => {
-  validation.checkProvided(activityId, movieId, username, review, rating, date);
+const editLog = async (activityId, movieId, userId, review, rating, date) => {
+  validation.checkProvided(activityId, movieId, userId, review, rating, date);
   activityId = validation.checkId(activityId, "Activity ID");
-  movieId = validation.checkMovieId(movieId);
-  username = validation.checkUsername(username);
+  movieId = validation.checkMovieId(movieId, "Movie ID");
+  userId = validation.checkId(userId, "User ID");
   review = validation.checkString(review, "Review");
   rating = validation.checkRating(rating, "Rating");
   date = validation.checkDate(date, "Date");
@@ -108,7 +106,7 @@ const deleteLog = async (activityId) => {
 
 export {
   createLog,
-  getLogsByUsername,
+  getLogsByUserId,
   getLogById,
   getAllLogs,
   editLog,
