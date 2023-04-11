@@ -137,6 +137,7 @@ export {
   checkString,
   checkStringArray,
   checkUsername,
+  checkEmail,
   checkNumber,
   checkNumberAndRoundOne,
   checkId,
