@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import { getMovieInfo } from "../utils/helper.js";
 
 const checkString = (strVal, name) => {
   if (typeof strVal !== "string") throw `Error: ${name} must be a string`;
@@ -38,7 +39,7 @@ function isNumber(char) {
 //2. can only contain letters, numbers, periods, and underscores
 //3. must be between 3 and 20 characters
 const checkUsername = (username) => {
-  username = this.checkString(username, "Username");
+  username = checkString(username, "Username");
   if (!isLetter(username.charAt(0)))
     throw "Error: Username must start with a letter";
   for (let i = 0; i < username.length; i++) {
@@ -50,6 +51,20 @@ const checkUsername = (username) => {
     throw "Error: Username must be between 3 and 20 characters";
   return username;
 };
+
+//adding a separate validation for rating, as it has different requirements
+//the idea is that when we say ratings, we're actually talking about how many 'stars' a user gives a movie,
+//so the rating must be between 0 and 5, and must be a multiple of 0.5.
+//I've seen some websites that allow users to give half stars, so I think this is a good idea.
+const checkRating = (rating) => {
+  rating = checkNumber(rating, "Rating");
+  if (rating < 0 || rating > 5) throw "Error: Rating must be between 0 and 5";
+  if (rating % 0.5 !== 0) throw "Error: Rating must be a multiple of 0.5";
+  return rating;
+};
+
+//do we really need email now? Can't we just have the user log in with the username?
+//I don't think we do, but I'll leave it here for now
 
 //validates email is in the following format:
 //1. check if email has exactly one @
@@ -91,11 +106,20 @@ const checkId = (id, name) => {
   return id;
 };
 
+const checkMovieId = (movieId) => {
+  if (movieId === undefined) throw "Error: Movie ID is required";
+  if (movieId === null) throw "Error: Movie ID cannot be null";
+  if (isNaN(movieId)) throw "Error: Movie ID must be a number";
+  let movie = getMovieInfo(movieId);
+  if (!movie) throw "Error: Movie not found";
+  return movieId;
+};
+
 // Validate that date is in MM/DD/YYYY format
 // Assume that dateVal is string
 // Will probably change depending on how we handle dates
 const checkDate = (dateVal, name) => {
-  dateVal = validateString(dateVal, name);
+  dateVal = checkString(dateVal, name);
 
   // Seperate the date into 3 parts
   // parts[0]: Months
@@ -121,6 +145,7 @@ const checkDate = (dateVal, name) => {
   const currYear = new Date(Date.now()).getFullYear();
   if (year < 1900 || year > currYear)
     `Error: Invalid format for ${name}: Year Invalid Range (1900 - ${currYear})`;
+  return dateVal;
 };
 
 // Validates that the given arguments are provided
@@ -141,6 +166,8 @@ export {
   checkNumber,
   checkNumberAndRoundOne,
   checkId,
+  checkMovieId,
+  checkRating,
   checkDate,
   checkProvided,
 };
