@@ -6,7 +6,7 @@
 import { users } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
 import * as validation from "../utils/validation.js";
-// import { checkNumber } from "../utils/validation.js";
+
 
 const exportedMethods = {
   async create(userId, title, movies) {
@@ -14,7 +14,9 @@ const exportedMethods = {
     //userId is valid
     //title is a string
     //movies is an array of integers
+    validation.checks(userId);
     userId = userId.trim();
+    if (!ObjectId.isValid(userId)) throw "invalid object ID";
     title = title.trim();
     if (!movies || !Array.isArray(movies))
       throw "You must provide an array of movies";
@@ -47,7 +49,9 @@ const exportedMethods = {
 
   async getAll(userId) {
     //check userID
-
+    validation.checks(userId);
+    userId = userId.trim();
+    if (!ObjectId.isValid(userId)) throw "invalid object ID";
     const userCollection = await users();
     const user = await userCollection.findOne({ _id: new ObjectId(id) });
     if (user === null) throw "No user with that id";
@@ -61,7 +65,7 @@ const exportedMethods = {
   },
 
   async get(listId) {
-    checks(listId);
+    validation.checks(listId);
     listId = listId.trim();
     if (!ObjectId.isValid(listId)) throw "invalid object ID";
 
@@ -82,7 +86,7 @@ const exportedMethods = {
     return list.lists[0];
   },
   async delete(listId) {
-    checks(listId);
+    validation.checks(listId);
     listId = listId.trim();
     // console.log("hi3");
     if (!ObjectId.isValid(listId)) throw "invalid object ID";
@@ -105,7 +109,6 @@ const exportedMethods = {
       { _id: userId },
       {
         $pull: { albums: { _id: new ObjectId(listId) } },
-        $set: { overallRating: newOverallRating },
       }
     );
     if (deleteInfo.modifiedCount === 0) {
@@ -115,12 +118,12 @@ const exportedMethods = {
     return updatedUser;
   },
   async updateList(listId, title, movies) {
-    checks(listId);
+    validation.checks(listId);
     listId = listId.trim();
     // console.log("hi3");
     if (!ObjectId.isValid(listId)) throw "invalid object ID";
     title = title.trim();
-    checks(title);
+    validation.checks(title);
     if (!movies || !Array.isArray(movies))
       throw "You must provide an array of movies";
     if (movies.length === 0) throw "You must supply at least one movie";
