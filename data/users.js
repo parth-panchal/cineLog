@@ -398,6 +398,7 @@ const checkUser = async (username, password) => {
   const userCollection = await users();
 
   const user = await userCollection.findOne({ username: username });
+  
 
   if (!user) {
     throw {
@@ -410,13 +411,15 @@ const checkUser = async (username, password) => {
   if (!passCheck) {
     throw {
       code: 400,
-      message: "Either the email address or password is invalid",
+      message: "Either the username or password is invalid",
     };
   }
+  user._id = userInfo._id.toString();
   return {
     firstName: user.firstName,
     lastName: user.lastName,
     username: user.username,
+    _id: user._id
   };
 };
 

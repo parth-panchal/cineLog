@@ -9,12 +9,12 @@ router
     //code to GET all lists from a user
     let userId;
     try {
-      userId = req.session.user.id ;
+      userId = req.session.user._id ;
       userId=validation.checkId(userId, "User ID");
     } catch (error) {
       return res
         .status(400)
-        .render("error",{ ErrorMessage: "A valid userId must be provided!" });
+        .render("error",{ error: "User must be " });
     }
     try {
       const lists = await listData.getAllLists(userId);
