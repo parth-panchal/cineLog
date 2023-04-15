@@ -106,11 +106,11 @@ const checkId = (id, name) => {
   return id;
 };
 
-const checkMovieId = (movieId) => {
+const checkMovieId = async (movieId) => {
   if (movieId === undefined) throw "Error: Movie ID is required";
   if (movieId === null) throw "Error: Movie ID cannot be null";
   if (isNaN(movieId)) throw "Error: Movie ID must be a number";
-  let movie = getMovieInfo(movieId);
+  let movie = await getMovieInfo(movieId);
   if (!movie) throw "Error: Movie not found";
   return movieId;
 };
