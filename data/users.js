@@ -13,19 +13,29 @@ const createUser = async (fName, lName, email, username, password) => {
 	/* TODO:
 	- Improve validation/storing for password once we learn
 	  hashing and authentication
+	- Store information as lowercase, for comparisons (validation should also lowercase
+	- Check if email is unique as well
+	)
 	*/
 	email = validation.checkEmail(email);
 	username = validation.checkUsername(username);
 	password = validation.checkString(password, "Password");
 
-	const existingUsername = await getUserByUsername(username);
+	// Try to see if the username already exists in DB
+	let existingUsername = undefined;
+	try {
+		existingUsername = await getUserByUsername(username);
+	} catch (error) {
+		// Catch the error thrown if username is not found in db
+		// But don't do anything since, it means the username is available
+	}
 	if (existingUsername) throw `Error: User already exists with that username`;
 
 	let newUser = {
-		fName: fName,
-		lName: lName,
-		email: email,
-		username: username,
+		fName: fName, //.toLowerCase(),
+		lName: lName, //.toLowerCase(),
+		email: email, //.toLowerCase(),
+		username: username, //.toLowerCase(),
 		password: password,
 		likes: [],
 		watchList: [],
@@ -44,7 +54,7 @@ const createUser = async (fName, lName, email, username, password) => {
 
 const getAllUsers = async () => {
 	const userCollection = await users();
-	const userArr = await userCollection.find({}).toArray();
+	let userArr = await userCollection.find({}).toArray();
 
 	if (!userArr) throw `Error: Could not get all bands`;
 
@@ -61,9 +71,11 @@ const getUserById = async (userId) => {
 	userId = validation.checkId(userId, "User ID");
 
 	const userCollection = await users();
-	const userInfo = userCollection.findOne({ _id: new ObjectId(userId) });
+	const userInfo = await userCollection.findOne({ _id: new ObjectId(userId) });
 
 	if (!userInfo) throw `Error: User not found`;
+
+	userInfo._id = userInfo._id.toString();
 
 	return userInfo;
 };
@@ -73,12 +85,16 @@ const getUserByUsername = async (username) => {
 	username = validation.checkUsername(username);
 
 	const userCollection = await users();
-	const userInfo = userCollection.findOne({ username: this.username });
+	const userInfo = await userCollection.findOne({ username: username });
 
 	if (!userInfo) throw `Error: User not found`;
 
+	userInfo._id = userInfo._id.toString();
+
 	return userInfo;
-}
+};
+
+
 
 const updateUser = async (userId, fName, lName, email, username, password) => {
 	validation.checkProvided("User Update Info", userId, fName, lName, email, username, password)
@@ -93,7 +109,7 @@ const updateUser = async (userId, fName, lName, email, username, password) => {
 	username = validation.checkUsername(username);
 	password = validation.checkString(password, "Password");
 
-	const existingUser = await getUserById(id);
+	const existingUser = await getUserById(userId);
 
 	const updatedUserInfo = {
 		fName: fName,
@@ -103,12 +119,18 @@ const updateUser = async (userId, fName, lName, email, username, password) => {
 		password: password
 	};
 
-	/* TODO:
-		- If user updates username, need a way to find every person that is following
-		the user and update their array.
-			--- Ignore this following is an array of userIds, can fetch their username regardless of changes to it
-	*/
+	// Checks if any of the fields are different from what already exists for user in DB
 	checkUpdate(existingUser, updatedUserInfo);
+	// Checks if the username that the user wants to change to is already in DB (used by another user)
+	// Try to see if the username already exists in DB
+	let existingUsername = undefined;
+	try {
+		existingUsername = await getUserByUsername(username);
+	} catch (error) {
+		// Catch the error thrown if username is not found in db
+		// But don't do anything since, it means the username is available
+	}
+	if (existingUsername) throw `Error: User already exists with that username`;
 
 	const userCollection = await users();
 	const updatedUser = await userCollection.findOneAndUpdate(
@@ -129,7 +151,7 @@ const updateUser = async (userId, fName, lName, email, username, password) => {
 
 const deleteUser = async (userId) => {
 	validation.checkProvided("User ID", userId);
-	id = validation.checkId(userId, "User ID");
+	userId = validation.checkId(userId, "User ID");
 
 	const userCollection = await users();
 	const deletedUser = await userCollection.findOneAndDelete(
@@ -152,7 +174,16 @@ const checkUpdate = (existingUser, updatedUserInfo) => {
 	if(existingUser.fName === updatedUserInfo.fName
 		&& existingUser.lName === updatedUserInfo.lName
 		&& existingUser.email === updatedUserInfo.email
-		&& existingUser.username === updatedUserInfo.email
+		&& existingUser.username === updatedUserInfo.username
 		&& existingUser.password === updatedUserInfo.password)
 		throw "Error: No changes found";
+};
+
+export {
+	createUser,
+	getAllUsers,
+	getUserByUsername,
+	getUserById,
+	updateUser,
+	deleteUser
 }

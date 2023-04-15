@@ -1,8 +1,14 @@
 import { dbConnection, closeConnection } from "../config/mongoConnection.js";
 import * as activity from "../data/activity.js";
+import userSeeding from "./userSeed.js";
 
 const db = await dbConnection();
 await db.dropDatabase();
+
+
+await userSeeding();
+
+// ================================= Activity Seeding =================================
 
 try {
   let newLog = await activity.createLog(

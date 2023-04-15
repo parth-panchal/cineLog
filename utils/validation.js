@@ -71,7 +71,7 @@ const checkRating = (rating) => {
 //2. check if email has atleast one . after @
 //3. check if email does not start or end with @ or .
 const checkEmail = (email) => {
-  email = this.checkString(email, "Email");
+  email = checkString(email, "Email");
   const atPos = email.indexOf("@");
   if (atPos === -1 || email.indexOf("@", atPos + 1) !== -1)
     throw "Error: Invalid email";
