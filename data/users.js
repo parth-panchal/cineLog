@@ -94,7 +94,11 @@ const getUserByUsername = async (username) => {
 	return userInfo;
 };
 
+// const getUserByEmail = async (email) => {
+// 	validation.checkProvided("Email", email);
+// 	email = validation.checkEmail(email).toLowerCase();
 
+// }
 
 const updateUser = async (userId, fName, lName, email, username, password) => {
 	validation.checkProvided("User Update Info", userId, fName, lName, email, username, password)
@@ -149,6 +153,163 @@ const updateUser = async (userId, fName, lName, email, username, password) => {
 
 };
 
+const updateUserLikes = async (userId, likeMovieId, operation) => {
+	validation.checkProvided("User Likes", userId, likeMovieId, operation);
+	userId = validation.checkId(userId, "User ID");
+	await validation.checkMovieId(likeMovieId);
+
+	const userCollection = await users();
+
+	if(operation === "add") {
+		const existingUser = await getUserById(userId);
+		if(existingUser.likes.includes(likeMovieId)) throw `Error: Movie ${likeMovieId} already exist in ${userId} like list`;
+
+		const updatedUser = await userCollection.findOneAndUpdate(
+			{ _id: new ObjectId(userId) },
+			{ $addToSet: { likes: likeMovieId }},
+			{
+				projection: { _id: 1, likes: 1},
+				returnDocument: "after"
+			}
+		);
+
+		if(updatedUser.lastErrorObject.n === 0) {
+			throw `Error: Could not add movie with id: ${likeMovieId} to user ${userId} like list`;
+		}
+
+		updatedUser.value._id = updatedUser.value._id.toString();
+
+		return updatedUser.value;
+	} else if(operation === "remove") {
+		const existingUser = await getUserById(userId);
+		if(!existingUser.likes.includes(likeMovieId)) throw `Error: Movie ${likeMovieId} doesn't exist in ${userId} like list`;
+
+		const updatedUser = await userCollection.findOneAndUpdate(
+			{ _id: new ObjectId(userId) },
+			{ $pull: { likes: likeMovieId }},
+			{
+				projection: { _id: 1, likes: 1},
+				returnDocument: "after"
+			}
+		);
+
+		if(updatedUser.lastErrorObject.n === 0) {
+			throw `Error: Could not remove movie with id: ${likeMovieId} from user ${userId} like list`;
+		}
+
+		updatedUser.value._id = updatedUser.value._id.toString();
+
+		return updatedUser.value;
+	} else {
+		throw "Error: Operation can only be 'add' or 'remove'";
+	}
+	
+};
+
+const updateUserWatchList = async (userId, watchlistMovieId, operation) => {
+	validation.checkProvided("User Watchlist", userId, watchlistMovieId, operation);
+	userId = validation.checkId(userId, "User ID");
+	await validation.checkMovieId(watchlistMovieId);
+
+	const userCollection = await users();
+
+	if(operation === "add") {
+		const existingUser = await getUserById(userId);
+		if(existingUser.watchList.includes(watchlistMovieId)) throw `Error: Movie ${watchlistMovieId} already exist in ${userId} watchlist`;
+
+		const updatedUser = await userCollection.findOneAndUpdate(
+			{ _id: new ObjectId(userId) },
+			{ $addToSet: { watchList: watchlistMovieId }},
+			{
+				projection: { _id: 1, watchList: 1},
+				returnDocument: "after"
+			}
+		);
+
+		if(updatedUser.lastErrorObject.n === 0) {
+			throw `Error: Could not add movie with id: ${likeMovieId} to user ${userId} watchlist`;
+		}
+
+		updatedUser.value._id = updatedUser.value._id.toString();
+
+		return updatedUser.value;
+	} else if(operation === "remove") {
+		const existingUser = await getUserById(userId);
+		if(!existingUser.watchList.includes(watchlistMovieId)) throw `Error: Movie ${watchlistMovieId} doesn't exist in ${userId} watchlist`;
+
+		const updatedUser = await userCollection.findOneAndUpdate(
+			{ _id: new ObjectId(userId) },
+			{ $pull: { watchList: watchlistMovieId }},
+			{
+				projection: { _id: 1, watchlistMovieId: 1},
+				returnDocument: "after"
+			}
+		);
+
+		if(updatedUser.lastErrorObject.n === 0) {
+			throw `Error: Could not remove movie with id: ${watchlistMovieId} from user ${userId} watchlist`;
+		}
+
+		updatedUser.value._id = updatedUser.value._id.toString();
+
+		return updatedUser.value;
+	} else {
+		throw "Error: Operation can only be 'add' or 'remove'";
+	}
+};
+
+const updateUserFollowing = async (userId, followingUserId, operation) => {
+	validation.checkProvided("User Following", userId, followingUserId, operation);
+	userId = validation.checkId(userId, "User ID");
+	followingUserId = validation.checkId(followingUserId, "Follower ID");
+
+	const userCollection = await users();
+
+	if(operation === "add") {
+		const existingUser = await getUserById(userId);
+		if(existingUser.following.includes(followingUserId)) throw `Error: User ${followingUserId} already exist in ${userId} follow list`;
+
+		const updatedUser = await userCollection.findOneAndUpdate(
+			{ _id: new ObjectId(userId) },
+			{ $addToSet: { following: followingUserId }},
+			{
+				projection: { _id: 1, following: 1},
+				returnDocument: "after"
+			}
+		);
+
+		if(updatedUser.lastErrorObject.n === 0) {
+			throw `Error: Could not add user with id: ${followingUserId} to user ${userId} follow list`;
+		}
+
+		updatedUser.value._id = updatedUser.value._id.toString();
+
+		return updatedUser.value;
+	} else if(operation === "remove") {
+		const existingUser = await getUserById(userId);
+		if(!existingUser.following.includes(followingUserId)) throw `Error: User ${followingUserId} doesn't exist in ${userId} follow list`;
+
+		const updatedUser = await userCollection.findOneAndUpdate(
+			{ _id: new ObjectId(userId) },
+			{ $pull: { following: followingUserId }},
+			{
+				projection: { _id: 1, following: 1},
+				returnDocument: "after"
+			}
+		);
+
+		if(updatedUser.lastErrorObject.n === 0) {
+			throw `Error: Could not remove user with id: ${followingUserId} from user ${userId} follow list`;
+		}
+
+		updatedUser.value._id = updatedUser.value._id.toString();
+
+		return updatedUser.value;
+	} else {
+		throw "Error: Operation can only be 'add' or 'remove'";
+	}
+};
+
 const deleteUser = async (userId) => {
 	validation.checkProvided("User ID", userId);
 	userId = validation.checkId(userId, "User ID");
@@ -162,13 +323,24 @@ const deleteUser = async (userId) => {
 		throw `Error: Could not delete the user with id of ${userId}`;
 	};
 
+	// Need to go through all users and remove the 
+	// deleted user from their following list (if present)
+	const deletedUserFromFollowing = await userCollection.updateMany(
+		{ following: userId },
+		{ $pull: { following: userId }}
+	);
+
+	if (!deletedUserFromFollowing.acknowledged || !deletedUserFromFollowing.insertedId) {
+		throw `Error: User with id ${userId} is deleted but could not delete user from followings lists`;
+	}
+
 	const returnObj = {
-		userId: deletedUser.value._id,
+		userId: deletedUser.value._id.toString(),
 		deleted: true
 	}
 
 	return returnObj;
-}
+};
 
 const checkUpdate = (existingUser, updatedUserInfo) => {
 	if(existingUser.fName === updatedUserInfo.fName
@@ -185,5 +357,8 @@ export {
 	getUserByUsername,
 	getUserById,
 	updateUser,
+	updateUserLikes,
+	updateUserWatchList,
+	updateUserFollowing,
 	deleteUser
 }

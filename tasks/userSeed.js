@@ -246,6 +246,303 @@ export default async function main() {
     console.log(error);
     }
 
+    try {
+        let updatedUser = await user.updateUserLikes(
+            user1Id,
+            550,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added movie to like list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserLikes(
+            user1Id,
+            550,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added movie to like list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserLikes(
+            user1Id,
+            670,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added movie to like list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserLikes(
+            user1Id,
+            234,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added movie to like list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserLikes(
+            user1Id,
+            1,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added movie to like list");
+    } catch (error) {
+        console.log(error);
+    }
+    
+    try {
+        let updatedUser = await user.updateUserLikes(
+            user1Id,
+            234,
+            "remove"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Removed movie from like list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserLikes(
+            user1Id,
+            1,
+            "remove"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Removed movie from like list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserLikes(
+            user1Id,
+            234,
+            "remove"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Removed movie from like list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserLikes(
+            user1Id,
+            234,
+            "poop"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Removed movie from like list");
+    } catch (error) {
+        console.log(error);
+    }
+    
+    try {
+        let updatedUser = await user.updateUserWatchList(
+            user1Id,
+            550,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added movie to watchlist");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserWatchList(
+            user1Id,
+            550,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added movie to watchlist");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserWatchList(
+            user1Id,
+            670,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added movie to watchlist");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserWatchList(
+            user1Id,
+            234,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added movie to watchlist");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserWatchList(
+            user1Id,
+            1,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added movie to watchlist");
+    } catch (error) {
+        console.log(error);
+    }
+    
+    try {
+        let updatedUser = await user.updateUserWatchList(
+            user1Id,
+            234,
+            "remove"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Removed movie from watchlist");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserWatchList(
+            user1Id,
+            1,
+            "remove"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Removed movie from watchlist");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserWatchList(
+            user1Id,
+            234,
+            "remove"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Removed movie from watchlist");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserWatchList(
+            user1Id,
+            234,
+            "poop"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Removed movie from watchlist");
+    } catch (error) {
+        console.log(error);
+    }
+    //////
+    try {
+        let updatedUser = await user.updateUserFollowing(
+            user1Id,
+            user2Id,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added follower to follow list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserFollowing(
+            user1Id,
+            user2Id,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added follower to follow list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserFollowing(
+            user1Id,
+            user3Id,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added follower to follow list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserFollowing(
+            user1Id,
+            234,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added follower to follow list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserFollowing(
+            user1Id,
+            1,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Added follower to follow list");
+    } catch (error) {
+        console.log(error);
+    }
+    
+    try {
+        let updatedUser = await user.updateUserFollowing(
+            user1Id,
+            user2Id,
+            "remove"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Removed follower from follow list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserFollowing(
+            user1Id,
+            1,
+            "remove"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Removed follower from follow list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserFollowing(
+            user1Id,
+            new ObjectId().toString(),
+            "remove"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Removed follower from follow list");
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserFollowing(
+            user1Id,
+            user2Id,
+            "poop"
+        );
+        if(updatedUser) console.log("Updated Info for User 1: Removed follower from follow list");
+    } catch (error) {
+        console.log(error);
+    }
+
     // -------------------------------- Delete Function -------------------------------
     try {
     let deletedUser = await user.deleteUser(user2Id);
@@ -266,5 +563,60 @@ export default async function main() {
     if(deletedUser) console.log("User deleted");
     } catch (error) {
     console.log(error);
+    }
+
+    // Test Case: Delete user that is followed by another, then call that other users follow list
+    console.log("----------------------TEST-----------------");
+    let user4Id = "";
+    let user4Username = "";
+    try {
+        let newUser = await user.createUser(
+            "Parshotan",
+            "Seenanan",
+            "test@example.com",
+            "testAccy4",
+            "testPass"
+        );
+        if(newUser) console.log("User created 4");
+        user4Id = newUser._id;
+        user4Username = newUser.username;
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserFollowing(
+            user1Id,
+            user4Id,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User User 1: Added follower to follow list");
+    } catch(error) {
+        console.log(error);
+    }
+
+    try {
+        let updatedUser = await user.updateUserFollowing(
+            user3Id,
+            user4Id,
+            "add"
+        );
+        if(updatedUser) console.log("Updated Info for User User 1: Added follower to follow list");
+    } catch(error) {
+        console.log(error);
+    }
+
+    try {
+        let deletedUser = await user.deleteUser(user4Id);
+        if(deletedUser) console.log("User 4 deleted");
+    } catch(error) {
+        console.log(error);
+    }
+    
+    try {
+        let userInfo = await user.getUserById(user1Id);
+        if(userInfo) console.log("Got Info for User 1")
+    } catch(error) {
+        console.log(error)
     }
 }
