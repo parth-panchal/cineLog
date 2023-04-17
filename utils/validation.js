@@ -71,7 +71,7 @@ const checkRating = (rating) => {
 //2. check if email has atleast one . after @
 //3. check if email does not start or end with @ or .
 const checkEmail = (email) => {
-  email = this.checkString(email, "Email");
+  email = checkString(email, "Email");
   const atPos = email.indexOf("@");
   if (atPos === -1 || email.indexOf("@", atPos + 1) !== -1)
     throw "Error: Invalid email";
@@ -106,11 +106,11 @@ const checkId = (id, name) => {
   return id;
 };
 
-const checkMovieId = (movieId) => {
+const checkMovieId = async (movieId) => {
   if (movieId === undefined) throw "Error: Movie ID is required";
   if (movieId === null) throw "Error: Movie ID cannot be null";
   if (isNaN(movieId)) throw "Error: Movie ID must be a number";
-  let movie = getMovieInfo(movieId);
+  let movie = await getMovieInfo(movieId);
   if (!movie) throw "Error: Movie not found";
   return movieId;
 };

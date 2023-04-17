@@ -10,7 +10,7 @@ import * as validation from "../utils/validation.js";
 
 const createLog = async (movieId, userId, review, rating, date) => {
   validation.checkProvided(movieId, userId, review, rating);
-  movieId = validation.checkMovieId(movieId, "Movie ID");
+  movieId = await validation.checkMovieId(movieId, "Movie ID");
   userId = validation.checkId(userId, "User ID"); // need to add check here from user data functions to see if user exists?
   review = validation.checkString(review, "Review");
   rating = validation.checkRating(rating, "Rating");
