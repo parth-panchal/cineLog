@@ -63,31 +63,6 @@ const checkRating = (rating) => {
   return rating;
 };
 
-//do we really need email now? Can't we just have the user log in with the username?
-//I don't think we do, but I'll leave it here for now
-
-//validates email is in the following format:
-//1. check if email has exactly one @
-//2. check if email has atleast one . after @
-//3. check if email does not start or end with @ or .
-const checkEmail = (email) => {
-  email = checkString(email, "Email");
-  const atPos = email.indexOf("@");
-  if (atPos === -1 || email.indexOf("@", atPos + 1) !== -1)
-    throw "Error: Invalid email";
-  const dotPos = email.indexOf(".", atPos);
-  if (dotPos === -1 || dotPos === email.length - 1)
-    throw "Error: Invalid email";
-  if (
-    email.startsWith(".") ||
-    email.startsWith("@") ||
-    email.endsWith(".") ||
-    email.endsWith("@")
-  )
-    throw "Error: Invalid email";
-  return email;
-};
-
 const checkNumber = (numVal, name) => {
   if (typeof numVal !== "number" || isNaN(numVal))
     throw `Error: ${name} must be a valid number`;
@@ -162,7 +137,6 @@ export {
   checkString,
   checkStringArray,
   checkUsername,
-  checkEmail,
   checkNumber,
   checkNumberAndRoundOne,
   checkId,

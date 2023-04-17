@@ -15,7 +15,6 @@ export default async function main() {
     let newUser = await user.createUser(
         "Parshotan",
         "Seenanan",
-        "test@example.com",
         "testAccy",
         "testPass"
     );
@@ -30,7 +29,6 @@ export default async function main() {
     let newUser = await user.createUser(
         "Parshotan",
         "Seenanan",
-        "test@example.com",
         "testAccy2",
         "testPass"
     );
@@ -45,7 +43,6 @@ export default async function main() {
     let newUser = await user.createUser(
         "Parshotan",
         "Seenanan",
-        "test@example.com",
         "testAccy3",
         "testPass"
     );
@@ -60,7 +57,6 @@ export default async function main() {
     let newUser = await user.createUser(
         "Parshotan",
         "Seenanan",
-        "test@example.com",
         "testAccy",
         "testPass"
     );
@@ -73,7 +69,6 @@ export default async function main() {
     let newUser = await user.createUser(
         "Parshotan",
         "Seenanan",
-        "test@example.com",
         "testAccy"
     );
     if(newUser) console.log("User created");
@@ -85,7 +80,6 @@ export default async function main() {
     let newUser = await user.createUser(
         "",
         "Seenanan",
-        "test@example.com",
         "",
         "testPass"
     );
@@ -98,7 +92,6 @@ export default async function main() {
     let newUser = await user.createUser(
         1234,
         "Seenanan",
-        "test@example.com",
         "testAccy",
         "testPass"
     );
@@ -111,7 +104,6 @@ export default async function main() {
     let newUser = await user.createUser(
         "Parshotan",
         "Seenanan",
-        "test@examplecom",
         "testAccy",
         "testPass"
     );
@@ -124,7 +116,6 @@ export default async function main() {
     let newUser = await user.createUser(
         "Parshotan",
         "Seenanan",
-        "test@example.com",
         "1231kasd",
         "testPass"
     );
@@ -137,7 +128,6 @@ export default async function main() {
     let newUser = await user.createUser(
         "Parshotan",
         "Seenanan",
-        "test@example.com",
         "testAccy",
         "testPass"
     );
@@ -195,7 +185,6 @@ export default async function main() {
         user3Id,
         "NewName",
         "NewLName",
-        "fake@email.com",
         "newUserName123",
         "testPass"
     );
@@ -209,7 +198,6 @@ export default async function main() {
         user3Id,
         "NewName",
         "",
-        "fake@email.com",
         "newUserName123",
         ""
     );
@@ -223,7 +211,6 @@ export default async function main() {
         user3Id,
         123,
         "NewLName",
-        "fake@email.com",
         "newUserName123",
         "testPass"
     );
@@ -237,7 +224,6 @@ export default async function main() {
         user3Id,
         "NewName",
         "NewLName",
-        "fake@email.com",
         "newUserName123",
         "testPass"
     );
@@ -573,7 +559,6 @@ export default async function main() {
         let newUser = await user.createUser(
             "Parshotan",
             "Seenanan",
-            "test@example.com",
             "testAccy4",
             "testPass"
         );
