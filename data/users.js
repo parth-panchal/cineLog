@@ -6,18 +6,16 @@ import { users } from '../config/mongoCollections.js';
 import { ObjectId } from 'mongodb';
 import * as validation from '../utils/validation.js';
 
-const createUser = async (fName, lName, email, username, password) => {
-	validation.checkProvided("User Info", fName, lName, email, username, password);
+const createUser = async (fName, lName, username, password) => {
+	validation.checkProvided("User Info", fName, lName, username, password);
 	fName = validation.checkString(fName, "First Name");
 	lName = validation.checkString(lName, "Last Name");
 	/* TODO:
 	- Improve validation/storing for password once we learn
 	  hashing and authentication
 	- Store information as lowercase, for comparisons (validation should also lowercase
-	- Check if email is unique as well
 	)
 	*/
-	email = validation.checkEmail(email);
 	username = validation.checkUsername(username);
 	password = validation.checkString(password, "Password");
 
@@ -34,7 +32,6 @@ const createUser = async (fName, lName, email, username, password) => {
 	let newUser = {
 		fName: fName, //.toLowerCase(),
 		lName: lName, //.toLowerCase(),
-		email: email, //.toLowerCase(),
 		username: username, //.toLowerCase(),
 		password: password,
 		likes: [],
@@ -94,14 +91,8 @@ const getUserByUsername = async (username) => {
 	return userInfo;
 };
 
-// const getUserByEmail = async (email) => {
-// 	validation.checkProvided("Email", email);
-// 	email = validation.checkEmail(email).toLowerCase();
-
-// }
-
-const updateUser = async (userId, fName, lName, email, username, password) => {
-	validation.checkProvided("User Update Info", userId, fName, lName, email, username, password)
+const updateUser = async (userId, fName, lName, username, password) => {
+	validation.checkProvided("User Update Info", userId, fName, lName, username, password)
 	userId = validation.checkId(userId, "User ID");
 	fName = validation.checkString(fName, "First Name");
 	lName = validation.checkString(lName, "Last Name");
@@ -109,7 +100,6 @@ const updateUser = async (userId, fName, lName, email, username, password) => {
 	- Improve validation/storing for password once we learn
 	  hashing and authentication
 	*/
-	email = validation.checkEmail(email);
 	username = validation.checkUsername(username);
 	password = validation.checkString(password, "Password");
 
@@ -118,7 +108,6 @@ const updateUser = async (userId, fName, lName, email, username, password) => {
 	const updatedUserInfo = {
 		fName: fName,
 		lName: lName,
-		email: email,
 		username: username,
 		password: password
 	};
@@ -330,7 +319,7 @@ const deleteUser = async (userId) => {
 		{ $pull: { following: userId }}
 	);
 
-	if (!deletedUserFromFollowing.acknowledged || !deletedUserFromFollowing.insertedId) {
+	if (!deletedUserFromFollowing.acknowledged || deletedUserFromFollowing.matchedCount !== deletedUserFromFollowing.modifiedCount) {
 		throw `Error: User with id ${userId} is deleted but could not delete user from followings lists`;
 	}
 
@@ -345,7 +334,6 @@ const deleteUser = async (userId) => {
 const checkUpdate = (existingUser, updatedUserInfo) => {
 	if(existingUser.fName === updatedUserInfo.fName
 		&& existingUser.lName === updatedUserInfo.lName
-		&& existingUser.email === updatedUserInfo.email
 		&& existingUser.username === updatedUserInfo.username
 		&& existingUser.password === updatedUserInfo.password)
 		throw "Error: No changes found";
