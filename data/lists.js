@@ -7,7 +7,6 @@ import { users } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
 import * as validation from "../utils/validation.js";
 
-
 const exportedMethods = {
   async create(userId, title, movies) {
     //for validation validate if
@@ -25,7 +24,7 @@ const exportedMethods = {
       elem = validation.checkNumber(elem, "movie");
     });
     const userCollection = await users();
-    const user = await userCollection.findOne({ _id: new ObjectId(id) });
+    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
     if (user === null) throw "No user with that id";
 
     let newList = {
@@ -53,7 +52,7 @@ const exportedMethods = {
     userId = userId.trim();
     if (!ObjectId.isValid(userId)) throw "invalid object ID";
     const userCollection = await users();
-    const user = await userCollection.findOne({ _id: new ObjectId(id) });
+    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
     if (user === null) throw "No user with that id";
 
     let movieList = user.lists;
@@ -108,7 +107,7 @@ const exportedMethods = {
     const deleteInfo = await userCollection.updateOne(
       { _id: userId },
       {
-        $pull: { albums: { _id: new ObjectId(listId) } },
+        $pull: { lists: { _id: new ObjectId(listId) } },
       }
     );
     if (deleteInfo.modifiedCount === 0) {
@@ -146,10 +145,21 @@ const exportedMethods = {
 
     const userId = user[0]._id;
     const updatedInfo = await userCollection.findOneAndUpdate(
-      { _id: new ObjectId(userId) },
-      { $set: updatedList },
-      { returnDocument: "after" }
+      { _id: userId },
+      {
+        $set: {
+          "lists.$[elem].title": updatedList.title,
+          "lists.$[elem].movies": updatedList.movies,
+          // Add other fields here that you want to update
+        },
+      },
+      {
+        arrayFilters: [{ "elem._id": new ObjectId(listId) }],
+        returnDocument: "after"
+      }
+  
     );
+
     if (updatedInfo.lastErrorObject.n === 0) {
       throw "could not update dog successfully";
     }
@@ -157,3 +167,4 @@ const exportedMethods = {
     return updatedInfo.value;
   },
 };
+export default exportedMethods;
