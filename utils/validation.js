@@ -1,6 +1,5 @@
 import { ObjectId } from "mongodb";
 import { getMovieInfo } from "../utils/helper.js";
-import { getMovieInfo } from "../utils/helper.js";
 
 const checkString = (strVal, name) => {
   if (typeof strVal !== "string") throw `Error: ${name} must be a string`;
@@ -14,15 +13,6 @@ const checkString = (strVal, name) => {
 
   return strVal.trim();
 };
-
-const checks = (str) => {
-  if (!str) throw "You must provide a string";
-  if (typeof str !== "string") throw "Input must be a string";
-  if (str.trim().length === 0)
-    throw "Input cannot be an empty string or string with just spaces";
-};
-
-
 
 const checkStringArray = (arr, name) => {
   if (!Array.isArray(arr)) throw `Error: ${name} must be an array`;
@@ -100,6 +90,17 @@ const checkMovieId = async (movieId) => {
   return movieId;
 };
 
+const checkMovieArray = (movies, name) => {
+  if (!movies || !Array.isArray(movies))
+    throw `Error: ${name} must be an array`;
+  if (movies.length === 0)
+    throw `Error: ${name} must have at least one element`;
+  movies.forEach((elem) => {
+    elem = validation.checkMovieId(elem);
+  });
+  return movies;
+};
+
 // Validate that date is in MM/DD/YYYY format
 // Assume that dateVal is string
 // Will probably change depending on how we handle dates
@@ -152,8 +153,8 @@ export {
   checkNumberAndRoundOne,
   checkId,
   checkMovieId,
+  checkMovieArray,
   checkRating,
   checkDate,
   checkProvided,
-  checks
 };
