@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { getMovieInfo } from "../utils/helper.js";
+import { getMovieInfo } from "../utils/helper.js";
 
 const checkString = (strVal, name) => {
   if (typeof strVal !== "string") throw `Error: ${name} must be a string`;
@@ -20,6 +21,8 @@ const checks = (str) => {
   if (str.trim().length === 0)
     throw "Input cannot be an empty string or string with just spaces";
 };
+
+
 
 const checkStringArray = (arr, name) => {
   if (!Array.isArray(arr)) throw `Error: ${name} must be an array`;
@@ -144,6 +147,7 @@ export {
   checkString,
   checkStringArray,
   checkUsername,
+  checkEmail,
   checkNumber,
   checkNumberAndRoundOne,
   checkId,
