@@ -96,7 +96,7 @@ const checkMovieArray = (movies, name) => {
   if (movies.length === 0)
     throw `Error: ${name} must have at least one element`;
   movies.forEach((elem) => {
-    elem = validation.checkMovieId(elem);
+    elem = checkMovieId(elem);
   });
   return movies;
 };
@@ -148,7 +148,7 @@ export {
   checkString,
   checkStringArray,
   checkUsername,
-  checkEmail,
+  // checkEmail,
   checkNumber,
   checkNumberAndRoundOne,
   checkId,

@@ -53,7 +53,7 @@ const exportedMethods = {
   },
 
   async get(listId) {
-    userId = validation.checkId(userId, "User ID")
+    listId = validation.checkId(listId, "List ID");
 
     const userCollection = await users();
     const list = await userCollection.findOne(
@@ -98,7 +98,7 @@ const exportedMethods = {
     return updatedUser;
   },
   async updateList(listId, title, movies) {
-    userId = validation.checkId(userId, "User ID")
+    listId = validation.checkId(listId, "List ID");
     title = validation.checkString(title, "Title");
     movies = validation.checkMovieArray(movies, "Movies");
     const updatedList = {
@@ -122,7 +122,6 @@ const exportedMethods = {
         $set: {
           "lists.$[elem].title": updatedList.title,
           "lists.$[elem].movies": updatedList.movies,
-          // Add other fields here that you want to update
         },
       },
       {
@@ -133,7 +132,7 @@ const exportedMethods = {
     );
 
     if (updatedInfo.lastErrorObject.n === 0) {
-      throw "could not update dog successfully";
+      throw "could not update the list successfully";
     }
     updatedInfo.value._id = updatedInfo.value._id.toString();
     return updatedInfo.value;

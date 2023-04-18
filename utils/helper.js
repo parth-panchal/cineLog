@@ -59,7 +59,6 @@ const getRecommendations = async (movieId) => {
   const { data } = await axios.get(BASE_URL + endpoint, { params });
 
   return data;
-  return data;
 };
 
 /*
@@ -68,8 +67,4 @@ We will require a function which gets the userID from the current session so tha
 
 export { searchMovie, getMovieInfo, getRecommendations };
 
-/*
-We will require a function which gets the userID from the current session so that's something we need to figure out in the future
-*/
 
-export { searchMovie, getMovieInfo, getRecommendations };
