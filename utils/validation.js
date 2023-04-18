@@ -68,34 +68,6 @@ const checkRating = (rating) => {
   if (rating < 0 || rating > 5) throw "Error: Rating must be between 0 and 5";
   if (rating % 0.5 !== 0) throw "Error: Rating must be a multiple of 0.5";
   return rating;
-<<<<<<< HEAD
-=======
-};
-
-//do we really need email now? Can't we just have the user log in with the username?
-//I don't think we do, but I'll leave it here for now
-
-//validates email is in the following format:
-//1. check if email has exactly one @
-//2. check if email has atleast one . after @
-//3. check if email does not start or end with @ or .
-const checkEmail = (email) => {
-  email = this.checkString(email, "Email");
-  const atPos = email.indexOf("@");
-  if (atPos === -1 || email.indexOf("@", atPos + 1) !== -1)
-    throw "Error: Invalid email";
-  const dotPos = email.indexOf(".", atPos);
-  if (dotPos === -1 || dotPos === email.length - 1)
-    throw "Error: Invalid email";
-  if (
-    email.startsWith(".") ||
-    email.startsWith("@") ||
-    email.endsWith(".") ||
-    email.endsWith("@")
-  )
-    throw "Error: Invalid email";
-  return email;
->>>>>>> 735291434543a244055c2e3d18dd0d0f7264af22
 };
 
 const checkNumber = (numVal, name) => {
@@ -116,19 +88,11 @@ const checkId = (id, name) => {
   return id;
 };
 
-<<<<<<< HEAD
 const checkMovieId = async (movieId) => {
   if (movieId === undefined) throw "Error: Movie ID is required";
   if (movieId === null) throw "Error: Movie ID cannot be null";
   if (isNaN(movieId)) throw "Error: Movie ID must be a number";
   let movie = await getMovieInfo(movieId);
-=======
-const checkMovieId = (movieId) => {
-  if (movieId === undefined) throw "Error: Movie ID is required";
-  if (movieId === null) throw "Error: Movie ID cannot be null";
-  if (isNaN(movieId)) throw "Error: Movie ID must be a number";
-  let movie = getMovieInfo(movieId);
->>>>>>> 735291434543a244055c2e3d18dd0d0f7264af22
   if (!movie) throw "Error: Movie not found";
   return movieId;
 };
