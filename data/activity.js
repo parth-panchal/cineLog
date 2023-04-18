@@ -4,9 +4,9 @@
 // delete activity - used by /activity/:id, also call update function in trending.js
 
 import { activity } from "../config/mongoCollections.js";
-import { trending } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
 import * as validation from "../utils/validation.js";
+import { updateTrending } from "./trending.js";
 
 const createLog = async (movieId, userId, review, rating, date) => {
   validation.checkProvided(movieId, userId, review, rating);
@@ -29,6 +29,7 @@ const createLog = async (movieId, userId, review, rating, date) => {
 
   if (!newLogInfo.insertedId || !newLogInfo.acknowledged)
     throw "Error: could not add activity";
+  updateTrending(newLogInfo.insertedId.toString(), date, "add");
   return await getLogById(newLogInfo.insertedId.toString());
 };
 
@@ -65,7 +66,6 @@ const editLog = async (activityId, movieId, userId, review, rating, date) => {
   date = validation.checkDate(date, "Date");
   const activities = await activity();
   const log = await getLogById(activityId);
-
   const update = {
     movieId: movieId,
     review: review,
@@ -88,6 +88,12 @@ const editLog = async (activityId, movieId, userId, review, rating, date) => {
   );
   if (updatedLog.lastErrorObject.n === 0)
     throw "Error: could not update activity";
+  let oldDate = log.date;
+  let newDate = date;
+  if (oldDate !== newDate) {
+    updateTrending(activityId, oldDate, "delete");
+    updateTrending(activityId, newDate, "add");
+  }
   //call updatetrening function in trending.js to update the trending once implemented
   return updatedLog.value;
 };
@@ -95,11 +101,14 @@ const editLog = async (activityId, movieId, userId, review, rating, date) => {
 const deleteLog = async (activityId) => {
   activityId = validation.checkId(activityId, "Activity ID");
   const logs = await activity();
+  const deleteDate = await logs.findOne({ _id: new ObjectId(activityId) });
+  console.log(deleteDate.date);
   const deletedLog = await logs.findOneAndDelete({
     _id: new ObjectId(activityId),
   });
   if (deletedLog.lastErrorObject.n === 0)
     throw "Error: could not delete activity";
+  updateTrending(activityId, deleteDate, "delete");
   //call updatetrening function in trending.js to update the trending once implemented
   return { activityId: activityId, deleted: true }; // will change the return object later based on requirements
 };
