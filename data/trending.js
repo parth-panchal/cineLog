@@ -43,21 +43,21 @@ const calculateTrending = async () => {
   let movieDict = {};
   for (let i = 0; i < allActivityIds.length; i++) {
     const activityId = allActivityIds[i];
-    const movieId = await getMovieByActivityId(activityId);
+    const movieId = await getMovieByActivityId(activityId); //this is what has been throwing the error. since the promise isn't being resolved, it won't even connect to the database
     if (movieDict[movieId]) movieDict[movieId]++;
     else movieDict[movieId] = 1;
   }
   return movieDict;
 };
 
-//treding for a specific date
+//trending for a specific date
 const calculateTrendingForDate = async (date) => {
   const trendingData = await trending();
   const trendingInfo = await trendingData.findOne({ date: date });
   let movieDict = {};
   for (let i = 0; i < trendingInfo.activityIds.length; i++) {
     const activityId = trendingInfo.activityIds[i];
-    const movieId = await getMovieByActivityId(activityId);
+    const movieId = await getMovieByActivityId(activityId); //same error as above
     if (movieDict[movieId]) movieDict[movieId]++;
     else movieDict[movieId] = 1;
   }
