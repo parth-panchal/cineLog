@@ -6,27 +6,19 @@
 import { users } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
 import * as validation from "../utils/validation.js";
-
+import * as userData from './users.js'
 
 const exportedMethods = {
   async create(userId, title, movies) {
     //for validation validate if
     //userId is valid
     //title is a string
-    //movies is an array of integers
-    validation.checks(userId);
-    userId = userId.trim();
-    if (!ObjectId.isValid(userId)) throw "invalid object ID";
-    title = title.trim();
-    if (!movies || !Array.isArray(movies))
-      throw "You must provide an array of movies";
-    if (movies.length === 0) throw "You must supply at least one movie";
-    movies.forEach((elem) => {
-      elem = validation.checkNumber(elem, "movie");
-    });
+    //movies is an array of integers/valid movieIDs
+    userId = validation.checkId(userId, "User ID")
+    title = validation.checkString(title, "Title");
+    movies = validation.checkMovieArray(movies, "Movies");
     const userCollection = await users();
-    const user = await userCollection.findOne({ _id: new ObjectId(id) });
-    if (user === null) throw "No user with that id";
+    const user = await userData.getUserById(userId);
 
     let newList = {
       _id: new ObjectId(),
@@ -40,7 +32,7 @@ const exportedMethods = {
       }
     );
     if (updatedInfo.modifiedCount === 0) {
-      throw "No update occured in the user while adding album!";
+      throw "No update occured in the user while adding lists!";
     }
 
     newList._id = newList._id.toString();
@@ -49,12 +41,8 @@ const exportedMethods = {
 
   async getAll(userId) {
     //check userID
-    validation.checks(userId);
-    userId = userId.trim();
-    if (!ObjectId.isValid(userId)) throw "invalid object ID";
-    const userCollection = await users();
-    const user = await userCollection.findOne({ _id: new ObjectId(id) });
-    if (user === null) throw "No user with that id";
+    userId = validation.checkId(userId, "User ID")
+    const user = await userData.getUserById(userId);
 
     let movieList = user.lists;
     if (movieList.length === 0) throw "No lists present for this user Id";
@@ -65,9 +53,7 @@ const exportedMethods = {
   },
 
   async get(listId) {
-    validation.checks(listId);
-    listId = listId.trim();
-    if (!ObjectId.isValid(listId)) throw "invalid object ID";
+    listId = validation.checkId(listId, "List ID");
 
     const userCollection = await users();
     const list = await userCollection.findOne(
@@ -86,13 +72,8 @@ const exportedMethods = {
     return list.lists[0];
   },
   async delete(listId) {
-    validation.checks(listId);
-    listId = listId.trim();
-    // console.log("hi3");
-    if (!ObjectId.isValid(listId)) throw "invalid object ID";
-    // console.log("hi3");
+    listId= validation.checkId(listId, "ListID")
     const userCollection = await users();
-    // console.log(userCollection)
     const user = await userCollection
       .find({
         "lists._id": new ObjectId(listId),
@@ -103,12 +84,11 @@ const exportedMethods = {
     }
 
     const userId = user[0]._id;
-    // let thisList = await this.get(listId);
-    // console.log(r);
+
     const deleteInfo = await userCollection.updateOne(
       { _id: userId },
       {
-        $pull: { albums: { _id: new ObjectId(listId) } },
+        $pull: { lists: { _id: new ObjectId(listId) } },
       }
     );
     if (deleteInfo.modifiedCount === 0) {
@@ -118,18 +98,9 @@ const exportedMethods = {
     return updatedUser;
   },
   async updateList(listId, title, movies) {
-    validation.checks(listId);
-    listId = listId.trim();
-    // console.log("hi3");
-    if (!ObjectId.isValid(listId)) throw "invalid object ID";
-    title = title.trim();
-    validation.checks(title);
-    if (!movies || !Array.isArray(movies))
-      throw "You must provide an array of movies";
-    if (movies.length === 0) throw "You must supply at least one movie";
-    movies.forEach((elem) => {
-      elem = validation.checkNumber(elem, "movie");
-    });
+    listId = validation.checkId(listId, "List ID");
+    title = validation.checkString(title, "Title");
+    movies = validation.checkMovieArray(movies, "Movies");
     const updatedList = {
       title: title,
       movies: movies,
@@ -146,14 +117,25 @@ const exportedMethods = {
 
     const userId = user[0]._id;
     const updatedInfo = await userCollection.findOneAndUpdate(
-      { _id: new ObjectId(userId) },
-      { $set: updatedList },
-      { returnDocument: "after" }
+      { _id: userId },
+      {
+        $set: {
+          "lists.$[elem].title": updatedList.title,
+          "lists.$[elem].movies": updatedList.movies,
+        },
+      },
+      {
+        arrayFilters: [{ "elem._id": new ObjectId(listId) }],
+        returnDocument: "after"
+      }
+  
     );
+
     if (updatedInfo.lastErrorObject.n === 0) {
-      throw "could not update dog successfully";
+      throw "could not update the list successfully";
     }
     updatedInfo.value._id = updatedInfo.value._id.toString();
     return updatedInfo.value;
   },
 };
+export default exportedMethods;

@@ -14,13 +14,6 @@ const checkString = (strVal, name) => {
   return strVal.trim();
 };
 
-const checks = (str) => {
-  if (!str) throw "You must provide a string";
-  if (typeof str !== "string") throw "Input must be a string";
-  if (str.trim().length === 0)
-    throw "Input cannot be an empty string or string with just spaces";
-};
-
 const checkStringArray = (arr, name) => {
   if (!Array.isArray(arr)) throw `Error: ${name} must be an array`;
 
@@ -97,6 +90,17 @@ const checkMovieId = async (movieId) => {
   return movieId;
 };
 
+const checkMovieArray = (movies, name) => {
+  if (!movies || !Array.isArray(movies))
+    throw `Error: ${name} must be an array`;
+  if (movies.length === 0)
+    throw `Error: ${name} must have at least one element`;
+  movies.forEach((elem) => {
+    elem = checkMovieId(elem);
+  });
+  return movies;
+};
+
 // Validate that date is in MM/DD/YYYY format
 // Assume that dateVal is string
 // Will probably change depending on how we handle dates
@@ -144,13 +148,13 @@ export {
   checkString,
   checkStringArray,
   checkUsername,
-  checkEmail,
+  // checkEmail,
   checkNumber,
   checkNumberAndRoundOne,
   checkId,
   checkMovieId,
+  checkMovieArray,
   checkRating,
   checkDate,
   checkProvided,
-  checks
 };

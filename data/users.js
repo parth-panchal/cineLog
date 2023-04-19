@@ -37,7 +37,7 @@ const createUser = async (fName, lName, username, password) => {
 		likes: [],
 		watchList: [],
 		following: [],
-		lists: {}
+		lists: []
 	};
 
 	const userCollection = await users();
