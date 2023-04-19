@@ -1,10 +1,15 @@
 import axios from "axios";
 import * as dotenv from "dotenv";
+
 dotenv.config();
 
 const BASE_URL = "https://api.themoviedb.org/3";
 
 const params = {
+  language: "en-US",
+  include_adult: false,
+  page: 1,
+  api_key: process.env.API_KEY,
   language: "en-US",
   include_adult: false,
   page: 1,
@@ -34,13 +39,13 @@ Returns data: Object, contains movie information fields
 const getMovieInfo = async (movieId) => {
   const endpoint = `/movie/${movieId}`;
 
-	try {
-		const { data } = await axios.get(BASE_URL + endpoint, { params });
-		return data;
-	} catch (error) {
-		// console.log(error);
-		throw "Error: Movie not found";
-	}
+  try {
+    const { data } = await axios.get(BASE_URL + endpoint, { params });
+    return data;
+  } catch (error) {
+    // console.log(error);
+    throw "Error: Movie not found";
+  }
 };
 
 /*
@@ -61,3 +66,5 @@ We will require a function which gets the userID from the current session so tha
 */
 
 export { searchMovie, getMovieInfo, getRecommendations };
+
+
