@@ -1,6 +1,8 @@
 import axios from "axios";
 import * as dotenv from "dotenv";
 
+import { ObjectId } from "mongodb";
+import { activity } from "../config/mongoCollections.js";
 dotenv.config();
 
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -61,10 +63,18 @@ const getRecommendations = async (movieId) => {
   return data;
 };
 
+const getMovieByActivityId = async (activityId) => {
+  const logs = await activity();
+  const log = await logs.findOne(
+    { _id: new ObjectId(activityId) },
+    { movieId: 1 }
+  );
+  if (!log) throw "Error: activity not found";
+  return log.movieId;
+};
+
 /*
 We will require a function which gets the userID from the current session so that's something we need to figure out in the future
 */
 
-export { searchMovie, getMovieInfo, getRecommendations };
-
-
+export { searchMovie, getMovieInfo, getRecommendations, getMovieByActivityId };

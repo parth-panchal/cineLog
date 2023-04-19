@@ -1,13 +1,13 @@
 import { dbConnection, closeConnection } from "../config/mongoConnection.js";
 import * as activity from "../data/activity.js";
-import lists from "../data/lists.js"
+import * as trending from "../data/trending.js";
+import lists from "../data/lists.js";
 import userSeeding from "./userSeed.js";
 
 const db = await dbConnection();
 await db.dropDatabase();
 
-
-await userSeeding();
+//await userSeeding();
 
 // ================================= Activity Seeding =================================
 
@@ -78,6 +78,8 @@ try {
   console.log(e);
 }
 try {
+  let result = await trending.calculateTrending();
+  console.log(result);
 } catch (e) {
   console.log(e);
 }
@@ -127,6 +129,5 @@ try {
 // } catch (e) {
 //   console.log(e)
 // }
-
 
 await closeConnection();
