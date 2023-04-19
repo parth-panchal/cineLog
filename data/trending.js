@@ -4,7 +4,6 @@
 
 import { trending } from "../config/mongoCollections.js";
 import { getMovieByActivityId } from "../utils/helper.js";
-import { activity } from "../config/mongoCollections.js";
 
 const updateTrending = async (activityId, date, action) => {
   const trendingData = await trending();
@@ -43,7 +42,7 @@ const calculateTrending = async () => {
   let movieDict = {};
   for (let i = 0; i < allActivityIds.length; i++) {
     const activityId = allActivityIds[i];
-    const movieId = await getMovieByActivityId(activityId); //this is what has been throwing the error. since the promise isn't being resolved, it won't even connect to the database
+    const movieId = await getMovieByActivityId(activityId);
     if (movieDict[movieId]) movieDict[movieId]++;
     else movieDict[movieId] = 1;
   }
@@ -57,7 +56,7 @@ const calculateTrendingForDate = async (date) => {
   let movieDict = {};
   for (let i = 0; i < trendingInfo.activityIds.length; i++) {
     const activityId = trendingInfo.activityIds[i];
-    const movieId = await getMovieByActivityId(activityId); //same error as above
+    const movieId = await getMovieByActivityId(activityId);
     if (movieDict[movieId]) movieDict[movieId]++;
     else movieDict[movieId] = 1;
   }

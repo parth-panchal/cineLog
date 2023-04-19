@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as dotenv from "dotenv";
+
 import { ObjectId } from "mongodb";
 import { activity } from "../config/mongoCollections.js";
 dotenv.config();
@@ -7,6 +8,10 @@ dotenv.config();
 const BASE_URL = "https://api.themoviedb.org/3";
 
 const params = {
+  language: "en-US",
+  include_adult: false,
+  page: 1,
+  api_key: process.env.API_KEY,
   language: "en-US",
   include_adult: false,
   page: 1,
