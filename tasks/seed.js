@@ -78,7 +78,8 @@ try {
   console.log(e);
 }
 try {
-  trending.calculateTrending();
+  let result = await trending.calculateTrending();
+  console.log(result);
 } catch (e) {
   console.log(e);
 }
