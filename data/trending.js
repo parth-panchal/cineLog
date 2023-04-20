@@ -16,7 +16,7 @@ import * as validation from "../utils/validation.js";
 
     Here we will be adding on what date what activityid was logged into our application
   */
-    export const createTendingObject = async (date,activityId) => {
+    export const createTrendingObject = async (date,activityId) => {
         date = validation.checkDate(date, "Date");
         //activityId = validation.checkId(activityId, "Activity ID");
         const logs = await trending();
@@ -25,9 +25,9 @@ import * as validation from "../utils/validation.js";
 
         let trendingObject = { 
             date: date,
-            activityIds: activityId
+            activityIds: [activityId]
          };
-        let trendingVal=undefined
+        let trendingVal=undefined;
         if(isTheGivenDatePresent){
             trendingVal = await logs.updateOne(
                 { _id: isTheGivenDatePresent._id },
@@ -42,7 +42,9 @@ import * as validation from "../utils/validation.js";
         }
          
     }    
-    const getActivityIdsForDate = async(date) => {
-        /* Implement your logic here to retrieve the list of activity IDs
-        for the given date from your data source */
+    const deleteTrendingObject = async(date,activityId) => {
+        date = validation.checkDate(date, "Date");
+        activityId = validation.checkId(activityId, "Activity ID");
+        const isTheGivenDataPresent = await logs.findOne({ date : date},{activityId : activityId});
+
     } 

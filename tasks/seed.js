@@ -75,4 +75,33 @@ try {
   console.log(e);
 }
 
+
+//####### Trending part ###########
+// import * as trending from "./data/trending.js";
+// import * as connection from "./config/mongoConnection.js";
+
+// async function main() {
+//     const db = await connection.dbConnection();
+    
+//     try {
+//         let trendingData = await trending.createTrendingObject("03/15/2023","absby87484ybsc");
+//         console.log(trendingData);
+//     }catch(e){
+//         console.log(e);
+//     }
+//     try {
+//         let deleteData = await trending.deleteTrendingObject("03/15/2023","absby87474ybsc");
+//         console.log(deleteData);
+//     }catch(e){
+//         console.log(e);
+//     }
+//     await connection.closeConnection();
+//     console.log("Done!");
+// }
+
+// main();
+//####### Trending part ###########
+
+
+
 await closeConnection();
