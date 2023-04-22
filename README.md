@@ -21,11 +21,14 @@ Repository to house final project codebase for 2023S CS 546 Web Programming I @ 
 
 ### Dependencies
 
+- BcryptJS
 - MongoDB Driver
 - Express
 - Express-Handlebars
+- Express-Session
 - Axios
 - Dotenv
+- XSS
 
 ### APIs Used
 

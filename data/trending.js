@@ -3,48 +3,64 @@
 // delete activity id from array of trending object for each deleted activity
 
 import { trending } from "../config/mongoCollections.js";
-import { activity } from "../config/mongoCollections.js";
-import { ObjectId } from "mongodb";
-import * as validation from "../utils/validation.js";
+import { getMovieByActivityId } from "../utils/helper.js";
 
+const updateTrending = async (activityId, date, action) => {
+  const trendingData = await trending();
+  if (action === "add") {
+    const existingTrend = await trendingData.findOne({ date: date });
+    if (!existingTrend)
+      await trendingData.insertOne({
+        date: date,
+        activityIds: [activityId],
+      });
+    else
+      await trendingData.findOneAndUpdate(
+        { date: date },
+        { $push: { activityIds: activityId } },
+        { returnDocument: "after" }
+      );
+  } else if (action === "delete") {
+    let deletedTrend = await trendingData.findOneAndUpdate(
+      { date: date },
+      { $pull: { activityIds: activityId } },
+      { returnDocument: "after" }
+    );
+    if (deletedTrend.activityIds.length === 0)
+      await trendingData.deleteOne({ date: date });
+  }
+};
 
-/*We are going to add only the id into activity.js as well The structure of the object there is going to be
-    trendingObject = {
-      date: 'string',
-      activityIds:[Array of acticity IDs]
-    }
+//all-time trending
+const calculateTrending = async () => {
+  const trendingData = await trending();
+  const trendingInfo = await trendingData.find({}).toArray();
+  let allActivityIds = [];
+  trendingInfo.forEach((trend) => {
+    allActivityIds = allActivityIds.concat(trend.activityIds);
+  });
+  let movieDict = {};
+  for (let i = 0; i < allActivityIds.length; i++) {
+    const activityId = allActivityIds[i];
+    const movieId = await getMovieByActivityId(activityId);
+    if (movieDict[movieId]) movieDict[movieId]++;
+    else movieDict[movieId] = 1;
+  }
+  return movieDict;
+};
 
-    Here we will be adding on what date what activityid was logged into our application
-  */
-    export const createTrendingObject = async (date,activityId) => {
-        date = validation.checkDate(date, "Date");
-        //activityId = validation.checkId(activityId, "Activity ID");
-        const logs = await trending();
+//trending for a specific date
+const calculateTrendingForDate = async (date) => {
+  const trendingData = await trending();
+  const trendingInfo = await trendingData.findOne({ date: date });
+  let movieDict = {};
+  for (let i = 0; i < trendingInfo.activityIds.length; i++) {
+    const activityId = trendingInfo.activityIds[i];
+    const movieId = await getMovieByActivityId(activityId);
+    if (movieDict[movieId]) movieDict[movieId]++;
+    else movieDict[movieId] = 1;
+  }
+  return movieDict;
+};
 
-        const isTheGivenDatePresent = await logs.findOne({ date : date});
-
-        let trendingObject = { 
-            date: date,
-            activityIds: [activityId]
-         };
-        let trendingVal=undefined;
-        if(isTheGivenDatePresent){
-            trendingVal = await logs.updateOne(
-                { _id: isTheGivenDatePresent._id },
-                { $addToSet: { activityIds: activityId } }
-            )
-            return trendingVal;
-        }
-
-        else {
-            trendingVal = await logs.insertOne(trendingObject);
-            return trendingVal;
-        }
-         
-    }    
-    const deleteTrendingObject = async(date,activityId) => {
-        date = validation.checkDate(date, "Date");
-        activityId = validation.checkId(activityId, "Activity ID");
-        const isTheGivenDataPresent = await logs.findOne({ date : date},{activityId : activityId});
-
-    } 
+export { updateTrending, calculateTrending, calculateTrendingForDate };

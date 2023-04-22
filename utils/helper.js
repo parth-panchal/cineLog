@@ -1,10 +1,17 @@
 import axios from "axios";
 import * as dotenv from "dotenv";
+
+import { ObjectId } from "mongodb";
+import { activity } from "../config/mongoCollections.js";
 dotenv.config();
 
 const BASE_URL = "https://api.themoviedb.org/3";
 
 const params = {
+  language: "en-US",
+  include_adult: false,
+  page: 1,
+  api_key: process.env.API_KEY,
   language: "en-US",
   include_adult: false,
   page: 1,
@@ -34,14 +41,13 @@ Returns data: Object, contains movie information fields
 const getMovieInfo = async (movieId) => {
   const endpoint = `/movie/${movieId}`;
 
-  const { data } = await axios.get(BASE_URL + endpoint, { params });
-
-  return data;
-
-  //we need to make this function work so that it throws an error if the movieId is invalid.
-  //I'm using this function in the checkMovieId function in validation.js, so what that function does, is if the movieId is 0, it throws an error as there is no movie with that ID in TMDB.
-  //I tried doing it but i couldn't figure it out.
-  //I think we need to use the axios response object to check if the status code is 200 or not.If it's not 200, then we throw an error. Not sure though.
+  try {
+    const { data } = await axios.get(BASE_URL + endpoint, { params });
+    return data;
+  } catch (error) {
+    // console.log(error);
+    throw "Error: Movie not found";
+  }
 };
 
 /*
@@ -57,8 +63,18 @@ const getRecommendations = async (movieId) => {
   return data;
 };
 
+const getMovieByActivityId = async (activityId) => {
+  const logs = await activity();
+  const log = await logs.findOne(
+    { _id: new ObjectId(activityId) },
+    { movieId: 1 }
+  );
+  if (!log) throw "Error: activity not found";
+  return log.movieId;
+};
+
 /*
 We will require a function which gets the userID from the current session so that's something we need to figure out in the future
 */
 
-export { searchMovie, getMovieInfo, getRecommendations };
+export { searchMovie, getMovieInfo, getRecommendations, getMovieByActivityId };
