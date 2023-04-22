@@ -92,6 +92,8 @@ const getUserByUsername = async (username) => {
 };
 
 const updateUser = async (userId, fName, lName, username, password) => {
+	// Make every field conditional
+	// User can update one or all field or every in between
 	validation.checkProvided("User Update Info", userId, fName, lName, username, password)
 	userId = validation.checkId(userId, "User ID");
 	fName = validation.checkString(fName, "First Name");
@@ -322,6 +324,8 @@ const deleteUser = async (userId) => {
 	if (!deletedUserFromFollowing.acknowledged || deletedUserFromFollowing.matchedCount !== deletedUserFromFollowing.modifiedCount) {
 		throw `Error: User with id ${userId} is deleted but could not delete user from followings lists`;
 	}
+
+	// Need to go through activity of user, and delete from trending 
 
 	const returnObj = {
 		userId: deletedUser.value._id.toString(),
