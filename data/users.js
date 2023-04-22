@@ -55,7 +55,7 @@ const getAllUsers = async () => {
   const userCollection = await users();
   let userArr = await userCollection.find({}).toArray();
 
-  if (!userArr) throw `Error: Could not get all bands`;
+  if (!userArr) throw `Error: Could not get all users`;
 
   userArr = userArr.map((user) => {
     user._id = user._id.toString();
@@ -92,6 +92,23 @@ const getUserByUsername = async (username) => {
 
   return userInfo;
 };
+
+const getUserByUsernamePartial = async (username) => {
+  validation.checkProvided("Username", username);
+  username = validation.checkString(username, "Username search query");
+
+  const userCollection = await users();
+  let userArr = await userCollection.find({ username: {$regex: username, $options: "i"}}).toArray();
+
+  if (!userArr.length) throw `Error: No users found`;
+
+  userArr = userArr.map((user) => {
+    user._id = user._id.toString();
+    return user;
+  });
+
+  return userArr;
+}
 
 const updateUser = async (userId, fName, lName, username, password) => {
 	// Make every field conditional
@@ -369,6 +386,7 @@ export {
   createUser,
   getAllUsers,
   getUserByUsername,
+  getUserByUsernamePartial,
   getUserById,
   updateUser,
   updateUserLikes,
