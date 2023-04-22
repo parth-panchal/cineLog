@@ -2,32 +2,46 @@ import { Router } from "express";
 import xss from "xss";
 import { userData } from "../data/index.js";
 import * as validation from "../utils/validation.js";
+import { searchMovie } from "../utils/helper.js"; 
 
 const router = Router();
 
 router
-    .route('/movies')
+    .route('/movies/:movieTitle')
     .get(async (req, res) => {
-        // Return the search results of the movie title
+        let movieTitle = xss(req.params.movieTitle);
 
-    })
-    .post(async (req, res) => {
-        // When the user searches for a movie title, it would make a request here
-        // Makes API Call
-        // Redirects to get route with info if valid
+        try {
+            movieTitle = await validation.checkMovieId(movieTitle);
+        } catch (error) {
+            return res.status(400).json({error: error});
+        }
 
+        try {
+            const movieInfo = await searchMovie(movieTitle);
+            res.render('searchResults', {results: movieInfo});
+        } catch (error) {
+            return res.status(500).json({error: error});
+        }
     });
 
 router
-    .route('/users')
+    .route('/users/:username')
     .get(async (req, res) => {
+        let username = xss(req.params.username);
 
-    })
-    .post(async (req, res) => {
-        // When the user searches for a user, it would make a request here
-        // Makes DB call, searchByUsername
-        // Redirects to get route with info if valid
+        try {
+            username = validation.checkString(username, "Username search query");
+        } catch (error) {
+            return res.status(400).json({error: error});
+        }
 
+        try {
+            const users = await userData.getUserByUsernamePartial(username);
+            res.render('searchResults', {results: users});
+        } catch (error) {
+            return res.status(500).json({error: error});
+        }
     });
 
 export default router;
