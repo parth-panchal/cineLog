@@ -1,22 +1,3 @@
-<<<<<<< HEAD
-import * as trending from "./data/trending.js";
-import * as connection from "./config/mongoConnection.js";
-
-async function main() {
-    const db = await connection.dbConnection();
-    await db.dropDatabase();
-    try {
-        let trendingData = await trending.createTendingObject("03/15/2023","absby87474ybsc");
-        console.log(trendingData);
-    }catch(e){
-        console.log(e);
-    }
-    await connection.closeConnection();
-    console.log("Done!");
-}
-
-main();
-=======
 import express from "express";
 import configRoutes from "./routes/index.js";
 import { fileURLToPath } from "url";
@@ -56,4 +37,3 @@ app.listen(3000, () => {
     console.log("We've now got a server!");
     console.log('Your routes will be running on http://localhost:3000');
 })
->>>>>>> 77ebcde867c8142dd0b051fe7fbddcab07ebe2f5
