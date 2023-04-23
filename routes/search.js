@@ -12,14 +12,14 @@ router
         let movieTitle = xss(req.params.movieTitle);
 
         try {
-            movieTitle = await validation.checkMovieId(movieTitle);
+            movieTitle = validation.checkString(movieTitle, "Movie Title");
         } catch (error) {
             return res.status(400).json({error: error});
         }
 
         try {
-            const movieInfo = await searchMovie(movieTitle);
-            res.render('searchResults', {results: movieInfo});
+            const moviesInfo = await searchMovie(movieTitle);
+            res.render('searchResults', {results: moviesInfo});
         } catch (error) {
             return res.status(500).json({error: error});
         }
