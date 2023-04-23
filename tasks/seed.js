@@ -1,7 +1,7 @@
 import { dbConnection, closeConnection } from "../config/mongoConnection.js";
 import * as activity from "../data/activity.js";
 import * as trending from "../data/trending.js";
-import lists from "../data/lists.js";
+import * as lists from "../data/lists.js";
 import userSeeding from "./userSeed.js";
 
 const db = await dbConnection();
