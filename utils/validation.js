@@ -144,11 +144,37 @@ const checkProvided = (name, ...args) => {
   }
 };
 
+const checkName = (name, variableName) => {
+  checkString(name, variableName);
+  if (name.length < 2 || name.length > 25)
+    throw `at ${location}: ${variableName} must be between 2 and 25 characters`;
+  if (name.match(/\d/))
+    throw `at ${location}: ${variableName} must not contain numbers`;
+  return name;
+};
+
+const checkPassword = (password) => {
+  checkString(password, "Password");
+  if (password.length < 8) throw "password must be at least 8 characters";
+  if (!password.match(/[A-Z]/))
+    throw "password must contain at least one uppercase letter";
+  if (!password.match(/\d/)) throw "password must contain at least one number";
+  if (!password.match(/[^A-Za-z0-9]/))
+    throw "password must contain at least one special character";
+  return password;
+};
+
+const checkOperation = (operation) => {
+  checkString(operation, "Operation");
+  if (operation !== "add" && operation !== "remove")
+    throw "Error: Operation must be either 'add' or 'remove'";
+  return operation;
+};
+
 export {
   checkString,
   checkStringArray,
   checkUsername,
-  // checkEmail,
   checkNumber,
   checkNumberAndRoundOne,
   checkId,
@@ -157,4 +183,7 @@ export {
   checkRating,
   checkDate,
   checkProvided,
+  checkName,
+  checkPassword,
+  checkOperation,
 };

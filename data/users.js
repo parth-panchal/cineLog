@@ -10,8 +10,8 @@ import * as validation from "../utils/validation.js";
 
 const createUser = async (fName, lName, username, password) => {
   validation.checkProvided("User Info", fName, lName, username, password);
-  fName = validation.checkString(fName, "First Name");
-  lName = validation.checkString(lName, "Last Name");
+  fName = validation.checkName(fName, "First Name");
+  lName = validation.checkName(lName, "Last Name");
   /* TODO:
 	- Improve validation/storing for password once we learn
 	  hashing and authentication
@@ -19,7 +19,7 @@ const createUser = async (fName, lName, username, password) => {
 	)
 	*/
   username = validation.checkUsername(username);
-  password = validation.checkString(password, "Password");
+  password = validation.checkPassword(password, "Password");
 
   // Try to see if the username already exists in DB
   let existingUsername = undefined;
@@ -37,7 +37,7 @@ const createUser = async (fName, lName, username, password) => {
     username: username, //.toLowerCase(),
     password: password,
     likes: [],
-    watchList: [],
+    watchlist: [],
     following: [],
     lists: [],
   };
@@ -55,7 +55,7 @@ const getAllUsers = async () => {
   const userCollection = await users();
   let userArr = await userCollection.find({}).toArray();
 
-  if (!userArr) throw `Error: Could not get all bands`;
+  if (!userArr) throw `Error: Could not get all users`;
 
   userArr = userArr.map((user) => {
     user._id = user._id.toString();
@@ -93,6 +93,25 @@ const getUserByUsername = async (username) => {
   return userInfo;
 };
 
+const getUserByUsernamePartial = async (username) => {
+  validation.checkProvided("Username", username);
+  username = validation.checkString(username, "Username search query");
+
+  const userCollection = await users();
+  let userArr = await userCollection
+    .find({ username: { $regex: username, $options: "i" } })
+    .toArray();
+
+  if (!userArr.length) throw `Error: No users found`;
+
+  userArr = userArr.map((user) => {
+    user._id = user._id.toString();
+    return user;
+  });
+
+  return userArr;
+};
+
 const updateUser = async (userId, fName, lName, username, password) => {
   validation.checkProvided(
     "User Update Info",
@@ -103,14 +122,14 @@ const updateUser = async (userId, fName, lName, username, password) => {
     password
   );
   userId = validation.checkId(userId, "User ID");
-  fName = validation.checkString(fName, "First Name");
-  lName = validation.checkString(lName, "Last Name");
+  fName = validation.checkName(fName, "First Name");
+  lName = validation.checkName(lName, "Last Name");
   /* TODO:
 	- Improve validation/storing for password once we learn
 	  hashing and authentication
 	*/
   username = validation.checkUsername(username);
-  password = validation.checkString(password, "Password");
+  password = validation.checkPassword(password, "Password");
 
   const existingUser = await getUserById(userId);
 
@@ -204,7 +223,7 @@ const updateUserLikes = async (userId, likeMovieId, operation) => {
   }
 };
 
-const updateUserWatchList = async (userId, watchlistMovieId, operation) => {
+const updateUserWatchlist = async (userId, watchlistMovieId, operation) => {
   validation.checkProvided(
     "User Watchlist",
     userId,
@@ -218,14 +237,14 @@ const updateUserWatchList = async (userId, watchlistMovieId, operation) => {
 
   if (operation === "add") {
     const existingUser = await getUserById(userId);
-    if (existingUser.watchList.includes(watchlistMovieId))
+    if (existingUser.watchlist.includes(watchlistMovieId))
       throw `Error: Movie ${watchlistMovieId} already exist in ${userId} watchlist`;
 
     const updatedUser = await userCollection.findOneAndUpdate(
       { _id: new ObjectId(userId) },
-      { $addToSet: { watchList: watchlistMovieId } },
+      { $addToSet: { watchlist: watchlistMovieId } },
       {
-        projection: { _id: 1, watchList: 1 },
+        projection: { _id: 1, watchlist: 1 },
         returnDocument: "after",
       }
     );
@@ -239,7 +258,7 @@ const updateUserWatchList = async (userId, watchlistMovieId, operation) => {
     return updatedUser.value;
   } else if (operation === "remove") {
     const existingUser = await getUserById(userId);
-    if (!existingUser.watchList.includes(watchlistMovieId))
+    if (!existingUser.watchlist.includes(watchlistMovieId))
       throw `Error: Movie ${watchlistMovieId} doesn't exist in ${userId} watchlist`;
 
     const updatedUser = await userCollection.findOneAndUpdate(
@@ -350,6 +369,8 @@ const deleteUser = async (userId) => {
     throw `Error: User with id ${userId} is deleted but could not delete user from followings lists`;
   }
 
+  // Need to go through activity of user, and delete from trending
+
   const returnObj = {
     userId: deletedUser.value._id.toString(),
     deleted: true,
@@ -372,10 +393,11 @@ export {
   createUser,
   getAllUsers,
   getUserByUsername,
+  getUserByUsernamePartial,
   getUserById,
   updateUser,
   updateUserLikes,
-  updateUserWatchList,
+  updateUserWatchlist,
   updateUserFollowing,
   deleteUser,
 };

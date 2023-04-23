@@ -1,13 +1,13 @@
 import { dbConnection, closeConnection } from "../config/mongoConnection.js";
 import * as activity from "../data/activity.js";
 import * as trending from "../data/trending.js";
-import lists from "../data/lists.js";
+import * as lists from "../data/lists.js";
 import userSeeding from "./userSeed.js";
 
 const db = await dbConnection();
 await db.dropDatabase();
 
-//await userSeeding();
+await userSeeding();
 
 // ================================= Activity Seeding =================================
 
@@ -86,7 +86,7 @@ try {
 
 // ================================= Lists Seeding ================================
 // try {
-//   let list1 = await lists.create(
+//   let list1 = await lists.createList(
 //     "643df5013cdc12d55448a21c",
 //     "Best movies of 2022",
 //     [ 555, 51, 233, 108]
@@ -96,7 +96,7 @@ try {
 //   console.log(e);
 // }
 // try {
-//   let list2 = await lists.create(
+//   let list2 = await lists.createList(
 //     "643df5013cdc12d55448a21c",
 //     "Best movies of 2025",
 //     [ 555, 51, 233, 108]
@@ -106,19 +106,19 @@ try {
 //   console.log(e);
 // }
 // try {
-//   let k = await lists.getAll("643df5013cdc12d55448a21c");
+//   let k = await lists.getAllLists("643df5013cdc12d55448a21c");
 //   console.log(k);
 // } catch (e) {
 //   console.log(e);
 // }
 // try {
-//   let k = await lists.get("643df579caabb1d767f569e7");
+//   let k = await lists.getAllLists("643df579caabb1d767f569e7");
 //   console.log(k);
 // } catch (e) {
 //   console.log(e);
 // }
 // try {
-//   let k = await lists.delete("643df579caabb1d767f569e7");
+//   let k = await lists.deleteList("643df579caabb1d767f569e7");
 //   console.log(k);
 // } catch (e) {
 //   console.log(e);
