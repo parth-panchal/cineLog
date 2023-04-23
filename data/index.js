@@ -1,5 +1,5 @@
 import * as activityDataFunctions from "./activity.js";
-import listsDataFunctions from "./lists.js";
+import * as listsDataFunctions from "./lists.js";
 import * as trendingDataFunctions from "./trending.js";
 import * as userDataFunctions from "./users.js";
 
