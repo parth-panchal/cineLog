@@ -604,4 +604,32 @@ export default async function main() {
     } catch(error) {
         console.log(error)
     }
+
+    // Test Case: Partial Searching
+    console.log("----------------------TEST 2-----------------");    
+    try {
+        let newUser = await user.createUser(
+            "Parshotan",
+            "Seenanan",
+            "testAccy5",
+            "testPass"
+        );
+        if(newUser) console.log("User created 4");
+    } catch(error) {
+        console.log(error);
+    }
+
+    try {
+        let userArr = await user.getUserByUsernamePartial("oo");
+        if(userArr) console.log("Got users for partial search")
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let userArr = await user.getUserByUsernamePartial("te");
+        if(userArr) console.log("Got users for partial search")
+    } catch (error) {
+        console.log(error);
+    }
 }

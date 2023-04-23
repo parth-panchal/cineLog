@@ -7,7 +7,7 @@ import userSeeding from "./userSeed.js";
 const db = await dbConnection();
 await db.dropDatabase();
 
-//await userSeeding();
+await userSeeding();
 
 // ================================= Activity Seeding =================================
 

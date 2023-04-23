@@ -55,7 +55,7 @@ const getAllUsers = async () => {
   const userCollection = await users();
   let userArr = await userCollection.find({}).toArray();
 
-  if (!userArr) throw `Error: Could not get all bands`;
+  if (!userArr) throw `Error: Could not get all users`;
 
   userArr = userArr.map((user) => {
     user._id = user._id.toString();
@@ -93,19 +93,31 @@ const getUserByUsername = async (username) => {
   return userInfo;
 };
 
+const getUserByUsernamePartial = async (username) => {
+  validation.checkProvided("Username", username);
+  username = validation.checkString(username, "Username search query");
+
+  const userCollection = await users();
+  let userArr = await userCollection.find({ username: {$regex: username, $options: "i"}}).toArray();
+
+  if (!userArr.length) throw `Error: No users found`;
+
+  userArr = userArr.map((user) => {
+    user._id = user._id.toString();
+    return user;
+  });
+
+  return userArr;
+}
+
 const updateUser = async (userId, fName, lName, username, password) => {
-  validation.checkProvided(
-    "User Update Info",
-    userId,
-    fName,
-    lName,
-    username,
-    password
-  );
-  userId = validation.checkId(userId, "User ID");
-  fName = validation.checkString(fName, "First Name");
-  lName = validation.checkString(lName, "Last Name");
-  /* TODO:
+	// Make every field conditional
+	// User can update one or all field or every in between
+	validation.checkProvided("User Update Info", userId, fName, lName, username, password)
+	userId = validation.checkId(userId, "User ID");
+	fName = validation.checkString(fName, "First Name");
+	lName = validation.checkString(lName, "Last Name");
+	/* TODO:
 	- Improve validation/storing for password once we learn
 	  hashing and authentication
 	*/
@@ -350,10 +362,12 @@ const deleteUser = async (userId) => {
     throw `Error: User with id ${userId} is deleted but could not delete user from followings lists`;
   }
 
-  const returnObj = {
-    userId: deletedUser.value._id.toString(),
-    deleted: true,
-  };
+	// Need to go through activity of user, and delete from trending 
+
+	const returnObj = {
+		userId: deletedUser.value._id.toString(),
+		deleted: true
+	}
 
   return returnObj;
 };
@@ -372,6 +386,7 @@ export {
   createUser,
   getAllUsers,
   getUserByUsername,
+  getUserByUsernamePartial,
   getUserById,
   updateUser,
   updateUserLikes,
