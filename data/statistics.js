@@ -1,13 +1,12 @@
 //statistics data functions
 
 //1. total number of movies watched
-//2. total number of movies watched by year
-//3. total hours of movies watched
-//4. most genre watched
-//5. most actor watched
-//6. most director watched
-//7. average rating given to movies watched
-//8. favorite decade of movies to watch
+//2. total hours of movies watched
+//3. most genre watched
+//4. most actor watched
+//5. most director watched
+//6. average rating given to movies watched
+//7. favorite decade of movies to watch
 
 //can add more functions if needed
 
@@ -20,17 +19,6 @@ const getTotalMoviesWatched = async (userId) => {
   const allLogs = await logs.find({ userId: userId }).toArray();
   let total = allLogs.length;
   return total;
-};
-
-const getTotalMoviesWatchedYear = async (userId, year) => {
-  if (typeof year !== "number") throw "Error: year must be a number";
-  const allLogs = await activity();
-  const logs = await allLogs.find({ userId: userId }).toArray();
-  let count = 0;
-  logs.forEach((log) => {
-    if (helper.getYearFromDateString(log.date) == year) count++;
-  });
-  return count;
 };
 
 const getTotalHoursWatched = async (userId) => {
@@ -139,7 +127,6 @@ const getFavoriteDecade = async (userId) => {
 export {
   getTotalHoursWatched,
   getTotalMoviesWatched,
-  getTotalMoviesWatchedYear,
   getMostWatchedActor,
   getMostWatchedDirector,
   getMostGenreWatched,
