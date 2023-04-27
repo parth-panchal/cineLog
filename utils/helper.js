@@ -108,6 +108,32 @@ const getMovieReleaseYear = async (movieId) => {
   return data.release_date.split("-")[0];
 };
 
+const getMovieCast = async (movieId) => {
+  const endpoint = `/movie/${movieId}`;
+  params["append_to_response"] = "credits";
+  try {
+    const { data } = await axios.get(BASE_URL + endpoint, { params });
+    delete params.append_to_response;
+    return data.credits.cast;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const getMovieCrew = async (movieId) => {
+  const endpoint = `/movie/${movieId}`;
+  params["append_to_response"] = "credits";
+  try {
+    const { data } = await axios.get(BASE_URL + endpoint, { params });
+    delete params.append_to_response;
+    return data.credits.crew;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+//console.log(await getMovieCast(550));
+
 /*
 We will require a function which gets the userID from the current session so that's something we need to figure out in the future
 */
@@ -122,4 +148,6 @@ export {
   getMovieRuntime,
   getMovieGenres,
   getMovieReleaseYear,
+  getMovieCast,
+  getMovieCrew,
 };
