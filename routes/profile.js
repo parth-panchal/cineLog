@@ -287,3 +287,5 @@ router.route("/statistics").get(async (req, res) => {
     res.render("error", { error: e });
   }
 });
+
+export default router;

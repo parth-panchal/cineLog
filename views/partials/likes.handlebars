@@ -4,7 +4,7 @@
 <ul>
     {{#each userLikes}}
     <li>
-        {{this.title}}
+        <a href="/movie/{{this.id}}">{{this.original_title}}</a>
         <form method="POST" action="/likes">
             <!-- Is this even the correct way to do it? -->
             <input type="hidden" name="_method" value="PATCH">

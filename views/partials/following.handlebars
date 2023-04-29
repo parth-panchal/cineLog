@@ -5,6 +5,7 @@
     {{#each following}}
     <li>
         {{this.name}}
+        <a href="/{{this.username}}">{{this.username}}</a>
         <form method="POST" action="/following">
             <!-- Is this even the correct way to do it? -->
             <input type="hidden" name="_method" value="PATCH">
