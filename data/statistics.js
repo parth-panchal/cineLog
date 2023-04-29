@@ -21,19 +21,22 @@ const getTotalMoviesWatched = async (userId) => {
   return total;
 };
 
-const getTotalHoursWatched = async (userId) => {
+const getTotalTimeWatched = async (userId) => {
   const allLogs = await activity();
   const logs = await allLogs.find({ userId: userId }).toArray();
   let sum = await logs.reduce(async (previousPromise, log) => {
     let totalHours = await previousPromise;
     let movieHours = await helper.getMovieRuntime(log.movieId);
-    console.log(`Movie Hour: ${movieHours}`);
     return totalHours + movieHours;
   }, Promise.resolve(0));
-  return await sum;
+  //convert to hours and minutes
+  let hours = Math.floor(sum / 60);
+  let minutes = sum % 60;
+  let totalTime = { hours: hours, minutes: minutes };
+  return `${totalTime.hours} hours, ${totalTime.minutes} minutes`;
 };
 
-const getMostGenreWatched = async (userId) => {
+const getMostWatchedGenre = async (userId) => {
   const allLogs = await activity();
   const logs = await allLogs.find({ userId: userId }).toArray();
   let all = await logs.reduce(async (previousPromise, log) => {
@@ -52,7 +55,30 @@ const getMostGenreWatched = async (userId) => {
       mostCommonGenre = genre;
     }
   }
-  return mostCommonGenre;
+  return mostCommonGenre.name;
+};
+
+const getMostWatchedMovie = async (userId) => {
+  let allLogs = await activity();
+  let logs = await allLogs.find({ userId: userId }).toArray();
+  let all = await logs.reduce(async (previousPromise, log) => {
+    let allMovies = await previousPromise;
+    let movie = await helper.getMovieInfo(log.movieId);
+    return allMovies.concat(movie);
+  }, Promise.resolve([]));
+  //count movie which has most logs
+  let counts = {};
+  let maxCount = 0;
+  let mostWatchedMovie = null;
+  for (let i = 0; i < all.length; i++) {
+    let movie = all[i];
+    counts[movie.original_title] = (counts[movie.original_title] || 0) + 1;
+    if (counts[movie.original_title] > maxCount) {
+      maxCount = counts[movie.original_title];
+      mostWatchedMovie = movie.original_title;
+    }
+  }
+  return mostWatchedMovie;
 };
 
 const getMostWatchedActor = async (userId) => {
@@ -68,7 +94,6 @@ const getMostWatchedActor = async (userId) => {
     if (actor.known_for_department == "Acting")
       actorCounts[actor.name] = (actorCounts[actor.name] || 0) + 1;
   });
-  console.log(actorCounts);
   let sortedActorCounts = Object.keys(actorCounts).sort((a, b) => {
     return actorCounts[b] - actorCounts[a];
   });
@@ -119,17 +144,33 @@ const getFavoriteDecade = async (userId) => {
     let decade = Math.floor(year / 10) * 10;
     decades[decade] = (decades[decade] || 0) + 1;
   });
-  return Object.keys(decades).reduce((a, b) =>
+  let decade = Object.keys(decades).reduce((a, b) =>
     decades[a] > decades[b] ? a : b
   );
+  return `${decade}s`;
 };
 
-export {
-  getTotalHoursWatched,
-  getTotalMoviesWatched,
-  getMostWatchedActor,
-  getMostWatchedDirector,
-  getMostGenreWatched,
-  getAverageRatingByUser,
-  getFavoriteDecade,
+const allStats = async (userId) => {
+  userId = validation.checkId(userId);
+  let totalMoviesWatched = await getTotalMoviesWatched(userId);
+  let totalTimeWatched = await getTotalTimeWatched(userId);
+  let mostWatchedMovie = await getMostWatchedMovie(userId);
+  let mostWatchedGenre = await getMostWatchedGenre(userId);
+  let mostWatchedActor = await getMostWatchedActor(userId);
+  let mostWatchedDirector = await getMostWatchedDirector(userId);
+  let averageRatingByUser = await getAverageRatingByUser(userId);
+  let favoriteDecade = await getFavoriteDecade(userId);
+
+  return {
+    totalMoviesWatched,
+    totalTimeWatched,
+    mostWatchedMovie,
+    mostWatchedGenre,
+    mostWatchedActor,
+    mostWatchedDirector,
+    averageRatingByUser,
+    favoriteDecade,
+  };
 };
+
+export { allStats };
