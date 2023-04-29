@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cineLog</title>
+    <title>cineLog {{title}}</title>
 </head>
 <body>
     <header>
         <img src="../../public/images/No_Image_Available.jpg" alt="cineLog">
         {{> searchbar }}
-        <button type="submit">Login</button>
-        <button type="submit">Sign Up</button>
+        <button type="submit" id="loginButton">Login</button>
+        <button type="submit" id="signupButton">Sign Up</button>
     </header>
     <main>
         {{{body}}}

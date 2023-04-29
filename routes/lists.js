@@ -4,24 +4,27 @@ import { listData } from "../data/index.js";
 import * as validation from "../utils/validation.js";
 
 router
-  .route("/:userId")
+  .route("/")
   .get(async (req, res) => {
     //code to GET all lists from a user
+    let userId;
     try {
-      let userId = validation.checkId(req.params.userId, "User ID");
+      userId = req.session.user.id ;
+      userId=validation.checkId(userId, "User ID");
     } catch (error) {
       return res
         .status(400)
-        .json({ ErrorMessage: "A valid userId must be provided!" });
+        .render("error",{ ErrorMessage: "A valid userId must be provided!" });
     }
     try {
-      let userId = validation.checkId(req.params.userId, "User ID");
       const lists = await listData.getAllLists(userId);
       return res.status(200).json(lists);
     } catch (e) {
-      return res.status(404).json({ error: e });
+      return res.status(404).render("error",{error:e});
     }
-  })
+  });
+router
+  .route("/newlist")
   .post(async (req, res) => {
     //code to POST lists for a user
     const listInfo = req.body;
@@ -57,6 +60,7 @@ router
   })
   .delete(async (req, res) => {
     //code to DELETE a list
+    let listId;
     try {
       let listId = validation.checkId(req.params.listId, "List ID");
     } catch (error) {
@@ -66,7 +70,6 @@ router
     }
 
     try {
-      let listId = validation.checkId(req.params.listId, "List ID");
       await listData.deleteList(listId);
       return res.status(200).json({ listId: listId, deleted: true });
     } catch (e) {
