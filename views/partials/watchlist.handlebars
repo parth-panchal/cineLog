@@ -1,0 +1,20 @@
+<h1>My Watchlist</h1>
+
+{{#if userWatchlist}}
+<ul>
+    {{#each userWatchlist}}
+    <li>
+        {{this.title}}
+        <form method="POST" action="/watchlist">
+            <!-- Is this even the correct way to do it? -->
+            <input type="hidden" name="_method" value="PATCH">
+            <input type="hidden" name="movieId" value="{{this._id}}">
+            <input type="hidden" name="operation" value="remove">
+            <button type="submit">Remove</button>
+        </form>
+    </li>
+    {{/each}}
+</ul>
+{{else}}
+<p>Your watchlist is empty.</p>
+{{/if}}
