@@ -1,0 +1,20 @@
+<h1>Movies I Likes</h1>
+
+{{#if userLikes}}
+<ul>
+    {{#each userLikes}}
+    <li>
+        {{this.title}}
+        <form method="POST" action="/likes">
+            <!-- Is this even the correct way to do it? -->
+            <input type="hidden" name="_method" value="PATCH">
+            <input type="hidden" name="movieId" value="{{this._id}}">
+            <input type="hidden" name="operation" value="remove">
+            <button type="submit">Remove</button>
+        </form>
+    </li>
+    {{/each}}
+</ul>
+{{else}}
+<p>You haven't liked any movies yet.</p>
+{{/if}}
