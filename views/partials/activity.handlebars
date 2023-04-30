@@ -1,14 +1,32 @@
-<h1>My Lists</h1>
-
-{{#if logs}}
-<ul>
+<h1>Activity Logs</h1>
+{{#if logs.length}}
+<table>
+  <thead>
+    <tr>
+      <th>Activity ID</th>
+      <th>Movie ID</th>
+      <th>User ID</th>
+      <th>Review</th>
+      <th>Rating</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
     {{#each logs}}
-    <li>
-        {{!-- how do i make the call to get the movie title here? --}}
-        <a href="/activity/{{this._id}}">{{this.movieId}} logged on {{this.date}}</a>
-    </li>
+    <tr>
+      <td>{{this.activityId}}</td>
+      <td>{{this.movieId}}</td>
+      <td>{{this.userId}}</td>
+      <td>{{this.review}}</td>
+      <td>{{this.rating}}</td>
+      <td>{{this.date}}</td>
+    </tr>
     {{/each}}
-</ul>
+  </tbody>
+</table>
 {{else}}
-<p>You haven't logged any movies yet.</p>
+<p>No activity logs found.</p>
 {{/if}}
+</body>
+
+</html>
