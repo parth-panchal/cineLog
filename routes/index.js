@@ -1,6 +1,6 @@
 import activityRoutes from "./activity.js";
-// import homepageRoutes from "./homepage.js";
-// import listsRoutes from "./lists.js";
+import homepageRoutes from "./homepage.js";
+import listsRoutes from "./lists.js";
 // import loginRoutes from "./login.js";
 // import movieRoutes from "./movie.js";
 // import profileRoutes from "./profile.js";
@@ -15,7 +15,7 @@ const constructorMethod = (app) => {
     // app.use('/signup', signupRoutes);
     // app.use('/profile', profileRoutes);
     app.use('/activity', activityRoutes);
-    // app.use('/lists', listsRoutes);
+    app.use('/lists', listsRoutes);
     // app.use('/movie', movieRoutes);
     // app.use('/user', userRoutes);
 
