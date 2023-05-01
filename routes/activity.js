@@ -13,9 +13,9 @@ router
     .route('/')
     .get(async (req, res) => {
         try {
-            const activityInfo = await activityData.getAllLogs();
+            const activityInfo = await activityData.gettopLogs();
             console.log(activityInfo)
-            res.status(200).send(activityInfo);
+            res.status(200).render('homeactivity', {title: "Activity Dashboard", results : activityInfo});
         } catch (e) {
             res.status(404).json({ error: "No Activities Found"});
             return;
@@ -54,7 +54,26 @@ router
     })
 
 router
-    .route('/:id')
+    .route('/showmore')
+    .get(async (req, res) => {
+        try {
+            console.log("Check A")
+            const activityInfo = await activityData.getAllLogs();
+            console.log("------------------------------")
+    
+            console.log("------------------------------")
+            console.log("Check B")
+            console.log(activityInfo)
+            //res.status(200).send(activityInfo);
+            res.status(200).render('homeactivity', {title: "Activity Dashboard", results : activityInfo});
+        } catch (e) {
+            res.status(404).json({ error: "No Activities Found"});
+            return;
+        }
+    })
+    
+router
+    .route('showmore/:id')
     .get(async (req, res) => {
         // if (!ObjectId.isValid(req.params.id)) {
         //     res.status(400).json({ error: "Provided id is not valid" });
@@ -70,7 +89,7 @@ router
         try {
             const activityInfo = await activityData.getLogById(activityId);
             console.log(activityInfo)
-            res.status(200).send(activityInfo);
+            res.status(200).render('view', {title: "Dashboard", results : activityInfo});
 
             
           } catch (e) {
