@@ -42,6 +42,16 @@ const getLogById = async (activityId) => {
   return log;
 };
 
+const gettopLogs = async () => {
+  console.log("Check 1")
+ const logs = await activity();
+ console.log("Check 2")
+ const all = await logs.find({}).limit(5).toArray();
+ //console.log(all)
+ console.log("Check 3 !!")
+ return all;
+};
+
 // Get all activity logs for a given username
 const getLogsByUserId = async (userId) => {
   // need to add check here from user data functions to see if user exists?
@@ -120,4 +130,5 @@ export {
   getAllLogs,
   editLog,
   deleteLog,
+  gettopLogs
 };
