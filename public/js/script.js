@@ -11,12 +11,4 @@
         console.log(searchText);
     });
 
-    loginButton.click(() => {
-        window.location.href = '/login';
-    });
-
-    signupButton.click(() => {
-        window.location.href = '/signup';
-    });
-
 })(window.jQuery);
