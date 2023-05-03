@@ -64,3 +64,4 @@ const calculateTrendingForDate = async (date) => {
 };
 
 export { updateTrending, calculateTrending, calculateTrendingForDate };
+

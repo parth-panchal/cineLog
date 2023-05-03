@@ -9,6 +9,6 @@
         console.log(searchForm);
         console.log(searchOption);
         console.log(searchText);
-    })
+    });
 
 })(window.jQuery);
