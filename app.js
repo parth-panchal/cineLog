@@ -44,16 +44,6 @@ app.use(
   })
 );
 
-app.use(
-  session({
-    name: "AuthCookie",
-    secret: process.env.SESSION_SECRET,
-    saveUninitialized: true,
-    resave: false,
-    cookie: { maxAge: 60000 },
-  })
-);
-
 app.use(middleware.rewriteUnsupportedBrowserMethods);
 app.use("/lists",middleware.lists);
 app.use("/logout",middleware.logout);
