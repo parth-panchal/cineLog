@@ -1,0 +1,18 @@
+<h1>Search Results</h1>
+{{#if noResults}} 
+    <h2>Sorry, No Results Found</h2>
+{{/if}}
+{{#if isMovieSearch}}
+    {{#each results}}
+        <img src="https://image.tmdb.org/t/p/w500{{poster_path}}" alt="Poster for {{title}}" class="img-thumbnail">
+        <a href="/movie/{{id}}" class="searchResult-Title">{{title}}</a>
+        <p>{{overview}}</p>
+    {{/each}}
+{{else}}
+    {{#each results}}
+        <a href="/user/{{username}}" class="searchResult-Title">{{username}}</a>
+        <p>{{fName}} {{lName}}</p>
+    {{/each}}
+{{/if}}
+
+
