@@ -110,23 +110,19 @@ const getMovieReleaseYear = async (movieId) => {
 
 const getMovieCast = async (movieId) => {
   const endpoint = `/movie/${movieId}`;
-  params["append_to_response"] = "credits";
   try {
     const { data } = await axios.get(BASE_URL + endpoint, { params });
-    delete params.append_to_response;
-    return data.credits.cast;
+    return data.cast;
   } catch (e) {
     console.log(e);
   }
 };
 
 const getMovieCrew = async (movieId) => {
-  const endpoint = `/movie/${movieId}`;
-  params["append_to_response"] = "credits";
+  const endpoint = `/movie/${movieId}/credits`;
   try {
     const { data } = await axios.get(BASE_URL + endpoint, { params });
-    delete params.append_to_response;
-    return data.credits.crew;
+    return data.crew;
   } catch (e) {
     console.log(e);
   }

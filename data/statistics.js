@@ -18,6 +18,7 @@ const getTotalMoviesWatched = async (userId) => {
   const logs = await activity();
   const allLogs = await logs.find({ userId: userId }).toArray();
   let total = allLogs.length;
+  console.log("Got total movies watched");
   return total;
 };
 
@@ -33,6 +34,7 @@ const getTotalTimeWatched = async (userId) => {
   let hours = Math.floor(sum / 60);
   let minutes = sum % 60;
   let totalTime = { hours: hours, minutes: minutes };
+  console.log("Got total time watched");
   return `${totalTime.hours} hours, ${totalTime.minutes} minutes`;
 };
 
@@ -44,17 +46,20 @@ const getMostWatchedGenre = async (userId) => {
     let movieGenres = await helper.getMovieGenres(log.movieId);
     return allGenres.concat(movieGenres);
   }, Promise.resolve([]));
+  console.log(all);
   let counts = {};
   let maxCount = 0;
   let mostCommonGenre = null;
   for (let i = 0; i < all.length; i++) {
     let genre = all[i];
+    console.log(genre);
     counts[genre.name] = (counts[genre.name] || 0) + 1;
     if (counts[genre.name] > maxCount) {
       maxCount = counts[genre.name];
       mostCommonGenre = genre;
     }
   }
+  console.log(mostCommonGenre.name);
   return mostCommonGenre.name;
 };
 
@@ -78,6 +83,7 @@ const getMostWatchedMovie = async (userId) => {
       mostWatchedMovie = movie.original_title;
     }
   }
+  console.log("Got most watched movie");
   return mostWatchedMovie;
 };
 
@@ -97,6 +103,7 @@ const getMostWatchedActor = async (userId) => {
   let sortedActorCounts = Object.keys(actorCounts).sort((a, b) => {
     return actorCounts[b] - actorCounts[a];
   });
+  console.log("Got most watched actor");
   return sortedActorCounts[0];
 };
 
@@ -116,6 +123,7 @@ const getMostWatchedDirector = async (userId) => {
   let sortedDirectorCounts = Object.keys(directorCounts).sort((a, b) => {
     return directorCounts[b] - directorCounts[a];
   });
+  console.log("Got most watched director");
   return sortedDirectorCounts[0];
 };
 
@@ -128,6 +136,7 @@ const getAverageRatingByUser = async (userId) => {
     count++;
     totalRating += log.rating;
   });
+  console.log("Got average rating");
   return totalRating / count;
 };
 
@@ -147,11 +156,16 @@ const getFavoriteDecade = async (userId) => {
   let decade = Object.keys(decades).reduce((a, b) =>
     decades[a] > decades[b] ? a : b
   );
+  console.log("Got favorite decade");
   return `${decade}s`;
 };
 
 const allStats = async (userId) => {
   userId = validation.checkId(userId);
+  let allLogs = await activity();
+  let logs = await allLogs.find({ userId: userId }).toArray();
+  console.log(logs);
+  if (logs.length == 0) return null;
   let totalMoviesWatched = await getTotalMoviesWatched(userId);
   let totalTimeWatched = await getTotalTimeWatched(userId);
   let mostWatchedMovie = await getMostWatchedMovie(userId);
