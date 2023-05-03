@@ -5,7 +5,6 @@
 
     // searchForm.submit(async (event) => {
     //     event.preventDefault();
-
     //     let searchOption = searchOptionChoice.val();
     //     let searchTerm = searchTermInput.val();
 
@@ -22,9 +21,10 @@
 
     //         console.log(result);
 
-        console.log(searchForm);
-        console.log(searchOption);
-        console.log(searchText);
-    });
+    //         } catch (error) {
+    //             console.log(error.responseJSON.error);
+    //         }
+    //     }
+    // })
 
 })(window.jQuery);

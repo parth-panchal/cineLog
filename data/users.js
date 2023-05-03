@@ -399,7 +399,6 @@ const checkUser = async (username, password) => {
   const userCollection = await users();
 
   const user = await userCollection.findOne({ username: username });
-  
 
   if (!user) {
     throw {
@@ -420,7 +419,7 @@ const checkUser = async (username, password) => {
     firstName: user.firstName,
     lastName: user.lastName,
     username: user.username,
-    _id: user._id
+    _id: user._id,
   };
 };
 

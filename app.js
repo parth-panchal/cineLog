@@ -4,8 +4,8 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import exphbs from "express-handlebars";
 import session from "express-session";
-import middleware from "./middleware.js";
 import * as dotenv from "dotenv";
+import middleware from "./middleware.js";
 dotenv.config();
 
 const app = express();
