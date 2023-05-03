@@ -6,7 +6,10 @@
 // delete user - used by /profile/:username
 import { users } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
+import bcrypt from "bcrypt";
 import * as validation from "../utils/validation.js";
+const saltRounds = 16;
+import * as helper from "../utils/helper.js";
 
 const createUser = async (fName, lName, username, password) => {
   validation.checkProvided("User Info", fName, lName, username, password);
@@ -20,6 +23,7 @@ const createUser = async (fName, lName, username, password) => {
 	*/
   username = validation.checkUsername(username);
   password = validation.checkPassword(password, "Password");
+  const passwordHash = await bcrypt.hash(password, saltRounds);
 
   // Try to see if the username already exists in DB
   let existingUsername = undefined;
@@ -35,7 +39,7 @@ const createUser = async (fName, lName, username, password) => {
     fName: fName, //.toLowerCase(),
     lName: lName, //.toLowerCase(),
     username: username, //.toLowerCase(),
-    password: password,
+    password: passwordHash,
     likes: [],
     watchlist: [],
     following: [],
@@ -130,6 +134,7 @@ const updateUser = async (userId, fName, lName, username, password) => {
 	*/
   username = validation.checkUsername(username);
   password = validation.checkPassword(password, "Password");
+  const passwordHash = await bcrypt.hash(password, saltRounds);
 
   const existingUser = await getUserById(userId);
 
@@ -137,21 +142,24 @@ const updateUser = async (userId, fName, lName, username, password) => {
     fName: fName,
     lName: lName,
     username: username,
-    password: password,
+    password: passwordHash,
   };
 
   // Checks if any of the fields are different from what already exists for user in DB
   checkUpdate(existingUser, updatedUserInfo);
   // Checks if the username that the user wants to change to is already in DB (used by another user)
   // Try to see if the username already exists in DB
-  let existingUsername = undefined;
-  try {
-    existingUsername = await getUserByUsername(username);
-  } catch (error) {
-    // Catch the error thrown if username is not found in db
-    // But don't do anything since, it means the username is available
+  if (existingUser.username !== updatedUserInfo.username) {
+    //check the following conditions only if the user is trying to change his username
+    let existingUsername = undefined;
+    try {
+      existingUsername = await getUserByUsername(username);
+    } catch (error) {
+      // Catch the error thrown if username is not found in db
+      // But don't do anything since, it means the username is available
+    }
+    if (existingUsername) throw `Error: User already exists with that username`;
   }
-  if (existingUsername) throw `Error: User already exists with that username`;
 
   const userCollection = await users();
   const updatedUser = await userCollection.findOneAndUpdate(
@@ -379,6 +387,42 @@ const deleteUser = async (userId) => {
   return returnObj;
 };
 
+const checkUser = async (username, password) => {
+  username = username.trim().toLowerCase();
+  try {
+    username = validation.checkUsername(username);
+    password = validation.checkPassword(password, "Password");
+  } catch (e) {
+    throw e;
+  }
+
+  const userCollection = await users();
+
+  const user = await userCollection.findOne({ username: username });
+
+  if (!user) {
+    throw {
+      code: 400,
+      message: "Either the username or password is invalid",
+    };
+  }
+
+  const passCheck = await bcrypt.compare(password, user.password);
+  if (!passCheck) {
+    throw {
+      code: 400,
+      message: "Either the username or password is invalid",
+    };
+  }
+  user._id = user._id.toString();
+  return {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    username: user.username,
+    _id: user._id,
+  };
+};
+
 const checkUpdate = (existingUser, updatedUserInfo) => {
   if (
     existingUser.fName === updatedUserInfo.fName &&
@@ -387,6 +431,38 @@ const checkUpdate = (existingUser, updatedUserInfo) => {
     existingUser.password === updatedUserInfo.password
   )
     throw "Error: No changes found";
+};
+
+const calculateRecommendationsForUser = async (userId) => {
+  let user = await getUserById(userId);
+  let userLikes = user.likes;
+  //console.log(userLikes);
+  let allRecos = await userLikes.reduce(async (previousPromise, movie) => {
+    let all = await previousPromise;
+    let movieRecos = await helper.getRecommendationsByMovieId(movie);
+    return all.concat(movieRecos);
+  }, Promise.resolve([]));
+  //maintain a count of how many times a movie is recommended
+  let movieCount = {};
+  allRecos.forEach((movie) => {
+    //have to store movie IDs since object keys are strings, cannot have objects as keys.
+    if (movieCount[movie.id]) movieCount[movie.id] += 1;
+    else movieCount[movie.id] = 1;
+  });
+  //sort movieCount by value
+  let sortedMovieCount = Object.keys(movieCount).sort(function (a, b) {
+    return movieCount[b] - movieCount[a];
+  });
+  //get top 10 movies
+  let top10 = sortedMovieCount.slice(0, 10);
+  //if we really need to use the objects, we can use this part of the code, otherwise we can just return the top10 variable
+  //return top10;
+  let movieObjectArray = top10.reduce(async (previousPromise, movieId) => {
+    let all = await previousPromise;
+    let movie = await helper.getMovieInfo(movieId);
+    return all.concat(movie);
+  }, Promise.resolve([]));
+  return movieObjectArray;
 };
 
 export {
@@ -400,4 +476,6 @@ export {
   updateUserWatchlist,
   updateUserFollowing,
   deleteUser,
+  checkUser,
+  calculateRecommendationsForUser,
 };

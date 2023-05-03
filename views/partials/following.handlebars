@@ -1,0 +1,21 @@
+<h1>Profiles I Follow</h1>
+
+{{#if following}}
+<ul>
+    {{#each following}}
+    <li>
+        {{this.name}}
+        <a href="/{{this.username}}">{{this.username}}</a>
+        <form method="POST" action="/following">
+            <!-- Is this even the correct way to do it? -->
+            <input type="hidden" name="_method" value="PATCH">
+            <input type="hidden" name="followingId" value="{{this._id}}">
+            <input type="hidden" name="operation" value="remove">
+            <button type="submit">Unfollow</button>
+        </form>
+    </li>
+    {{/each}}
+</ul>
+{{else}}
+<p>You are not following any profiles.</p>
+{{/if}}

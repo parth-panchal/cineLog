@@ -5,6 +5,7 @@ import { dirname } from "path";
 import exphbs from "express-handlebars";
 import session from "express-session";
 import * as dotenv from "dotenv";
+import middleware from "./middleware.js";
 dotenv.config();
 
 const app = express();
@@ -42,6 +43,21 @@ app.use(
       cookie: {maxAge: 60000},
   })
 );
+
+app.use(
+  session({
+    name: "AuthCookie",
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: true,
+    resave: false,
+    cookie: { maxAge: 60000 },
+  })
+);
+
+app.use(middleware.rewriteUnsupportedBrowserMethods);
+app.use("/lists",middleware.lists);
+app.use("/logout",middleware.logout);
+app.use(middleware.updates);
 
 configRoutes(app);
 
