@@ -9,6 +9,7 @@ import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 import * as validation from "../utils/validation.js";
 const saltRounds = 16;
+import * as helper from "../utils/helper.js";
 
 const createUser = async (fName, lName, username, password) => {
   validation.checkProvided("User Info", fName, lName, username, password);
@@ -398,7 +399,6 @@ const checkUser = async (username, password) => {
   const userCollection = await users();
 
   const user = await userCollection.findOne({ username: username });
-  
 
   if (!user) {
     throw {
@@ -419,7 +419,7 @@ const checkUser = async (username, password) => {
     firstName: user.firstName,
     lastName: user.lastName,
     username: user.username,
-    _id: user._id
+    _id: user._id,
   };
 };
 
@@ -431,6 +431,38 @@ const checkUpdate = (existingUser, updatedUserInfo) => {
     existingUser.password === updatedUserInfo.password
   )
     throw "Error: No changes found";
+};
+
+const calculateRecommendationsForUser = async (userId) => {
+  let user = await getUserById(userId);
+  let userLikes = user.likes;
+  //console.log(userLikes);
+  let allRecos = await userLikes.reduce(async (previousPromise, movie) => {
+    let all = await previousPromise;
+    let movieRecos = await helper.getRecommendationsByMovieId(movie);
+    return all.concat(movieRecos);
+  }, Promise.resolve([]));
+  //maintain a count of how many times a movie is recommended
+  let movieCount = {};
+  allRecos.forEach((movie) => {
+    //have to store movie IDs since object keys are strings, cannot have objects as keys.
+    if (movieCount[movie.id]) movieCount[movie.id] += 1;
+    else movieCount[movie.id] = 1;
+  });
+  //sort movieCount by value
+  let sortedMovieCount = Object.keys(movieCount).sort(function (a, b) {
+    return movieCount[b] - movieCount[a];
+  });
+  //get top 10 movies
+  let top10 = sortedMovieCount.slice(0, 10);
+  //if we really need to use the objects, we can use this part of the code, otherwise we can just return the top10 variable
+  //return top10;
+  let movieObjectArray = top10.reduce(async (previousPromise, movieId) => {
+    let all = await previousPromise;
+    let movie = await helper.getMovieInfo(movieId);
+    return all.concat(movie);
+  }, Promise.resolve([]));
+  return movieObjectArray;
 };
 
 export {
@@ -445,4 +477,5 @@ export {
   updateUserFollowing,
   deleteUser,
   checkUser,
+  calculateRecommendationsForUser,
 };

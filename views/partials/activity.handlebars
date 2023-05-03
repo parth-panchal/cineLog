@@ -1,31 +1,32 @@
 <h1>Activity Logs</h1>
-    {{#if logs.length}}
-      <table>
-        <thead>
-          <tr>
-            <th>Activity ID</th>
-            <th>Movie ID</th>
-            <th>User ID</th>
-            <th>Review</th>
-            <th>Rating</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each logs}}
-            <tr>
-              <td>{{this.activityId}}</td>
-              <td>{{this.movieId}}</td>
-              <td>{{this.userId}}</td>
-              <td>{{this.review}}</td>
-              <td>{{this.rating}}</td>
-              <td>{{this.date}}</td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    {{else}}
-      <p>No activity logs found.</p>
-    {{/if}}
-  </body>
+{{#if logs.length}}
+<table>
+  <thead>
+    <tr>
+      <th>Activity ID</th>
+      <th>Movie ID</th>
+      <th>User ID</th>
+      <th>Review</th>
+      <th>Rating</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each logs}}
+    <tr>
+      <td>{{this.activityId}}</td>
+      <td>{{this.movieId}}</td>
+      <td>{{this.userId}}</td>
+      <td>{{this.review}}</td>
+      <td>{{this.rating}}</td>
+      <td>{{this.date}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+{{else}}
+<p>No activity logs found.</p>
+{{/if}}
+</body>
+
 </html>
