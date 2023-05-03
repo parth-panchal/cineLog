@@ -25,6 +25,7 @@ router
 
         try {
             const movieInfo = await getMovieInfo(movieId);
+            console.log(movieInfo);
             res.render('movie', {movieInfo: movieInfo});
         } catch (error) {
             return res.status(500).json({error: error});
