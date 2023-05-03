@@ -28,7 +28,7 @@ const exportedMethods = {
 
     next();
   },
-  lists(req, res, next) {
+  protectedRoutes(req, res, next) {
     if (req.session.user) {
       next();
     } else {
@@ -43,6 +43,14 @@ const exportedMethods = {
       res.redirect("/");
     }
   },
+  signup_login(req, res, next) {
+    if (req.session.user) {
+      res.redirect("/");
+    } else {
+      next();
+    }
+  },
+  
 };
 
 export default exportedMethods;
