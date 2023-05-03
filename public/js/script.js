@@ -1,10 +1,26 @@
 (function ($) { 
     let searchForm = $('#searchForm'),
-        searchOption = $('#searchOption'),
-        searchText = $('#searchText');
+        searchOptionChoice = $('#searchOption'),
+        searchTermInput = $('#searchTerm');
 
-    searchForm.submit( event => {
-        event.preventDefault();
+    // searchForm.submit(async (event) => {
+    //     event.preventDefault();
+
+    //     let searchOption = searchOptionChoice.val();
+    //     let searchTerm = searchTermInput.val();
+
+    //     // TODO:  Validate searchOption and searchTerm
+
+    //     if(searchTerm && searchOption) {
+    //         let requestConfig = {
+    //             method: "GET",
+    //             url: `/search/${searchOption}/${searchTerm}`,
+    //             contentType: "application/json"
+    //         };
+    //         try {
+    //         const result = await $.ajax(requestConfig);
+
+    //         console.log(result);
 
         console.log(searchForm);
         console.log(searchOption);
