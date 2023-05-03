@@ -34,14 +34,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.engine('handlebars', handlebarsInstance.engine);
 app.set('view engine', 'handlebars');
-
 app.use(
   session({
-    name: "AuthCookie",
-    secret: "This is a secret.. shhh don't tell anyone",
-    saveUninitialized: true,
-    resave: false,
-    cookie: { maxAge: 60000 },
+      name: 'cineLogSession',
+      secret: process.env.SESSION_SECRET,
+      saveUninitialized: false,
+      resave: false,
+      cookie: {maxAge: 60000},
   })
 );
 
