@@ -148,9 +148,9 @@ const checkProvided = (name, ...args) => {
 const checkName = (name, variableName) => {
   checkString(name, variableName);
   if (name.length < 2 || name.length > 25)
-    throw `at ${location}: ${variableName} must be between 2 and 25 characters`;
+    throw `${variableName} must be between 2 and 25 characters`;
   if (name.match(/\d/))
-    throw `at ${location}: ${variableName} must not contain numbers`;
+    throw `${variableName} must not contain numbers`;
   return name.toLowerCase();
 };
 

@@ -5,7 +5,6 @@
 
     // searchForm.submit(async (event) => {
     //     event.preventDefault();
-
     //     let searchOption = searchOptionChoice.val();
     //     let searchTerm = searchTermInput.val();
 
