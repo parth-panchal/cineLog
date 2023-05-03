@@ -5,6 +5,8 @@ import { dirname } from "path";
 import exphbs from "express-handlebars";
 import session from "express-session";
 import middleware from "./middleware.js";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
