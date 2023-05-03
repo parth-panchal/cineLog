@@ -31,7 +31,7 @@ router
       // console.log(user);
 
       req.session.user = user;
-      res.cookie("AuthCookie", req.session.user);
+      // res.cookie("AuthCookie", req.session.user);
 
       // return res.redirect(req.session.returnTo || "/");
       if (req.session.returnTo && req.session.returnTo !== "/login") {
