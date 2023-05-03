@@ -414,7 +414,7 @@ const checkUser = async (username, password) => {
       message: "Either the username or password is invalid",
     };
   }
-  user._id = userInfo._id.toString();
+  user._id = user._id.toString();
   return {
     firstName: user.firstName,
     lastName: user.lastName,
