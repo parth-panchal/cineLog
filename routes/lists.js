@@ -62,7 +62,7 @@ router
     //code to DELETE a list
     let listId;
     try {
-      let listId = validation.checkId(req.params.listId, "List ID");
+      listId = validation.checkId(req.params.listId, "List ID");
     } catch (error) {
       return res
         .status(400)
