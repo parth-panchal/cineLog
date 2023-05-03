@@ -6,7 +6,9 @@
 // delete user - used by /profile/:username
 import { users } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
+import bcrypt from "bcrypt";
 import * as validation from "../utils/validation.js";
+const saltRounds = 16;
 
 const createUser = async (fName, lName, username, password) => {
   validation.checkProvided("User Info", fName, lName, username, password);
@@ -20,6 +22,7 @@ const createUser = async (fName, lName, username, password) => {
 	*/
   username = validation.checkUsername(username);
   password = validation.checkPassword(password, "Password");
+  const passwordHash = await bcrypt.hash(password, saltRounds);
 
   // Try to see if the username already exists in DB
   let existingUsername = undefined;
@@ -35,7 +38,7 @@ const createUser = async (fName, lName, username, password) => {
     fName: fName, //.toLowerCase(),
     lName: lName, //.toLowerCase(),
     username: username, //.toLowerCase(),
-    password: password,
+    password: passwordHash,
     likes: [],
     watchlist: [],
     following: [],
@@ -130,6 +133,7 @@ const updateUser = async (userId, fName, lName, username, password) => {
 	*/
   username = validation.checkUsername(username);
   password = validation.checkPassword(password, "Password");
+  const passwordHash = await bcrypt.hash(password, saltRounds);
 
   const existingUser = await getUserById(userId);
 
@@ -137,21 +141,24 @@ const updateUser = async (userId, fName, lName, username, password) => {
     fName: fName,
     lName: lName,
     username: username,
-    password: password,
+    password: passwordHash,
   };
 
   // Checks if any of the fields are different from what already exists for user in DB
   checkUpdate(existingUser, updatedUserInfo);
   // Checks if the username that the user wants to change to is already in DB (used by another user)
   // Try to see if the username already exists in DB
-  let existingUsername = undefined;
-  try {
-    existingUsername = await getUserByUsername(username);
-  } catch (error) {
-    // Catch the error thrown if username is not found in db
-    // But don't do anything since, it means the username is available
+  if (existingUser.username !== updatedUserInfo.username) {
+    //check the following conditions only if the user is trying to change his username
+    let existingUsername = undefined;
+    try {
+      existingUsername = await getUserByUsername(username);
+    } catch (error) {
+      // Catch the error thrown if username is not found in db
+      // But don't do anything since, it means the username is available
+    }
+    if (existingUsername) throw `Error: User already exists with that username`;
   }
-  if (existingUsername) throw `Error: User already exists with that username`;
 
   const userCollection = await users();
   const updatedUser = await userCollection.findOneAndUpdate(
@@ -379,6 +386,43 @@ const deleteUser = async (userId) => {
   return returnObj;
 };
 
+const checkUser = async (username, password) => {
+  username = username.trim().toLowerCase();
+  try {
+    username = validation.checkUsername(username);
+    password = validation.checkPassword(password, "Password");
+  } catch (e) {
+    throw e;
+  }
+
+  const userCollection = await users();
+
+  const user = await userCollection.findOne({ username: username });
+  
+
+  if (!user) {
+    throw {
+      code: 400,
+      message: "Either the username or password is invalid",
+    };
+  }
+
+  const passCheck = await bcrypt.compare(password, user.password);
+  if (!passCheck) {
+    throw {
+      code: 400,
+      message: "Either the username or password is invalid",
+    };
+  }
+  user._id = userInfo._id.toString();
+  return {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    username: user.username,
+    _id: user._id
+  };
+};
+
 const checkUpdate = (existingUser, updatedUserInfo) => {
   if (
     existingUser.fName === updatedUserInfo.fName &&
@@ -400,4 +444,5 @@ export {
   updateUserWatchlist,
   updateUserFollowing,
   deleteUser,
+  checkUser,
 };
