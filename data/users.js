@@ -271,7 +271,7 @@ const updateUserWatchlist = async (userId, watchlistMovieId, operation) => {
 
     const updatedUser = await userCollection.findOneAndUpdate(
       { _id: new ObjectId(userId) },
-      { $pull: { watchList: watchlistMovieId } },
+      { $pull: { watchlist: watchlistMovieId } },
       {
         projection: { _id: 1, watchlistMovieId: 1 },
         returnDocument: "after",

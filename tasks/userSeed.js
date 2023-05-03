@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import * as user from "../data/users.js";
 
 export default async function main() {
-  // ================================= User Seeding =================================
+  console.log("================================= User Seeding =================================");
   let user1Id = "";
   let user1Username = "";
   let user2Id = "";
@@ -471,6 +471,7 @@ export default async function main() {
 
   // Test Case: Delete user that is followed by another, then call that other users follow list
   console.log("----------------------TEST-----------------");
+  // Fix
   let user4Id = "";
   let user4Username = "";
   try {
@@ -478,7 +479,7 @@ export default async function main() {
       "Parshotan",
       "Seenanan",
       "testAccy4",
-      "testPass"
+      "testPass1!"
     );
     if (newUser) console.log("User created 4");
     user4Id = newUser._id;
@@ -674,7 +675,7 @@ export default async function main() {
       "Parshotan",
       "Seenanan",
       "testAccy5",
-      "testPass"
+      "testPass1!"
     );
     if (newUser) console.log("User created 4");
   } catch (error) {
