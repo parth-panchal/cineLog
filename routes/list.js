@@ -35,7 +35,7 @@ router
     //code to POST lists for a user
     const listInfo = req.body;
     try {
-      // let userId = validation.checkId(xss(req.params.userId), "User ID");
+      let userId = validation.checkId(xss(req.params.userId), "User ID");
       let title = validation.checkString(xss(listInfo.title), "Title");
       let movies = validation.checkMovieArray(xss(listInfo.movies), "Movies");
       const list = await listData.createList(userId, title, movies);
