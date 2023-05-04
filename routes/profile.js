@@ -23,10 +23,9 @@
 //for "/statistics"
 //get - get all the statistics for the user
 
-//IS IT REQ.SESSION OR REQ.PARAMS??
-
 import { userData, listData, activityData, statsData } from "../data/index.js";
 import * as validation from "../utils/validation.js";
+import * as helper from "../utils/helper.js";
 
 import xss from "xss";
 
@@ -36,9 +35,9 @@ const router = Router();
 router
   .route("/")
   .get(async (req, res) => {
-    req.session.user.id = xss(req.session.user.id);
+    req.session.user._id = xss(req.session.user._id);
     try {
-      let userDetails = await userData.getUserById(req.session.user.id); //not sure if this is the right way to get the user id
+      let userDetails = await userData.getUserById(req.session.user._id); //not sure if this is the right way to get the user id
       return res.render("profile", {
         userDetails: userDetails,
         script_partial: "userInfo",
@@ -53,13 +52,13 @@ router
       return res
         .status(400)
         .render("error", { error: "You must provide data to update a user" });
-    req.session.user.id = xss(req.session.user.id);
+    req.session.user._id = xss(req.session.user._id);
     user.fname = xss(user.fname);
     user.lname = xss(user.lname);
     user.username = xss(user.username);
     user.password = xss(user.password); // update this once hashed password is implemented
     try {
-      req.session.user.id = validation.checkId(req.session.user.id);
+      req.session.user._id = validation.checkId(req.session.user._id);
       user.fname = validation.checkString(user.fname, "first name");
       user.lname = validation.checkString(user.lname, "last name");
       user.username = validation.checkUsername(user.username);
@@ -70,7 +69,7 @@ router
 
     try {
       const userUpdates = await userData.updateUser(
-        req.session.user.id,
+        req.session.user._id,
         user.fname,
         user.lname,
         user.username,
@@ -85,15 +84,15 @@ router
     }
   })
   .delete(async (req, res) => {
-    req.session.user.id = xss(req.session.user.id);
+    req.session.user._id = xss(req.session.user._id);
     try {
-      req.session.user.id = validation.checkId(req.session.user.id);
+      req.session.user._id = validation.checkId(req.session.user._id);
     } catch (e) {
       return res.status(400).render("error", { error: e });
     }
 
     try {
-      let user = await userData.deleteUser(req.session.user.id);
+      let user = await userData.deleteUser(req.session.user._id);
       return res.json(user); //change this afterwards
     } catch (e) {
       return res.status(500).render("error", { error: e });
@@ -103,15 +102,15 @@ router
 router
   .route("/watchlist")
   .get(async (req, res) => {
-    req.session.user.id = xss(req.session.user.id);
+    req.session.user._id = xss(req.session.user._id);
     try {
-      req.session.user.id = validation.checkId(req.session.user.id);
+      req.session.user._id = validation.checkId(req.session.user._id);
     } catch (e) {
       return res.status(400).render("error", { error: e });
     }
     try {
-      let userWatchlist = await userData.getUserById(req.session.user.id)
-        .watchlist;
+      let user = await userData.getUserById(req.session.user._id);
+      let userWatchlist = user.watchlist;
       return res.render("profile", {
         userWatchlist: userWatchlist,
         script_partial: "watchlist",
@@ -121,11 +120,11 @@ router
     }
   })
   .patch(async (req, res) => {
-    req.session.user.id = xss(req.session.user.id);
+    req.session.user._id = xss(req.session.user._id);
     req.body.movieId = xss(req.body.movieId);
     req.body.operation = xss(req.body.operation);
     try {
-      req.session.user.id = validation.checkId(req.session.user.id);
+      req.session.user._id = validation.checkId(req.session.user._id);
       req.body.movieId = await validation.checkId(req.body.movieId);
       req.body.operation = validation.checkOperation(
         req.body.operation,
@@ -136,7 +135,7 @@ router
     }
     try {
       const updatedWatchlist = await userData.updateUserWatchlist(
-        req.session.user.id,
+        req.session.user._id,
         req.body.movieId,
         req.body.operation
       );
@@ -152,14 +151,28 @@ router
 router
   .route("/likes")
   .get(async (req, res) => {
-    req.session.user.id = xss(req.session.user.id);
+    req.session.user._id = xss(req.session.user._id);
     try {
-      req.session.user.id = validation.checkId(req.session.user.id);
+      req.session.user._id = validation.checkId(req.session.user._id);
     } catch (e) {
       return res.status(400).render("error", { error: e });
     }
     try {
-      let userLikes = await userData.getUserById(req.session.user.id).likes;
+      let user = await userData.getUserById(req.session.user._id);
+      let userLikeNumbers = user.likes;
+      let userLikes = [];
+      try {
+        userLikes = await userLikeNumbers.reduce(
+          async (previousPromise, movieId) => {
+            let arr = await previousPromise;
+            let movie = await helper.getMovieInfo(movieId);
+            return arr.concat(movie);
+          },
+          Promise.resolve([])
+        );
+      } catch (e) {
+        console.log(e); //change this later
+      }
       return res.render("profile", {
         userLikes: userLikes,
         script_partial: "likes",
@@ -169,11 +182,11 @@ router
     }
   })
   .patch(async (req, res) => {
-    req.session.user.id = xss(req.session.user.id);
+    req.session.user._id = xss(req.session.user._id);
     req.body.movieId = xss(req.body.movieId);
     req.body.operation = xss(req.body.operation);
     try {
-      req.session.user.id = validation.checkId(req.session.user.id);
+      req.session.user._id = validation.checkId(req.session.user._id);
       req.body.movieId = await validation.checkId(req.body.movieId);
       req.body.operation = validation.checkOperation(req.body.operation);
     } catch (e) {
@@ -181,7 +194,7 @@ router
     }
     try {
       const updatedLikes = await userData.updateUserLikes(
-        req.session.user.id,
+        req.session.user._id,
         req.body.movieId,
         req.body.operation
       );
@@ -195,14 +208,14 @@ router
   });
 
 router.route("/activity").get(async (req, res) => {
-  req.session.user.id = xss(req.session.user.id);
+  req.session.user._id = xss(req.session.user._id);
   try {
-    req.session.user.id = validation.checkId(req.session.user.id);
+    req.session.user._id = validation.checkId(req.session.user._id);
   } catch (e) {
     return res.render("error", { error: e });
   }
   try {
-    let logs = await activityData.getLogsByUserId(req.session.user.id);
+    let logs = await activityData.getLogsByUserId(req.session.user._id);
     return res.render("profile", { logs: logs, script_partial: "activity" });
   } catch (e) {
     return res.render("error", { error: e });
@@ -210,14 +223,14 @@ router.route("/activity").get(async (req, res) => {
 });
 
 router.route("/lists").get(async (req, res) => {
-  req.session.user.id = xss(req.session.user.id);
+  req.session.user._id = xss(req.session.user._id);
   try {
-    req.session.user.id = validation.checkId(req.session.user.id);
+    req.session.user._id = validation.checkId(req.session.user._id);
   } catch (e) {
     return res.render("error", { error: e });
   }
   try {
-    let lists = await listData.getAll(req.session.user.id);
+    let lists = await listData.getAll(req.session.user._id);
     return res.render("profile", { lists: lists, script_partial: "lists" });
   } catch (e) {
     res.render("error", { error: e });
@@ -227,15 +240,15 @@ router.route("/lists").get(async (req, res) => {
 router
   .route("/following")
   .get(async (req, res) => {
-    req.session.user.id = xss(req.session.user.id);
+    req.session.user._id = xss(req.session.user._id);
     try {
-      req.session.user.id = validation.checkId(req.session.user.id);
+      req.session.user._id = validation.checkId(req.session.user._id);
     } catch (e) {
       return res.render("error", { error: e });
     }
     try {
-      let profilesFollowed = await userData.getUserById(req.session.user.id)
-        .following;
+      let user = await userData.getUserById(req.session.user._id);
+      let profilesFollowed = user.following;
       return res.render("profile", {
         following: profilesFollowed,
         script_partial: "following",
@@ -245,12 +258,12 @@ router
     }
   })
   .patch(async (req, res) => {
-    req.session.user.id = xss(req.session.user.id);
+    req.session.user._id = xss(req.session.user._id);
     req.body.followingId = xss(req.body.followingId);
     req.body.operation = xss(req.body.operation);
     try {
       const updatedFollowing = await userData.updateUserFollowing(
-        req.session.user.id,
+        req.session.user._id,
         req.body.followingId,
         req.body.operation
       );
@@ -264,15 +277,23 @@ router
   });
 
 router.route("/statistics").get(async (req, res) => {
-  req.session.user.id = xss(req.session.user.id);
+  req.session.user._id = xss(req.session.user._id);
   try {
-    req.session.user.id = validation.checkId(req.session.user.id);
+    req.session.user._id = validation.checkId(req.session.user._id);
   } catch (e) {
     return res.render("error", { error: e });
   }
   try {
-    let statistics = await statsData.allStats(req.session.user.id);
+    let statistics = await statsData.allStats(req.session.user._id);
+    console.log(statistics);
+    if (statistics == null) {
+      return res.render("profile", {
+        statsAvailable: false,
+        script_partial: "statistics",
+      });
+    }
     return res.render("profile", {
+      statsAvailable: true,
       totalMoviesWatched: statistics.totalMoviesWatched,
       totalTimeWatched: `${statistics.totalTimeWatched.hours} hours, ${statistics.totalTimeWatched.minutes} minutes`,
       mostWatchedMovie: statistics.mostWatchedMovie,
