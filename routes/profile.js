@@ -21,16 +21,11 @@
 //get - get the profiles followed for the user
 
 //for "/statistics"
-//
-//
-//
-//
-// LOL.
+//get - get all the statistics for the user
 
 //IS IT REQ.SESSION OR REQ.PARAMS??
 
-import { userData, listData, activityData } from "../data/index.js";
-import * as statsData from "../data/statistics.js";
+import { userData, listData, activityData, statsData } from "../data/index.js";
 import * as validation from "../utils/validation.js";
 
 import xss from "xss";
@@ -49,7 +44,7 @@ router
         script_partial: "userInfo",
       }); //use id userDetails in homepage hbs to get details
     } catch (e) {
-      return res.render("error", { error }); //figure these out too..
+      return res.render("error", { error: e }); //figure these out too..
     }
   })
   .put(async (req, res) => {
@@ -276,8 +271,21 @@ router.route("/statistics").get(async (req, res) => {
     return res.render("error", { error: e });
   }
   try {
-    // complete this once the statistics functions are implemented
+    let statistics = await statsData.allStats(req.session.user.id);
+    return res.render("profile", {
+      totalMoviesWatched: statistics.totalMoviesWatched,
+      totalTimeWatched: `${statistics.totalTimeWatched.hours} hours, ${statistics.totalTimeWatched.minutes} minutes`,
+      mostWatchedMovie: statistics.mostWatchedMovie,
+      mostWatchedGenre: statistics.mostWatchedGenre,
+      mostWatchedActor: statistics.mostWatchedActor,
+      mostWatcheDirector: statistics.mostWatchedDirector,
+      averageRating: statistics.averageRatingByUser,
+      favoriteDecade: statistics.favoriteDecade,
+      script_partial: "statistics",
+    });
   } catch (e) {
     res.render("error", { error: e });
   }
 });
+
+export default router;

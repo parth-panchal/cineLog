@@ -1,16 +1,14 @@
 <div class="searchbar">
-    <form id="searchForm">
-        <label for="searchOption" class="sr-only">
-            <select name="searchOption" id="searchOption">
-                <option value="movies">Movies</option>
-                <option value="users">Users</option>
-            </select>
-        </label>
-        <label for="search">
-            <input type="text" name="search" id="searchBar" placeholder="Search for Movies or Users">
-        </label>
-        <label for="searchSubmit">
-            <button type="submit" name="searchSubmit">Search</button>
-        </label>
+    <form method="post" action="/search" id="searchForm">
+        <label for="searchOption" class="sr-only"> Search Criteria</label>
+        <select name="searchOption" id="searchOption">
+            <option value="movies">Movies</option>
+            <option value="users">Users</option>
+        </select>
+        
+        <label for="searchTerm" class="sr-only"> Search for Movies or Users</label>
+        <input type="text" name="searchTerm" id="searchTerm" placeholder="Search for Movies or Users">
+    
+        <button type="submit">Search</button>
     </form>
 </div>

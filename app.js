@@ -3,6 +3,10 @@ import configRoutes from "./routes/index.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import exphbs from "express-handlebars";
+import session from "express-session";
+import * as dotenv from "dotenv";
+import middleware from "./middleware.js";
+dotenv.config();
 
 const app = express();
 
@@ -30,6 +34,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.engine('handlebars', handlebarsInstance.engine);
 app.set('view engine', 'handlebars');
+app.use(
+  session({
+      name: 'cineLogSession',
+      secret: process.env.SESSION_SECRET,
+      saveUninitialized: false,
+      resave: false,
+      cookie: {maxAge: 60000},
+  })
+);
+
+app.use(middleware.rewriteUnsupportedBrowserMethods);
+app.use("/lists",middleware.protectedRoutes);
+app.use("/activity",middleware.protectedRoutes);
+app.use("/profile",middleware.protectedRoutes);
+app.use("/user",middleware.protectedRoutes);
+app.use("/login",middleware.signup_login);
+app.use("/signup",middleware.signup_login);
+app.use("/logout",middleware.logout);
+app.use(middleware.updates);
 
 configRoutes(app);
 

@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import * as user from "../data/users.js";
 
 export default async function main() {
-  // ================================= User Seeding =================================
+  console.log("================================= User Seeding =================================");
   let user1Id = "";
   let user1Username = "";
   let user2Id = "";
@@ -95,7 +95,7 @@ export default async function main() {
     let newUser = await user.createUser(
       "Parshotan",
       "Seenanan",
-      "testAccy",
+      "TEstAccy",
       "testPass1!"
     );
     if (newUser) console.log("User created");
@@ -471,8 +471,155 @@ export default async function main() {
 
   // Test Case: Delete user that is followed by another, then call that other users follow list
   console.log("----------------------TEST-----------------");
+  // Fix
   let user4Id = "";
   let user4Username = "";
+  try {
+    let newUser = await user.createUser(
+      "Parshotan",
+      "Seenanan",
+      "testAccy4",
+      "testPass1!"
+    );
+    if (newUser) console.log("User created 4");
+    user4Id = newUser._id;
+    user4Username = newUser.username;
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let updatedUser = await user.updateUserFollowing(user1Id, user4Id, "add");
+    if (updatedUser)
+      console.log(
+        "Updated Info for User User 1: Added follower to follow list"
+      );
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let updatedUser = await user.updateUserWatchlist(user1Id, 234, "remove");
+    if (updatedUser)
+      console.log("Updated Info for User 1: Removed movie from watchlist");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let updatedUser = await user.updateUserWatchlist(user1Id, 234, "poop");
+    if (updatedUser)
+      console.log("Updated Info for User 1: Removed movie from watchlist");
+  } catch (error) {
+    console.log(error);
+  }
+  //////
+  try {
+    let updatedUser = await user.updateUserFollowing(user1Id, user2Id, "add");
+    if (updatedUser)
+      console.log("Updated Info for User 1: Added follower to follow list");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let updatedUser = await user.updateUserFollowing(user1Id, user2Id, "add");
+    if (updatedUser)
+      console.log("Updated Info for User 1: Added follower to follow list");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let updatedUser = await user.updateUserFollowing(user1Id, user3Id, "add");
+    if (updatedUser)
+      console.log("Updated Info for User 1: Added follower to follow list");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let updatedUser = await user.updateUserFollowing(user1Id, 234, "add");
+    if (updatedUser)
+      console.log("Updated Info for User 1: Added follower to follow list");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let updatedUser = await user.updateUserFollowing(user1Id, 1, "add");
+    if (updatedUser)
+      console.log("Updated Info for User 1: Added follower to follow list");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let updatedUser = await user.updateUserFollowing(
+      user1Id,
+      user2Id,
+      "remove"
+    );
+    if (updatedUser)
+      console.log("Updated Info for User 1: Removed follower from follow list");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let updatedUser = await user.updateUserFollowing(user1Id, 1, "remove");
+    if (updatedUser)
+      console.log("Updated Info for User 1: Removed follower from follow list");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let updatedUser = await user.updateUserFollowing(
+      user1Id,
+      new ObjectId().toString(),
+      "remove"
+    );
+    if (updatedUser)
+      console.log("Updated Info for User 1: Removed follower from follow list");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let updatedUser = await user.updateUserFollowing(user1Id, user2Id, "poop");
+    if (updatedUser)
+      console.log("Updated Info for User 1: Removed follower from follow list");
+  } catch (error) {
+    console.log(error);
+  }
+
+  // -------------------------------- Delete Function -------------------------------
+  try {
+    let deletedUser = await user.deleteUser(user2Id);
+    if (deletedUser) console.log("User deleted");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let deletedUser = await user.deleteUser(user2Id);
+    if (deletedUser) console.log("User deleted");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let deletedUser = await user.deleteUser();
+    if (deletedUser) console.log("User deleted");
+  } catch (error) {
+    console.log(error);
+  }
+
+  // Test Case: Delete user that is followed by another, then call that other users follow list
+  console.log("----------------------TEST-----------------");
+  // let user4Id = "";
+  // let user4Username = "";
   try {
     let newUser = await user.createUser(
       "Parshotan",
@@ -503,6 +650,41 @@ export default async function main() {
       console.log(
         "Updated Info for User User 1: Added follower to follow list"
       );
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let deletedUser = await user.deleteUser(user4Id);
+    if (deletedUser) console.log("User 4 deleted");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let userInfo = await user.getUserById(user1Id);
+    if (userInfo) console.log("Got Info for User 1");
+  } catch (error) {
+    console.log(error);
+  }
+
+  // Test Case: Partial Searching
+  console.log("----------------------TEST 2-----------------");
+  try {
+    let newUser = await user.createUser(
+      "Parshotan",
+      "Seenanan",
+      "testAccy5",
+      "testPass1!"
+    );
+    if (newUser) console.log("User created 4");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    let userArr = await user.getUserByUsernamePartial("oo");
+    if (userArr) console.log("Got users for partial search");
   } catch (error) {
     console.log(error);
   }

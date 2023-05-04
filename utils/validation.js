@@ -40,6 +40,7 @@ function isNumber(char) {
 //3. must be between 3 and 20 characters
 const checkUsername = (username) => {
   username = checkString(username, "Username");
+  username = username.toLowerCase();
   if (!isLetter(username.charAt(0)))
     throw "Error: Username must start with a letter";
   for (let i = 0; i < username.length; i++) {
@@ -147,10 +148,10 @@ const checkProvided = (name, ...args) => {
 const checkName = (name, variableName) => {
   checkString(name, variableName);
   if (name.length < 2 || name.length > 25)
-    throw `at ${location}: ${variableName} must be between 2 and 25 characters`;
+    throw `${variableName} must be between 2 and 25 characters`;
   if (name.match(/\d/))
-    throw `at ${location}: ${variableName} must not contain numbers`;
-  return name;
+    throw `${variableName} must not contain numbers`;
+  return name.toLowerCase();
 };
 
 const checkPassword = (password) => {
