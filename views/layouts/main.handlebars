@@ -17,8 +17,13 @@
         {{> searchbar }}
         {{!-- <button type="submit" id="loginButton">Login</button> --}}
         {{!-- <button type="submit" id="signupButton">Sign Up</button> --}}
-        <a href="/login">Login</a>
-        <a href="/signup">Sign up</a>
+        {{#if isAuthenticated}}
+            <a href="/profile">Profile</a>
+            <a href="/logout">Log Out</a>
+        {{else}}
+            <a href="/login">Login</a>
+            <a href="/signup">Sign Up</a>
+        {{/if}}
 
     </header>
     <main>
