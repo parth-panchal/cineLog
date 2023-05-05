@@ -155,7 +155,6 @@ router
         req.body.movieId,
         req.body.operation
       );
-      console.log(updatedWatchlistNumbersObject);
       let updatedWatchlistNumbers = updatedWatchlistNumbersObject.watchlist;
       let updatedWatchlist = [];
       try {
@@ -229,7 +228,6 @@ router
         req.body.movieId,
         req.body.operation
       );
-      console.log(userUpdatedResp);
       let updatedLikesNumbers = userUpdatedResp.likes;
       let updatedLikes = [];
       try {
@@ -258,20 +256,30 @@ router.route("/activity").get(async (req, res) => {
   try {
     req.session.user._id = validation.checkId(req.session.user._id);
   } catch (e) {
-    return res.render("error", { error: e });
+    console.log(e); //change this later
   }
   try {
-    console.log(req.session.user._id);
-    let logs = await activityData.getLogsByUserId(req.session.user._id);
-    logs.forEach(async (log) => {
-      let movie = await helper.getMovieInfo(log["movieId"]);
-      let movieTitle = movie.title;
-      log["movieTitle"] = movieTitle;
-    });
-    console.log(logs);
+    let logsWithoutMovieTitle = await activityData.getLogsByUserId(
+      req.session.user._id
+    );
+    let logs = [];
+    try {
+      logs = await logsWithoutMovieTitle.reduce(
+        async (previousPromise, log) => {
+          let arr = await previousPromise;
+          let movie = await helper.getMovieInfo(log["movieId"]);
+          let movieTitle = movie.title;
+          log["movieTitle"] = movieTitle;
+          return arr.concat(log);
+        },
+        Promise.resolve([])
+      );
+    } catch (e) {
+      console.log(e); //
+    }
     return res.render("profile", { logs: logs, script_partial: "activity" });
   } catch (e) {
-    return res.render("error", { error: e });
+    return res.render("profile", { error: e });
   }
 });
 
@@ -365,7 +373,6 @@ router.route("/statistics").get(async (req, res) => {
   }
   try {
     let statistics = await statsData.allStats(req.session.user._id);
-    console.log(statistics);
     if (statistics == null) {
       return res.render("profile", {
         statsAvailable: false,
@@ -375,11 +382,11 @@ router.route("/statistics").get(async (req, res) => {
     return res.render("profile", {
       statsAvailable: true,
       totalMoviesWatched: statistics.totalMoviesWatched,
-      totalTimeWatched: `${statistics.totalTimeWatched.hours} hours, ${statistics.totalTimeWatched.minutes} minutes`,
+      totalTimeWatched: statistics.totalTimeWatched,
       mostWatchedMovie: statistics.mostWatchedMovie,
       mostWatchedGenre: statistics.mostWatchedGenre,
       mostWatchedActor: statistics.mostWatchedActor,
-      mostWatcheDirector: statistics.mostWatchedDirector,
+      mostWatchedDirector: statistics.mostWatchedDirector,
       averageRating: statistics.averageRatingByUser,
       favoriteDecade: statistics.favoriteDecade,
       script_partial: "statistics",
@@ -392,9 +399,9 @@ router.route("/statistics").get(async (req, res) => {
 export default router;
 
 //likes --DONE
-//watchlist
-//following
-//activity
-//lists
-//stats
+//watchlist --DONE
+//following --DONE
+//activity --DONE
+//lists --DONE
+//stats --DONE
 //userinfo
