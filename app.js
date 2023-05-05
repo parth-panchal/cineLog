@@ -44,15 +44,15 @@ app.use(
   })
 );
 
-app.use(middleware.rewriteUnsupportedBrowserMethods);
-app.use("/lists",middleware.protectedRoutes);
-app.use("/activity",middleware.protectedRoutes);
-app.use("/profile",middleware.protectedRoutes);
-app.use("/user",middleware.protectedRoutes);
-app.use("/login",middleware.signup_login);
-app.use("/signup",middleware.signup_login);
-app.use("/logout",middleware.logout);
-app.use(middleware.updates);
+// app.use(middleware.rewriteUnsupportedBrowserMethods);
+// app.use("/lists",middleware.protectedRoutes);
+// app.use("/activity",middleware.protectedRoutes);
+// app.use("/profile",middleware.protectedRoutes);
+// app.use("/user",middleware.protectedRoutes);
+// app.use("/login",middleware.signup_login);
+// app.use("/signup",middleware.signup_login);
+// app.use("/logout",middleware.logout);
+// app.use(middleware.updates);
 
 configRoutes(app);
 

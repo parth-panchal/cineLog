@@ -1,4 +1,4 @@
-// import activityRoutes from "./activity.js";
+import activityRoutes from "./activity.js";
 import homepageRoutes from "./homepage.js";
 import listsRoutes from "./lists.js";
 import loginRoutes from "./login.js";
