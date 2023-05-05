@@ -1,5 +1,6 @@
 /* IDs */
 
+
 /* Classes */
 .sr-only:not(:focus):not(:active) {
     clip: rect(0 0 0 0);
@@ -11,7 +12,8 @@
     width: 1px;
 }
 
-/* Page Tags */
+/* #####Page Tags##### */
+    /* global */
 body {
     background-color: white;
 }
@@ -44,3 +46,45 @@ nav a:hover {
     color: #fff;
     border-radius: 5px;
 }
+
+img{
+    width: 300px;
+    height: 300px;
+    max-width: 100%; /* Ensure the image doesn't exceed its container */
+    display: block; /* Make sure the image is a block element */
+    margin: 0 auto; /* Center the image horizontally */
+    border-radius: 50%; /* Add a circular border to the image */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+}
+    /* used for activity */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+    }
+    
+    th, td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #ddd;
+    }
+    
+    th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    }
+    
+    button {
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    }
+    
+    button:hover {
+    background-color: #006A8E;
+    }
+    
+    
