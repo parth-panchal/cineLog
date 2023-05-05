@@ -155,7 +155,10 @@ router
         req.body.movieId,
         req.body.operation
       );
+      console.log(updatedWatchlistNumbersObject);
+      console.log("here");
       let updatedWatchlistNumbers = updatedWatchlistNumbersObject.watchlist;
+      console.log(updatedWatchlistNumbers);
       let updatedWatchlist = [];
       try {
         updatedWatchlist = await updatedWatchlistNumbers.reduce(
