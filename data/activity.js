@@ -80,7 +80,8 @@ const getAllLogs = async () => {
 const editLog = async (activityId, review, rating, date) => {
   validation.checkProvided(activityId, review, rating, date);
   activityId = validation.checkId(activityId, "Activity ID");
-
+  //movieId = validation.checkMovieId(movieId, "Movie ID");
+  //userId = validation.checkId(userId, "User ID");
   review = validation.checkString(review, "Review");
 
   //rating = validation.checkRating(rating, "Rating");
@@ -97,8 +98,6 @@ const editLog = async (activityId, review, rating, date) => {
   console.log("log$$$$$$$$")
   
   const update = {
-    movieId: movieId,
-    userId: userId,
     review: review,
     rating: rating,
     date: date,

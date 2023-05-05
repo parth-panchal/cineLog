@@ -19,7 +19,7 @@ router
         // console.log("inside route")
         
         let activityId = xss(req.params.id); 
-        // console.log(activityId)
+        console.log(activityId)
 
         try {
             activityId = await validation.checkId(activityId)
@@ -32,9 +32,9 @@ router
             const movieInfo = await getMovieInfo(activityInfo.movieId);
 
 
-            // console.log(movieInfo)
+            console.log(movieInfo)
             // console.log("------------------------")
-            res.status(200).render('activityById', {title: "Activity", results : activityInfo, movieName : movieInfo.original_title, poster_path : movieInfo.poster_path });
+            res.status(200).render('activityById', {title: "Activity", results : activityInfo, movieName : movieInfo.original_title});
 
             
           } catch (e) {
@@ -96,22 +96,12 @@ router
         let review = "vsguiylwj"; //hardcoded
         let rating = xss(activityInfo.rating);
         let date = xss(activityInfo.date);
-        //let movieId = xss(req.body.movieId);
         //validation.checkProvided(movieId, userId, review, rating);
         //movieId = await validation.checkMovieId(movieId, "Movie ID");
         //userId = validation.checkId(userId, "User ID"); 
-        //review = validation.checkString(review, "Review");
-        // rating = validation.checkRating(rating, "Rating");
-        // console.log("check 2")
-
-        // date = validation.checkDate(date, "Date");
-        // console.log("check 3")
-        console.log(activityId)
-        console.log(movieId)
-        console.log(userId)
-        console.log(review)
-        console.log(rating)
-        console.log(date)
+        review = validation.checkString(review, "Review");
+        rating = validation.checkRating(rating, "Rating");
+        date = validation.checkDate(date, "Date");
 
         //here user id will remain the same
         //the only things that the user can change are review rating movie id and date
