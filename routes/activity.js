@@ -55,9 +55,6 @@ router
 
     })
 
-
-router
-    .route('/:id/update')
     .patch(async (req, res) => {
         let activityInfo = req.body;
         let activityId = xss(req.params.id);
@@ -71,7 +68,7 @@ router
         //the only things that the user can change are review rating movie id and date
 
         try{
-            const updatedActivity = await activityData.editLog(activityId, review, rating, date);
+            const updatedActivity = await activityData.editLog(activityId, movieId, userId, review, rating, date);
             res.status(200).json({ message: 'Log updated successfully', updatedActivity });
         } catch (error) {
             return res.status(400).render('error', { error: error.toString() });
