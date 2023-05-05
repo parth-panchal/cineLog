@@ -9,12 +9,13 @@ const updateTrending = async (activityId, date, action) => {
   const trendingData = await trending();
   if (action === "add") {
     const existingTrend = await trendingData.findOne({ date: date });
-    if (!existingTrend)
-      await trendingData.insertOne({
+    if (!existingTrend) {
+      let addition = await trendingData.insertOne({
         date: date,
         activityIds: [activityId],
       });
-    else
+      console.log(addition);
+    } else
       await trendingData.findOneAndUpdate(
         { date: date },
         { $push: { activityIds: activityId } },
@@ -26,7 +27,9 @@ const updateTrending = async (activityId, date, action) => {
       { $pull: { activityIds: activityId } },
       { returnDocument: "after" }
     );
-    if (deletedTrend.activityIds.length === 0)
+    console.log("here");
+    console.log(deletedTrend);
+    if (deletedTrend.value.activityIds.length === 0)
       await trendingData.deleteOne({ date: date });
   }
 };
@@ -64,4 +67,3 @@ const calculateTrendingForDate = async (date) => {
 };
 
 export { updateTrending, calculateTrending, calculateTrendingForDate };
-

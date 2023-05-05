@@ -10,7 +10,7 @@ import userRoutes from "./user.js";
 
 const constructorMethod = (app) => {
   app.use("/", homepageRoutes);
-  app.use('/search', searchRoutes);
+  app.use("/search", searchRoutes);
   app.use("/login", loginRoutes);
   app.use("/signup", signupRoutes);
   app.use("/profile", profileRoutes);
