@@ -35,20 +35,26 @@ const createLog = async (movieId, userId, review, rating, date) => {
 
 // Get an activity log by its _id
 const getLogById = async (activityId) => {
+  console.log(`Activity id is ${activityId}`)
+
   activityId = validation.checkId(activityId, "Activity ID");
   const logs = await activity();
+  console.log(logs)
+  console.log("#########################")
   const log = await logs.findOne({ _id: new ObjectId(activityId) });
+  console.log("#########################")
+  console.log(log)
   if (!log) throw "Error: activity not found";
   return log;
 };
 
 const gettopLogs = async () => {
-  console.log("Check 1")
+  // console.log("Check 1")
  const logs = await activity();
- console.log("Check 2")
+//  console.log("Check 2")
  const all = await logs.find({}).limit(5).toArray();
  //console.log(all)
- console.log("Check 3 !!")
+//  console.log("Check 3 !!")
  return all;
 };
 
@@ -66,17 +72,30 @@ const getAllLogs = async () => {
 };
 
 // Edit an activity log
-const editLog = async (activityId, review, rating, date) => {
+const editLog = async (activityId, movieId, userId, review, rating, date) => {
+  console.log("inside edit log")
+  // console.log(activityId);
   validation.checkProvided(activityId, review, rating, date);
   activityId = validation.checkId(activityId, "Activity ID");
+
+  review = validation.checkString(review, "Review");
+
+  //rating = validation.checkRating(rating, "Rating");
+  
+  //date = validation.checkDate(date, "Date");
+
+
   //movieId = validation.checkMovieId(movieId, "Movie ID");
   //userId = validation.checkId(userId, "User ID");
-  review = validation.checkString(review, "Review");
-  rating = validation.checkRating(rating, "Rating");
-  date = validation.checkDate(date, "Date");
+
   const activities = await activity();
+  // console.log(activities)
   const log = await getLogById(activityId);
+  console.log("log$$$$$$$$")
+  
   const update = {
+    movieId: movieId,
+    userId: userId,
     review: review,
     rating: rating,
     date: date,
@@ -110,7 +129,7 @@ const deleteLog = async (activityId) => {
   activityId = validation.checkId(activityId, "Activity ID");
   const logs = await activity();
   const deleteDate = await logs.findOne({ _id: new ObjectId(activityId) });
-  console.log(deleteDate.date);
+  // console.log(deleteDate.date);
   const deletedLog = await logs.findOneAndDelete({
     _id: new ObjectId(activityId),
   });
