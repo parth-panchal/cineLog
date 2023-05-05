@@ -77,9 +77,7 @@ const getAllLogs = async () => {
 };
 
 // Edit an activity log
-const editLog = async (activityId, movieId, userId, review, rating, date) => {
-  console.log("inside edit log")
-  // console.log(activityId);
+const editLog = async (activityId, review, rating, date) => {
   validation.checkProvided(activityId, review, rating, date);
   activityId = validation.checkId(activityId, "Activity ID");
 

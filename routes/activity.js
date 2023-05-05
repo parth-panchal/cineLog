@@ -68,6 +68,9 @@ router
 
     })
 
+
+router
+    .route('/:id/update')
     .patch(async (req, res) => {
         let activityInfo = req.body;
         console.log(activityInfo)
