@@ -75,30 +75,14 @@ router
         let activityInfo = req.body;
         console.log(activityInfo)
         let activityId = xss(req.params.id);
-        let userId = xss(req.session.user.id);
-        //let movieId = xss(req.body.movieId);
-        let review = xss(activityInfo.review);
-        let rating = xss(activityInfo.rating);
-        let date = xss(activityInfo.date);
-        //validation.checkProvided(movieId, userId, review, rating);
-        //movieId = await validation.checkMovieId(movieId, "Movie ID");
-        //userId = validation.checkId(userId, "User ID"); 
-        review = validation.checkString(review, "Review");
-        rating = validation.checkRating(rating, "Rating");
-        date = validation.checkDate(date, "Date");
-        //user session paused for testing
-        //let userId = xss(req.session.user.id);
-        let movieId = xss(req.params.movieId);
-        // let userId = xss(req.params.userId);
-        // let review = xss(req.params.review);
-        // let movieId = "7968"; //hardcoded
-        let userId = "23"; //hardcoded
-        let review = "vsguiylwj"; //hardcoded
-        let rating = xss(activityInfo.rating);
-        let date = xss(activityInfo.date);
-        //validation.checkProvided(movieId, userId, review, rating);
-        //movieId = await validation.checkMovieId(movieId, "Movie ID");
-        //userId = validation.checkId(userId, "User ID"); 
+        let userId = req.session.user.id;
+        let movieId = xss(req.body.movieId);
+        let review = activityInfo.review;
+        let rating = activityInfo.rating;
+        let date = activityInfo.date;
+        validation.checkProvided(movieId, userId, review, rating);
+        movieId = await validation.checkMovieId(movieId, "Movie ID");
+        userId = validation.checkId(userId, "User ID"); 
         review = validation.checkString(review, "Review");
         rating = validation.checkRating(rating, "Rating");
         date = validation.checkDate(date, "Date");
