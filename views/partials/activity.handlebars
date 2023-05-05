@@ -1,15 +1,13 @@
-<h1>My Lists</h1>
+<h1>My Activity</h1>
 
 {{#if logs}}
 <ul>
     {{#each logs}}
     <li>
-        {{!-- how do i make the call to get the movie title here? --}}
-        <a href="/activity/{{this._id}}">{{this.movieId}} logged on {{this.date}}</a>
+        <a href="/activity/{{_id}}">{{movieTitle}} logged on {{date}}</a>
     </li>
     {{/each}}
 </ul>
 {{else}}
 <p>You haven't logged any movies yet.</p>
 {{/if}}
-
