@@ -75,6 +75,17 @@ router
         let activityInfo = req.body;
         console.log(activityInfo)
         let activityId = xss(req.params.id);
+        let userId = xss(req.session.user.id);
+        //let movieId = xss(req.body.movieId);
+        let review = xss(activityInfo.review);
+        let rating = xss(activityInfo.rating);
+        let date = xss(activityInfo.date);
+        //validation.checkProvided(movieId, userId, review, rating);
+        //movieId = await validation.checkMovieId(movieId, "Movie ID");
+        //userId = validation.checkId(userId, "User ID"); 
+        review = validation.checkString(review, "Review");
+        rating = validation.checkRating(rating, "Rating");
+        date = validation.checkDate(date, "Date");
         //user session paused for testing
         //let userId = xss(req.session.user.id);
         let movieId = xss(req.params.movieId);
