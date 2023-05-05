@@ -109,7 +109,7 @@ const getMovieReleaseYear = async (movieId) => {
 };
 
 const getMovieCast = async (movieId) => {
-  const endpoint = `/movie/${movieId}`;
+  const endpoint = `/movie/${movieId}/credits`;
   try {
     const { data } = await axios.get(BASE_URL + endpoint, { params });
     return data.cast;
@@ -127,12 +127,6 @@ const getMovieCrew = async (movieId) => {
     console.log(e);
   }
 };
-
-//console.log(await getMovieCast(550));
-
-/*
-We will require a function which gets the userID from the current session so that's something we need to figure out in the future
-*/
 
 export {
   searchMovie,

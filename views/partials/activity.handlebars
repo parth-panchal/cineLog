@@ -4,8 +4,7 @@
 <ul>
     {{#each logs}}
     <li>
-        {{!-- how do i make the call to get the movie title here? --}}
-        <a href="/activity/{{_id}}">{{title}} logged on {{date}}</a>
+        <a href="/activity/{{_id}}">{{movieTitle}} logged on {{date}}</a>
     </li>
     {{/each}}
 </ul>
