@@ -46,7 +46,8 @@ const getLogById = async (activityId) => {
 const getLogsByUserId = async (userId) => {
   // need to add check here from user data functions to see if user exists?
   const logs = await activity();
-  return await logs.find({ _id: new ObjectId(userId) }).toArray();
+  let userLogs = await logs.find({ userId: userId }).toArray();
+  return userLogs;
 };
 
 const getAllLogs = async () => {
