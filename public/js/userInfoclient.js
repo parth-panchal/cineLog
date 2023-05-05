@@ -79,7 +79,81 @@
     }
     if(edit_form) {
         edit_form.addEventListener("editButton", (event) => {
+        event.preventDefault();
         valid = true;
+        if(!firstName_input.value){
+            valid = false
+            firstName_input = ''
+            err.hidden = false
+            err.innerHTML = " First name not provided"
+            return
+        }
+        else {
+            valid = true
+            err.hidden = true
+        }
+
+        if(!firstName_input.value.length < 2 || !firstName_input.value.length > 25 ){
+            valid = false
+            firstName_input = ''
+            err.hidden = false
+            err.innerHTML = " First name mustt be between 2 and 25 characters"
+            return 
+        }
+        else {
+            valid = true
+            err.hidden = true
+        }
+
+        if(/\d/.test(firstName_input)){
+            valid = false
+            firstName_input = ''
+            err.hidden = false
+            err.innerHTML = " First name can not have numbers"
+            return 
+        }
+        else {
+            valid = true
+            err.hidden = true
+        }
+
+
+        if(!lastName_input.value){
+            valid = false
+            lastName_input = ''
+            err.hidden = false
+            err.innerHTML = " Last name not provided"
+            return
+        }
+        else {
+            valid = true
+            err.hidden = true
+        }
+
+        if(!lastName_input.value.length < 2 || !lastName_input.value.length > 25 ){
+            valid = false
+            lastName_input = ''
+            err.hidden = false
+            err.innerHTML = " Last name mustt be between 2 and 25 characters"
+            return 
+        }
+        else {
+            valid = true
+            err.hidden = true
+        }
+
+        if(/\d/.test(lastName_input)){
+            valid = false
+            lastName_input = ''
+            err.hidden = false
+            err.innerHTML = " Last name can not have numbers"
+            return 
+        }
+        else {
+            valid = true
+            err.hidden = true
+        }
+
         }
         )
     }
