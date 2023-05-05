@@ -14,6 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const staticDir = express.static(__dirname + "/public");
 
+
 const handlebarsInstance = exphbs.create({
     defaultLayout: 'main',
     // Specify helpers which are only registered on this instance.
@@ -43,9 +44,12 @@ app.use(
       cookie: {maxAge: 60000},
   })
 );
-
+app.get('/scriptList.js', function(req, res) {
+  res.setHeader('Content-Type', 'application/javascript');
+  res.sendFile(__dirname + "/public/js/scriptList.js");
+});
 app.use(middleware.rewriteUnsupportedBrowserMethods);
-app.use("/lists",middleware.protectedRoutes);
+app.use("/list",middleware.protectedRoutes);
 app.use("/activity",middleware.protectedRoutes);
 app.use("/profile",middleware.protectedRoutes);
 app.use("/user",middleware.protectedRoutes);

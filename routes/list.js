@@ -26,6 +26,10 @@ import xss from "xss";
 //   });
 router
   .route("/newlist")
+  .get(async (req, res) => {
+    //code here for GET
+    return res.render("createNewList",{title:"New list page"});
+  })
   .post(async (req, res) => {
     //code to POST lists for a user
     const listInfo = req.body;
