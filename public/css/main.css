@@ -53,16 +53,35 @@ nav a:hover {
     color: #fff;
     border-radius: 5px;
 }
-
-img{
-    width: 300px;
-    height: 300px;
-    max-width: 100%; /* Ensure the image doesn't exceed its container */
-    display: block; /* Make sure the image is a block element */
-    margin: 0 auto; /* Center the image horizontally */
-    border-radius: 50%; /* Add a circular border to the image */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+nav {
+    background-color: #f9f9f9;
 }
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+nav li {
+    margin: 0 10px;
+}
+
+nav a {
+    color: #333;
+    text-decoration: none;
+    padding: 10px;
+}
+
+nav a:hover {
+    background-color: #0077cc;
+    color: #fff;
+    border-radius: 5px;
+}
+
     /* used for activity */
     /*by tags*/
     table {
