@@ -66,25 +66,23 @@ const getAllLogs = async () => {
 };
 
 // Edit an activity log
-const editLog = async (activityId, movieId, userId, review, rating, date) => {
-  validation.checkProvided(activityId, movieId, userId, review, rating, date);
+const editLog = async (activityId, review, rating, date) => {
+  validation.checkProvided(activityId, review, rating, date);
   activityId = validation.checkId(activityId, "Activity ID");
-  movieId = validation.checkMovieId(movieId, "Movie ID");
-  userId = validation.checkId(userId, "User ID");
+  //movieId = validation.checkMovieId(movieId, "Movie ID");
+  //userId = validation.checkId(userId, "User ID");
   review = validation.checkString(review, "Review");
   rating = validation.checkRating(rating, "Rating");
   date = validation.checkDate(date, "Date");
   const activities = await activity();
   const log = await getLogById(activityId);
   const update = {
-    movieId: movieId,
     review: review,
     rating: rating,
     date: date,
   };
   let hasChanges = false;
   if (
-    update.movieId !== log.movieId ||
     update.review !== log.review ||
     update.rating !== log.rating ||
     update.date !== log.date
