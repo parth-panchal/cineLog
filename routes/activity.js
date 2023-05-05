@@ -105,15 +105,11 @@ router
         //here user id will remain the same
         //the only things that the user can change are review rating movie id and date
         try{
-            console.log("in try catch block")
-            const updatedActivity = await activityData.editLog(activityId, movieId, userId, review, rating, date);
-            console.log("check 2")
+            const updatedActivity = await activityData.editLog(activityId, review, rating, date);
             res.status(200).json({ message: 'Log updated successfully', updatedActivity });
 
         } catch (error) {
-            // console.log("in catch error block")
-            //return res.status(400).render({error: "There was some problem in updating the log"});
-            return res.status(400).render('error', { error: error.toString() });
+            return res.status(400).render({error: "There was some problem in updating the log"});
         }
     })
 

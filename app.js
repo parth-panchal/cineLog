@@ -44,10 +44,7 @@ app.use(
       cookie: {maxAge: 3600000},
   })
 );
-app.get('/scriptList.js', function(req, res) {
-  res.setHeader('Content-Type', 'application/javascript');
-  res.sendFile(__dirname + "/public/js/scriptList.js");
-});
+
 app.use(middleware.rewriteUnsupportedBrowserMethods);
 app.use("/list",middleware.protectedRoutes);
 app.use("/activity",middleware.protectedRoutes);
