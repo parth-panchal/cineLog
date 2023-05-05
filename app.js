@@ -6,7 +6,6 @@ import exphbs from "express-handlebars";
 import session from "express-session";
 import * as dotenv from "dotenv";
 import middleware from "./middleware.js";
-import { searchMovie } from "./utils/helper.js";
 
 dotenv.config();
 
@@ -15,6 +14,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const staticDir = express.static(__dirname + "/public");
+
 
 const handlebarsInstance = exphbs.create({
   defaultLayout: "main",
