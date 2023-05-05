@@ -155,7 +155,10 @@ router
         req.body.movieId,
         req.body.operation
       );
+      console.log(updatedWatchlistNumbersObject);
+      console.log("here");
       let updatedWatchlistNumbers = updatedWatchlistNumbersObject.watchlist;
+      console.log(updatedWatchlistNumbers);
       let updatedWatchlist = [];
       try {
         updatedWatchlist = await updatedWatchlistNumbers.reduce(
@@ -275,7 +278,7 @@ router.route("/activity").get(async (req, res) => {
         Promise.resolve([])
       );
     } catch (e) {
-      console.log(e); //
+      console.log(e); //change this later
     }
     return res.render("profile", { logs: logs, script_partial: "activity" });
   } catch (e) {

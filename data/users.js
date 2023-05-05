@@ -224,7 +224,6 @@ const updateUserLikes = async (userId, likeMovieId, operation) => {
     }
 
     updatedUser.value._id = updatedUser.value._id.toString();
-
     return updatedUser.value;
   } else {
     throw "Error: Operation can only be 'add' or 'remove'";
@@ -260,7 +259,6 @@ const updateUserWatchlist = async (userId, watchlistMovieId, operation) => {
     if (updatedUser.lastErrorObject.n === 0) {
       throw `Error: Could not add movie with id: ${likeMovieId} to user ${userId} watchlist`;
     }
-
     updatedUser.value._id = updatedUser.value._id.toString();
 
     return updatedUser.value;
@@ -273,7 +271,7 @@ const updateUserWatchlist = async (userId, watchlistMovieId, operation) => {
       { _id: new ObjectId(userId) },
       { $pull: { watchlist: watchlistMovieId } },
       {
-        projection: { _id: 1, watchlistMovieId: 1 },
+        projection: { _id: 1, watchlist: 1 },
         returnDocument: "after",
       }
     );
@@ -436,7 +434,6 @@ const checkUpdate = (existingUser, updatedUserInfo) => {
 const calculateRecommendationsForUser = async (userId) => {
   let user = await getUserById(userId);
   let userLikes = user.likes;
-  //console.log(userLikes);
   let allRecos = await userLikes.reduce(async (previousPromise, movie) => {
     let all = await previousPromise;
     let movieRecos = await helper.getRecommendationsByMovieId(movie);

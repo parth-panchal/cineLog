@@ -1,18 +1,46 @@
 /* IDs */
 
-
 /* Classes */
 .sr-only:not(:focus):not(:active) {
-    clip: rect(0 0 0 0); 
+    clip: rect(0 0 0 0);
     clip-path: inset(50%);
     height: 1px;
     overflow: hidden;
     position: absolute;
-    white-space: nowrap; 
+    white-space: nowrap;
     width: 1px;
 }
 
 /* Page Tags */
 body {
-    background-color: cadetblue;
+    background-color: white;
+}
+
+nav {
+    background-color: #f9f9f9;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+nav li {
+    margin: 0 10px;
+}
+
+nav a {
+    color: #333;
+    text-decoration: none;
+    padding: 10px;
+}
+
+nav a:hover {
+    background-color: #0077cc;
+    color: #fff;
+    border-radius: 5px;
 }
