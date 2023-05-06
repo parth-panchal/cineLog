@@ -49,7 +49,12 @@ const calculateTrending = async () => {
     if (movieDict[movieId]) movieDict[movieId]++;
     else movieDict[movieId] = 1;
   }
-  return movieDict;
+  let answer = Object.entries(movieDict).sort((a, b) => b[1] - a[1]);
+  let sortedMovieDict = {};
+  answer.forEach((item) => {
+    sortedMovieDict[item[0]] = item[1];
+  });
+  return sortedMovieDict;
 };
 
 //trending for a specific date
