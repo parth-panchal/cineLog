@@ -149,6 +149,17 @@ router
     } catch (e) {
       return res.render("profile", { error: e });
     }
+    //adding validation to check if movie exists in user watchlist
+    try {
+      let user = await userData.getUserById(req.session.user._id);
+      let userWatchlist = user.watchlist;
+      //check if movie exists in user likes
+      if (!userWatchlist.includes(req.body.movieId)) {
+        throw `Movie does not exist in user watchlist`;
+      }
+    } catch (e) {
+      console.log(e);
+    }
     try {
       const updatedWatchlistNumbersObject = await userData.updateUserWatchlist(
         req.session.user._id,
@@ -221,6 +232,17 @@ router
       req.body.operation = validation.checkOperation(req.body.operation);
     } catch (e) {
       return res.render("profile", { error: e });
+    }
+    //adding validation to check if movie exists in user likes
+    try {
+      let user = await userData.getUserById(req.session.user._id);
+      let userLikes = user.likes;
+      //check if movie exists in user likes
+      if (!userLikes.includes(req.body.movieId)) {
+        throw `Movie does not exist in user likes`;
+      }
+    } catch (e) {
+      console.log(e);
     }
     try {
       const userUpdatedResp = await userData.updateUserLikes(
@@ -335,6 +357,17 @@ router
     req.session.user._id = xss(req.session.user._id);
     req.body.followingId = xss(req.body.followingId);
     req.body.operation = xss(req.body.operation);
+    //adding validation to check if user exists in user following
+    try {
+      let user = await userData.getUserById(req.session.user._id);
+      let userFollowing = user.following;
+      //check if movie exists in user likes
+      if (!userFollowing.includes(req.body.followingId)) {
+        throw `User does not exist in user following`;
+      }
+    } catch (e) {
+      console.log(e);
+    }
     try {
       const updatedFollowingIdsObject = await userData.updateUserFollowing(
         req.session.user._id,
