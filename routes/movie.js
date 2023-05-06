@@ -27,10 +27,14 @@ router
         }
 
         try {
+            let alreadyPresentLikes = false;
+            let alreadyPresentWatchlist = false;
+
             if(isAuthenticated) {
                 let userId = xss(req.session.user._id);
-                let userInfo = await getUserById(userId);
-                
+                let {likes, watchlist, following} = await getUserById(userId);
+                if(likes.includes(movieId)) alreadyPresentLikes = true;
+                if(watchlist.includes(movieId)) alreadyPresentWatchlist = true;
             }
             
             let movieInfo = await getMovieInfo(movieId);
@@ -46,13 +50,14 @@ router
             // Generate yyyy-mm-dd date string
             var formattedDate = year + "-" + month + "-" + day;
 
-
             res.render('movie', {
                 movieInfo: movieInfo,
                 movieCast: movieCast,
                 activityInfo: activityInfo,
                 isAuthenticated: isAuthenticated,
-                currDate: formattedDate
+                currDate: formattedDate,
+                alreadyPresentLikes,
+                alreadyPresentWatchlist
             });
         } catch (error) {
             return res.status(500).json({error: error});

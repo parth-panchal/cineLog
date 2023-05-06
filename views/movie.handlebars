@@ -24,8 +24,16 @@
 {{#if isAuthenticated}}
     <p>People You Follow Who've Watched This: </p>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#activityModal">Add to Activity</button>
-    <button type="button" class="btn btn-primary" id="addToWatchlistBtn">Add to Watchlist</button>
-    <button type="button" class="btn btn-primary" id="addToLikesBtn">Add to Likes</button>
+    {{#if alreadyPresentWatchlist}}
+        <button type="button" class="btn btn-primary" disabled>Added to Watchlist</button>
+    {{else}}
+        <button type="button" class="btn btn-primary" id="addToWatchlistBtn">Add to Watchlist</button>
+    {{/if}}
+    {{#if alreadyPresentLikes}}
+        <button type="button" class="btn btn-primary" disabled>Added to Likes</button>
+    {{else}}
+        <button type="button" class="btn btn-primary" id="addToLikesBtn">Add to Likes</button>
+    {{/if}}
     <div id="backendError" class="error" hidden></div>
 
     <div class="modal fade" id="activityModal" tabindex="-1" role="dialog" aria-labelledby="activityModal" aria-hidden="true">
