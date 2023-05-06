@@ -25,9 +25,12 @@ saveChangesButton.addEventListener('click', (event) => {
 
     const date = document.getElementById('date').value; 
     //const data_date = { date: date };
-
-
-    activityId = '645577b0d622d02e0c535894' //hardcoded
+    // console.log("before window")
+    const url_d = window.location.href;
+    const activityId = url_d.split("/")[4];
+    // console.log(`this is the url ${url_d}`)
+    // console.log(`${activityId} activity id is this`)
+    // activityId = '6456789826472b44ced10c41' //hardcoded
     const url = `/activity/${activityId}`; 
    
     fetch(url, {
@@ -63,7 +66,10 @@ saveChangesButton.addEventListener('click', (event) => {
 
 
 deleteButton.addEventListener('click', () => {
-    const activityId = '645532b1eebb1822419282ea'; 
+    const url_d = window.location.href;
+    const activityId = url_d.split("/")[4];
+    // console.log(`this is the url ${url_d}`)
+    // const activityId = '6456789826472b44ced10c41'; 
     const url = `/activity/${activityId}`; 
     fetch(url, {
       method: 'DELETE'
@@ -76,12 +82,10 @@ deleteButton.addEventListener('click', () => {
     })
     .then(response => {
   
-      console.log(response);
-     
+      console.log(response)
       deleteModal.modal('hide');
     })
     .catch(error => {
-      // handle error
       console.error(error);
     });
   });

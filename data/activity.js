@@ -32,15 +32,16 @@ const createLog = async (movieId, userId, review, rating, date) => {
 
 // Get an activity log by its _id
 const getLogById = async (activityId) => {
-  console.log(`Activity id is ${activityId}`)
+  // console.log(`Activity id is ${activityId}`)
 
   activityId = validation.checkId(activityId, "Activity ID");
+  activityId = activityId.toString();
   const logs = await activity();
-  console.log(logs)
-  console.log("#########################")
+  // console.log(logs)
+  // console.log("#########################")
   const log = await logs.findOne({ _id: new ObjectId(activityId) });
-  console.log("#########################")
-  console.log(log)
+  // console.log("#########################")
+  // console.log(log)
   if (!log) throw "Error: activity not found";
   return log;
 };
@@ -95,7 +96,7 @@ const editLog = async (activityId, review, rating, date) => {
   const activities = await activity();
   // console.log(activities)
   const log = await getLogById(activityId);
-  console.log("log$$$$$$$$")
+  // console.log("log$$$$$$$$")
   
   const update = {
     review: review,

@@ -24,7 +24,7 @@ router
         try {
             activityId = await validation.checkId(activityId)
         } catch (error) {
-            return res.status(400).json({error: error});
+            return res.status(400).render('error').json({error: error});
         }
         
         try {
@@ -51,6 +51,7 @@ router
             // console.log("check2")
             activityId = await validation.checkId(activityId)
         } catch (error) {
+            // console.log("e1")
             return res.status(400).json({error: error});
         }
         try {
@@ -61,7 +62,8 @@ router
         }
         try {
             // console.log("check4")
-            await activityData.deleteLog(activityId)
+            deletedActivity = await activityData.deleteLog(activityId)
+            res.status(200).json({ message: 'Log deleted successfully', deletedActivity });
         } catch (error) {
             res.status(500).json({ e });
         }
@@ -73,7 +75,7 @@ router
     .route('/:id/update')
     .patch(async (req, res) => {
         let activityInfo = req.body;
-        console.log(activityInfo)
+        // console.log(activityInfo)
         let activityId = xss(req.params.id);
         let userId = req.session.user.id;
         let movieId = xss(req.body.movieId);
