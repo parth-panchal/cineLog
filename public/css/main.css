@@ -1,4 +1,8 @@
 /* IDs */
+#headerBtn {
+    display: flex;
+    align-items: center;
+  }
 
 /* Classes */
 .sr-only:not(:focus):not(:active) {
@@ -15,16 +19,11 @@
     color: red;
 }
 
-.error {
-    color: red;
-}
-
 /* #####Page Tags##### */
     /* global */
 body {
     background-color: white;
 }
-
 
 nav {
     background-color: #f9f9f9;
@@ -55,8 +54,6 @@ nav a:hover {
     border-radius: 5px;
 }
 
-
-
 img{
     width: 300px;
     height: 300px;
@@ -67,7 +64,8 @@ img{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
 }
     /* used for activity */
-table {
+    /*by tags*/
+    table {
     border-collapse: collapse;
     width: 100%;
     margin-bottom: 20px;
@@ -96,4 +94,27 @@ table {
     button:hover {
     background-color: #006A8E;
     }
-    
+    /*By tags*/
+    #activityById {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+      
+    #activityById_mname {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+      
+    #err_c {
+        color: red;
+    }
+
+    .table_class{
+    border: 1px solid black; 
+    padding: 8px;
+    }
