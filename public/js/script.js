@@ -144,7 +144,9 @@ const checkString = (strVal, name) => {
   };
 
 (function ($) { 
+
     // ===================== Sign Up =====================
+
     let signupForm = $(`#signUpForm`),
         firstNameInput = $(`#firstNameInput`),
         lastNameInput = $(`#lastNameInput`),
@@ -224,6 +226,54 @@ const checkString = (strVal, name) => {
             return;
         }
         
+    })
+
+    // ===================== Sign Up =====================
+
+    let loginForm = $('#loginForm'),
+        loginErrorDiv = $('#loginErrorDiv');
+    
+    loginForm.submit(async (event) => {
+        let username = usernameInput.val();
+        let pass = passwordInput.val();
+
+        let errors = [];
+        loginErrorDiv.text('');
+        loginErrorDiv.attr("hidden", true);
+
+        if(!username) {
+            errors.push("You must enter a value for Username");
+        }
+
+        if(!pass) {
+            errors.push("You must enter a value for Password");
+        }
+
+        if(errors.length > 0) {
+            event.preventDefault();
+            loginErrorDiv.text(errors);
+            loginErrorDiv.removeAttr("hidden");
+            return;
+        }
+
+        try {
+            username = checkUsername(username);
+        } catch (error) {
+            errors.push(error);
+        }
+
+        try {
+            pass = checkPassword(pass);
+        } catch (error) {
+            errors.push(error);
+        }
+
+        if(errors.length > 0) {
+            event.preventDefault();
+            signupErrorDiv.text(errors);
+            signupErrorDiv.removeAttr("hidden");
+            return;
+        }
     })
 
     // ===================== Search Bar =====================
