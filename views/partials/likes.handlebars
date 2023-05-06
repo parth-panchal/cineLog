@@ -7,7 +7,7 @@
         <a href="/movie/{{id}}">{{title}}</a>
         <form method="POST" action="/profile/likes">
             <input type="hidden" name="_method" value="PATCH">
-            <input type="hidden" name="movieId" value="{{id}}">
+            <input type="hidden" name="movieId" value="{{id}}" hidden>
             <input type="hidden" name="operation" value="remove">
             <button type="submit">Remove from likes</button>
         </form>

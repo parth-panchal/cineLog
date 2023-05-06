@@ -128,7 +128,9 @@ const getAverageRatingByUser = async (userId) => {
     count++;
     totalRating += log.rating;
   });
-  return totalRating / count;
+  const averageRating = totalRating / count;
+  if (Number.isInteger(averageRating)) return parseInt(averageRating);
+  else return parseFloat(averageRating.toFixed(1));
 };
 
 const getFavoriteDecade = async (userId) => {
