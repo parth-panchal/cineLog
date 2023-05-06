@@ -58,8 +58,8 @@ const checkUsername = (username) => {
 //so the rating must be between 0 and 5, and must be a multiple of 0.5.
 //I've seen some websites that allow users to give half stars, so I think this is a good idea.
 const checkRating = (rating) => {
-  rating = checkNumber(rating, "Rating");
-  if (rating < 0 || rating > 5) throw "Error: Rating must be between 0 and 5";
+  rating = checkNumber(parseInt(rating), "Rating");
+  if (rating < 0.5 || rating > 5) throw "Error: Rating must be between 0 and 5";
   if (rating % 0.5 !== 0) throw "Error: Rating must be a multiple of 0.5";
   return rating;
 };
@@ -86,9 +86,12 @@ const checkMovieId = async (movieId) => {
   if (movieId === undefined) throw "Error: Movie ID is required";
   if (movieId === null) throw "Error: Movie ID cannot be null";
   if (isNaN(movieId)) throw "Error: Movie ID must be a number";
+  try{
   let movie = await getMovieInfo(movieId);
-  if (!movie) throw "Error: Movie not found";
-  return movieId;
+  } catch(e) {
+    console.log(e)
+  }
+  return parseInt(movieId);
 };
 
 const checkMovieArray = (movies, name) => {
@@ -96,9 +99,11 @@ const checkMovieArray = (movies, name) => {
     throw `Error: ${name} must be an array`;
   if (movies.length === 0)
     throw `Error: ${name} must have at least one element`;
-  movies.forEach((elem) => {
-    elem = checkMovieId(elem);
+  movies.forEach(async (elem) => {
+    elem = await checkMovieId(elem);
+    console.log(elem);
   });
+  console.log(movies);
   return movies;
 };
 
@@ -109,18 +114,18 @@ const checkDate = (dateVal, name) => {
   dateVal = checkString(dateVal, name);
 
   // Seperate the date into 3 parts
-  // parts[0]: Months
-  // parts[1]: Days
-  // parts[2]: Year
-  const parts = dateVal.split("/");
+  // parts[0]: Year
+  // parts[1]: Month
+  // parts[2]: Day
+  const parts = dateVal.split("-");
   if (parts.length !== 3) throw `Error: Invalid date for ${name}`;
 
-  if (parts[0].length !== 2 || parts[1].length !== 2 || parts[2].length !== 4)
-    throw `Error: Invalid format for ${name}: Must be in MM/DD/YYYY form`;
+  if (parts[0].length !== 4 || parts[1].length !== 2 || parts[2].length !== 2)
+    throw `Error: Invalid format for ${name}: Must be in YYYY/MM/DD form`;
 
-  const month = parseInt(parts[0]);
-  const day = parseInt(parts[1]);
-  const year = parseInt(parts[2]);
+  const year = parseInt(parts[0]);
+  const month = parseInt(parts[1]);
+  const day = parseInt(parts[2]);
 
   if (isNaN(month) || isNaN(day) || isNaN(year))
     throw `Error: Invalid format for ${name}: Month, Day, and Year must all be valid numbers`;
