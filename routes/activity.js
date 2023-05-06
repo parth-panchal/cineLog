@@ -24,7 +24,7 @@ router
         try {
             activityId = await validation.checkId(activityId)
         } catch (error) {
-            return res.status(400).json({error: error});
+            return res.status(400).render('error').json({error: error});
         }
         
         try {
@@ -51,6 +51,7 @@ router
             // console.log("check2")
             activityId = await validation.checkId(activityId)
         } catch (error) {
+            // console.log("e1")
             return res.status(400).json({error: error});
         }
         try {
@@ -61,7 +62,8 @@ router
         }
         try {
             // console.log("check4")
-            await activityData.deleteLog(activityId)
+            deletedActivity = await activityData.deleteLog(activityId)
+            res.status(200).json({ message: 'Log deleted successfully', deletedActivity });
         } catch (error) {
             res.status(500).json({ e });
         }
@@ -70,16 +72,16 @@ router
 
     .patch(async (req, res) => {
         let activityInfo = req.body;
-        console.log(activityInfo)
+        // console.log(activityInfo)
         let activityId = xss(req.params.id);
         //user session paused for testing
-        //let userId = xss(req.session.user.id);
+        // let userId = xss(req.session.user.id);
         let movieId = xss(req.params.movieId);
         // let userId = xss(req.params.userId);
         // let review = xss(req.params.review);
         // let movieId = "7968"; //hardcoded
         let userId = "23"; //hardcoded
-        let review = "vsguiylwj"; //hardcoded
+        let review = xss(activityInfo.review);; 
         let rating = xss(activityInfo.rating);
         let date = xss(activityInfo.date);
         //let movieId = xss(req.body.movieId);
@@ -92,19 +94,19 @@ router
 
         // date = validation.checkDate(date, "Date");
         // console.log("check 3")
-        console.log(activityId)
+        // console.log(activityId)
         console.log(movieId)
         console.log(userId)
-        console.log(review)
-        console.log(rating)
-        console.log(date)
+        // console.log(review)
+        // console.log(rating)
+        // console.log(date)
 
         //here user id will remain the same
         //the only things that the user can change are review rating movie id and date
         try{
-            console.log("in try catch block")
+            // console.log("in try catch block")
             const updatedActivity = await activityData.editLog(activityId, movieId, userId, review, rating, date);
-            console.log("check 2")
+            // console.log("check 2")
             res.status(200).json({ message: 'Log updated successfully', updatedActivity });
 
         } catch (error) {
