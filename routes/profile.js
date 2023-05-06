@@ -39,6 +39,7 @@ router
     try {
       let userDetails = await userData.getUserById(req.session.user._id); //not sure if this is the right way to get the user id
       return res.render("profile", {
+        isAuthenticated: true,
         userDetails: userDetails,
         script_partial: "userInfo",
       }); //use id userDetails in homepage hbs to get details
@@ -82,6 +83,7 @@ router
         user.password
       );
       return res.render("profile", {
+        isAuthenticated: true,
         userUpdates: userUpdates,
         script_partial: "userInfo",
       });
@@ -131,6 +133,7 @@ router
         console.log(e); //change this later
       }
       return res.render("profile", {
+        isAuthenticated: true,
         userWatchlist: userWatchlist,
         script_partial: "watchlist",
       });
@@ -147,7 +150,10 @@ router
       req.body.movieId = await validation.checkMovieId(req.body.movieId);
       req.body.operation = validation.checkOperation(req.body.operation);
     } catch (e) {
-      return res.render("profile", { error: e });
+      return res.render("profile", { 
+        isAuthenticated: true,
+        error: e 
+      });
     }
     //adding validation to check if movie exists in user watchlist
     try {
@@ -181,6 +187,7 @@ router
         console.log(e);
       }
       return res.render("profile", {
+        isAuthenticated: true,
         userWatchlist: updatedWatchlist,
         script_partial: "watchlist",
       });
@@ -215,6 +222,7 @@ router
         console.log(e); //change this later
       }
       return res.render("profile", {
+        isAuthenticated: true,
         userLikes: userLikes,
         script_partial: "likes",
       });
@@ -231,7 +239,10 @@ router
       req.body.movieId = await validation.checkMovieId(req.body.movieId);
       req.body.operation = validation.checkOperation(req.body.operation);
     } catch (e) {
-      return res.render("profile", { error: e });
+      return res.render("profile", {
+        isAuthenticated: true, 
+        error: e 
+      });
     }
     //adding validation to check if movie exists in user likes
     try {
@@ -265,6 +276,7 @@ router
         console.log(e); //change this later
       }
       return res.render("profile", {
+        isAuthenticated: true,
         userLikes: updatedLikes,
         script_partial: "likes",
       });
@@ -303,9 +315,14 @@ router.route("/activity").get(async (req, res) => {
       return new Date(b.date) - new Date(a.date);
     });
     console.log(logs);
-    return res.render("profile", { logs: logs, script_partial: "activity" });
+    return res.render("profile", {
+      isAuthenticated: true, 
+      logs: logs, 
+      script_partial: "activity" });
   } catch (e) {
-    return res.render("profile", { error: e });
+    return res.render("profile", { 
+      isAuthenticated: true,
+      error: e });
   }
 });
 
@@ -318,7 +335,10 @@ router.route("/lists").get(async (req, res) => {
   }
   try {
     let lists = await listData.getAllLists(req.session.user._id);
-    return res.render("profile", { lists: lists, script_partial: "lists" });
+    return res.render("profile", { 
+      isAuthenticated: true,
+      lists: lists, 
+      script_partial: "lists" });
   } catch (e) {
     res.render("error", { error: e });
   }
@@ -350,6 +370,7 @@ router
         console.log(e); //change this later
       }
       return res.render("profile", {
+        isAuthenticated: true,
         following: profilesFollowed,
         script_partial: "following",
       });
@@ -393,6 +414,7 @@ router
         console.log(e); //change this later
       }
       return res.render("profile", {
+        isAuthenticated: true,
         following: updatedFollowing,
         script_partial: "following",
       });
@@ -412,11 +434,13 @@ router.route("/statistics").get(async (req, res) => {
     let statistics = await statsData.allStats(req.session.user._id);
     if (statistics == null) {
       return res.render("profile", {
+        isAuthenticated: true,
         statsAvailable: false,
         script_partial: "statistics",
       });
     }
     return res.render("profile", {
+      isAuthenticated: true,
       statsAvailable: true,
       totalMoviesWatched: statistics.totalMoviesWatched,
       totalTimeWatched: statistics.totalTimeWatched,
