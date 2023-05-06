@@ -12,6 +12,10 @@
     width: 1px;
 }
 
+.error {
+    color: red;
+}
+
 /* #####Page Tags##### */
     /* global */
 body {

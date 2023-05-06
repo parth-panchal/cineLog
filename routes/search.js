@@ -39,8 +39,7 @@ router
     .route('/movies/:searchTerm')
     .get(async (req, res) => {
         let searchTerm = xss(req.params.searchTerm);
-        console.log(searchTerm);
-
+        let isAuthenticated = req.session.user ? true : false;
         try {
             searchTerm = validation.checkString(searchTerm, "Movie Title");
         } catch (error) {
@@ -49,11 +48,11 @@ router
 
         try {
             const moviesInfo = await searchMovie(searchTerm);
-            console.log(moviesInfo.results);
             return res.render('searchResults', {
                 results: moviesInfo.results,
                 noResults: false,
-                isMovieSearch: true
+                isMovieSearch: true,
+                isAuthenticated
             });
         } catch (error) {
             res.render('searchResults', {

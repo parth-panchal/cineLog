@@ -40,7 +40,7 @@ app.use(
       secret: process.env.SESSION_SECRET,
       saveUninitialized: false,
       resave: false,
-      cookie: {maxAge: 60000},
+      cookie: {maxAge: 3600000},
   })
 );
 
