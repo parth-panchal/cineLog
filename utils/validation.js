@@ -87,7 +87,7 @@ const checkMovieId = async (movieId) => {
   if (movieId === null) throw "Error: Movie ID cannot be null";
   if (isNaN(movieId)) throw "Error: Movie ID must be a number";
   try{
-  let movie = await getMovieInfo(movieId);
+    await getMovieInfo(movieId);
   } catch(e) {
     console.log(e)
   }
@@ -101,9 +101,7 @@ const checkMovieArray = (movies, name) => {
     throw `Error: ${name} must have at least one element`;
   movies.forEach(async (elem) => {
     elem = await checkMovieId(elem);
-    console.log(elem);
   });
-  console.log(movies);
   return movies;
 };
 
