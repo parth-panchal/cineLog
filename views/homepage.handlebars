@@ -1,2 +1,33 @@
-<p class="about">This is our app CineLog. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae amet suscipit rerum temporibus perferendis fuga sequi maxime itaque voluptates aperiam dolorem, id non. Officiis sequi asperiores nobis commodi, ipsam facere.</p>
+<p class="about">This is our app CineLog. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae amet
+    suscipit rerum temporibus perferendis fuga sequi maxime itaque voluptates aperiam dolorem, id non. Officiis sequi
+    asperiores nobis commodi, ipsam facere.</p>
 {{!-- Trending --}}
+<h1>Trending movies</h1>
+{{#if trendingList}}
+<ul>
+    {{#each trendingList}}
+    <li>
+        <a href="/movie/{{this._id}}">{{this.title}}</a>
+    </li>
+    {{/each}}
+</ul>
+{{else}}
+<p>No trending movies yet.</p>
+{{/if}}
+
+{{#if userRecommendations}}
+<h1>User Recommendations</h1>
+{{#if userRecommendations}}
+<ul>
+    {{#each userRecommendations}}
+    <li>
+        <a href="/movie/{{this._id}}">{{this.title}}</a>
+    </li>
+    {{/each}}
+</ul>
+{{else}}
+<p>No recommendations yet.</p>
+{{/if}}
+{{else}}
+<p>You need to log in to see recommendations.</p>
+{{/if}}
