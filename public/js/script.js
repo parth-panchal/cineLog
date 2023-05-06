@@ -144,6 +144,88 @@ const checkString = (strVal, name) => {
   };
 
 (function ($) { 
+    // ===================== Sign Up =====================
+    let signupForm = $(`#signUpForm`),
+        firstNameInput = $(`#firstNameInput`),
+        lastNameInput = $(`#lastNameInput`),
+        usernameInput = $(`#usernameInput`),
+        passwordInput = $(`#passwordInput`),
+        confirmPassInput = $(`#confirmPasswordInput`),
+        signupErrorDiv = $(`#signupErrorDiv`);
+
+    signupForm.submit(async (event) => {
+        let firstName = firstNameInput.val();
+        let lastName = lastNameInput.val();
+        let username = usernameInput.val();
+        let pass = passwordInput.val();
+        let confirmPass = confirmPassInput.val();
+
+        let errors = [];
+        signupErrorDiv.text('');
+        signupErrorDiv.attr("hidden", true);
+
+        if(!firstName) {
+            errors.push("You must enter a value for First Name");
+        }
+
+        if(!lastName) {
+            errors.push("You must enter a value for Last Name");
+        }
+
+        if(!username) {
+            errors.push("You must enter a value for Username");
+        }
+
+        if(!pass) {
+            errors.push("You must enter a value for Password");
+        }
+
+        if(!confirmPass) {
+            errors.push("You must enter a value for Confirm Password");
+        }
+
+        if(errors.length > 0) {
+            event.preventDefault();
+            signupErrorDiv.text(errors);
+            signupErrorDiv.removeAttr("hidden");
+            return;
+        }
+
+        try {
+            firstName = checkName(firstName, "First Name");
+        } catch (error) {
+            errors.push(error);
+        }
+
+        try {
+            lastName = checkName(lastName, "Last Name");
+        } catch (error) {
+            errors.push(error);
+        }
+
+        try {
+            username = checkUsername(username);
+        } catch (error) {
+            errors.push(error);
+        }
+
+        try {
+            pass = checkPassword(pass);
+        } catch (error) {
+            errors.push(error);
+        }
+
+        if(confirmPass !== pass) errors.push("Error: Password and Confirm Password do not match");
+
+        if(errors.length > 0) {
+            event.preventDefault();
+            signupErrorDiv.text(errors);
+            signupErrorDiv.removeAttr("hidden");
+            return;
+        }
+        
+    })
+
     // ===================== Search Bar =====================
 
     let searchForm = $('#searchForm'),
