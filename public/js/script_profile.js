@@ -1,5 +1,5 @@
 //following
-(function ($) {
+(function () {
   let form = document.querySelector('form[action="/profile/following"]');
   if (form) {
     form.addEventListener("submit", function (event) {
@@ -20,10 +20,10 @@
       }
     });
   }
-})(window.jQuery);
+})();
 
 //likes
-(function ($) {
+(function () {
   let form = document.querySelector('form[action="/profile/likes"]');
   if (form) {
     form.addEventListener("submit", function (event) {
@@ -44,10 +44,10 @@
       }
     });
   }
-})(window.jQuery);
+})();
 
 //watchlist
-(function ($) {
+(function () {
   let form = document.querySelector('form[action="/profile/watchlist"]');
   if (form) {
     form.addEventListener("submit", function (event) {
@@ -68,4 +68,4 @@
       }
     });
   }
-})(window.jQuery);
+})();
