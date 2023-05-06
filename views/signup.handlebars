@@ -2,30 +2,46 @@
     <div class="card" style="width: 18rem;">
         <div class="card-header">Sign up</div>
         <div class="card-body">
-            <form action="/signup" method="POST">
+            <form action="/signup" method="POST" id="signUpForm">
                 <div class="mb-3">
                     <label for="firstNameInput" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="firstNameInput" name="firstNameInput">
+                    <input type="text" class="form-control" id="firstNameInput" name="firstNameInput" required>
                 </div>
                 <div class="mb-3">
                     <label for="lastNameInput" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="lastNameInput" name="lastNameInput">
+                    <input type="text" class="form-control" id="lastNameInput" name="lastNameInput" required>
                 </div>
                 <div class="mb-3">
                     <label for="usernameInput" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="usernameInput" name="usernameInput">
+                    <input type="text" class="form-control" id="usernameInput" name="usernameInput" required>
                 </div>
                 <div class="mb-3">
                     <label for="passwordInput" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="passwordInput" name="passwordInput">
+                    <input type="password" class="form-control" id="passwordInput" name="passwordInput" required>
                 </div>
                 <div class="mb-3">
                     <label for="confirmPasswordInput" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="confirmPasswordInput" name="confirmPasswordInput">
+                    <input type="password" class="form-control" id="confirmPasswordInput" name="confirmPasswordInput" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit</button>
+
+                <div id="signupErrorDiv" class="error"></div>
             </form>
         </div>
     </div>
 </div>
+
+// TODO:
+- client-side validation for login/signup
+- user.handlebar
+    - show username
+    - show watchlist
+    - show likes
+    - show activity
+    - show lists
+- user route
+    - make sure you can click follow button
+- make sure DB is properly seeded for prof's testing
+    - 15 users, with activity, watchlists, likes, lists, and followers
+- make sure css has 15 rules
