@@ -144,9 +144,51 @@ const checkString = (strVal, name) => {
   };
 
 (function ($) { 
+    // ===================== Search Bar =====================
+
     let searchForm = $('#searchForm'),
         searchOptionChoice = $('#searchOption'),
-        searchTermInput = $('#searchTerm');
+        searchTermInput = $('#searchTerm'),
+        searchErrorDiv = $(`#searchFormErrorDiv`);
+    
+    searchForm.submit(async (event) => {
+        let searchChoice = searchOptionChoice.val();
+        let searchTerm = searchTermInput.val();
+
+        let errors = [];
+        searchErrorDiv.text('');
+        searchErrorDiv.attr("hidden", true);
+
+        if(!searchChoice) {
+            errors.push("Search choice must only be 'Movies' or 'Users'");
+        }
+
+        if(!searchTerm) {
+            errors.push("Search cannot be empty!");
+        }
+
+        if(errors.length > 0) {
+            event.preventDefault();
+            searchErrorDiv.text(errors);
+            searchErrorDiv.removeAttr("hidden");
+            return;
+        }
+
+        if(searchChoice !== 'movies' && searchChoice !== 'users') errors.push("Search choice must only be 'Movies' or 'Users'");
+
+        try {
+            searchTerm = checkString(searchTerm, "Search Term");
+        } catch (error) {
+            errors.push(error);
+        }
+
+        if(errors.length > 0) {
+            event.preventDefault();
+            searchErrorDiv.text(errors);
+            searchErrorDiv.removeAttr("hidden");
+            return;
+        }
+    })
 
     // ===================== Movie Page =====================
 
