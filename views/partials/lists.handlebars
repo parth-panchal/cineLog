@@ -4,7 +4,7 @@
 <ul>
     {{#each lists}}
     <li>
-        <a href="/lists/{{this.id}}">{{this.title}}</a>
+        <a href="/lists/{{_id}}">{{title}}</a>
     </li>
     {{/each}}
 </ul>
@@ -12,6 +12,6 @@
 <p>You haven't created any lists yet.</p>
 {{/if}}
 
-<form method="GET" action="/lists/createList">
+<form method="GET" action="/lists/newList">
     <button type="submit">Create New List</button>
 </form>

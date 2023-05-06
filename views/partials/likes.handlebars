@@ -1,17 +1,15 @@
-<h1>Movies I Likes</h1>
+<h1>Movies I Like</h1>
 
 {{#if userLikes}}
 <ul>
-    <li>Test</li>
     {{#each userLikes}}
     <li>
         <a href="/movie/{{id}}">{{title}}</a>
-        <form method="POST" action="/likes">
-            <!-- Is this even the correct way to do it? -->
+        <form method="POST" action="/profile/likes">
             <input type="hidden" name="_method" value="PATCH">
-            <input type="hidden" name="movieId" value="{{this.id}}">
+            <input type="hidden" name="movieId" value="{{id}}">
             <input type="hidden" name="operation" value="remove">
-            <button type="submit">Remove</button>
+            <button type="submit">Remove from likes</button>
         </form>
     </li>
     {{/each}}

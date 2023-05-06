@@ -11,11 +11,10 @@ import { updateTrending } from "./trending.js";
 const createLog = async (movieId, userId, review, rating, date) => {
   validation.checkProvided(movieId, userId, review, rating, date);
   movieId = await validation.checkMovieId(movieId, "Movie ID");
-  userId = validation.checkId(userId, "User ID"); // need to add check here from user data functions to see if user exists?
+  userId = validation.checkId(userId, "User ID");
   review = validation.checkString(review, "Review");
   rating = validation.checkRating(rating, "Rating");
   date = validation.checkDate(date, "Date");
-
   let newLog = {
     movieId: movieId,
     userId: userId,
@@ -23,30 +22,35 @@ const createLog = async (movieId, userId, review, rating, date) => {
     rating: rating,
     date: date,
   };
-
   const logs = await activity();
   const newLogInfo = await logs.insertOne(newLog);
-
   if (!newLogInfo.insertedId || !newLogInfo.acknowledged)
     throw "Error: could not add activity";
-  updateTrending(newLogInfo.insertedId.toString(), date, "add");
+  await updateTrending(newLogInfo.insertedId.toString(), date, "add");
   return await getLogById(newLogInfo.insertedId.toString());
 };
 
 // Get an activity log by its _id
 const getLogById = async (activityId) => {
+  console.log(`Activity id is ${activityId}`)
+
   activityId = validation.checkId(activityId, "Activity ID");
   const logs = await activity();
+  console.log(logs)
+  console.log("#########################")
   const log = await logs.findOne({ _id: new ObjectId(activityId) });
+  console.log("#########################")
+  console.log(log)
   if (!log) throw "Error: activity not found";
   return log;
 };
 
+
 // Get all activity logs for a given username
 const getLogsByUserId = async (userId) => {
-  // need to add check here from user data functions to see if user exists?
   const logs = await activity();
-  return await logs.find({ _id: new ObjectId(userId) }).toArray();
+  let userLogs = await logs.find({ userId: userId }).toArray();
+  return userLogs;
 };
 
 const getLogsByMovieId = async (movieId) => {
@@ -74,24 +78,35 @@ const getAllLogs = async () => {
 
 // Edit an activity log
 const editLog = async (activityId, movieId, userId, review, rating, date) => {
-  validation.checkProvided(activityId, movieId, userId, review, rating, date);
+  console.log("inside edit log")
+  // console.log(activityId);
+  validation.checkProvided(activityId, review, rating, date);
   activityId = validation.checkId(activityId, "Activity ID");
-  movieId = validation.checkMovieId(movieId, "Movie ID");
-  userId = validation.checkId(userId, "User ID");
+
   review = validation.checkString(review, "Review");
-  rating = validation.checkRating(rating, "Rating");
-  date = validation.checkDate(date, "Date");
+
+  //rating = validation.checkRating(rating, "Rating");
+  
+  //date = validation.checkDate(date, "Date");
+
+
+  //movieId = validation.checkMovieId(movieId, "Movie ID");
+  //userId = validation.checkId(userId, "User ID");
+
   const activities = await activity();
+  // console.log(activities)
   const log = await getLogById(activityId);
+  console.log("log$$$$$$$$")
+  
   const update = {
     movieId: movieId,
+    userId: userId,
     review: review,
     rating: rating,
     date: date,
   };
   let hasChanges = false;
   if (
-    update.movieId !== log.movieId ||
     update.review !== log.review ||
     update.rating !== log.rating ||
     update.date !== log.date
@@ -108,10 +123,9 @@ const editLog = async (activityId, movieId, userId, review, rating, date) => {
   let oldDate = log.date;
   let newDate = date;
   if (oldDate !== newDate) {
-    updateTrending(activityId, oldDate, "delete");
-    updateTrending(activityId, newDate, "add");
+    await updateTrending(activityId, oldDate, "delete");
+    await updateTrending(activityId, newDate, "add");
   }
-  //call updatetrening function in trending.js to update the trending once implemented
   return updatedLog.value;
 };
 
@@ -119,14 +133,13 @@ const deleteLog = async (activityId) => {
   activityId = validation.checkId(activityId, "Activity ID");
   const logs = await activity();
   const deleteDate = await logs.findOne({ _id: new ObjectId(activityId) });
-  console.log(deleteDate.date);
+  // console.log(deleteDate.date);
   const deletedLog = await logs.findOneAndDelete({
     _id: new ObjectId(activityId),
   });
   if (deletedLog.lastErrorObject.n === 0)
     throw "Error: could not delete activity";
-  updateTrending(activityId, deleteDate, "delete");
-  //call updatetrening function in trending.js to update the trending once implemented
+  await updateTrending(activityId, deleteDate.date, "delete");
   return { activityId: activityId, deleted: true }; // will change the return object later based on requirements
 };
 
@@ -137,5 +150,5 @@ export {
   getLogsByMovieId,
   getAllLogs,
   editLog,
-  deleteLog,
+  deleteLog
 };
