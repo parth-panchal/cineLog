@@ -5,7 +5,9 @@ import { Router } from "express";
 import xss from "xss";
 import { activityData, userData } from "../data/index.js";
 import * as validation from "../utils/validation.js";
-import { getMovieInfo } from "../utils/helper.js";
+import { getMovieCast, getMovieInfo, calculateMovieStats } from "../utils/helper.js";
+import { getLogsByMovieId } from "../data/activity.js";
+import { getUserById } from "../data/users.js";
 
 const router = Router();
 
@@ -16,6 +18,7 @@ router
         // This will call API for movie details about specific one
         // Redirects to get route if data is present
         let movieId = xss(req.params.id);
+        let isAuthenticated = req.session.user ? true : false;
 
         try {
             movieId = await validation.checkMovieId(movieId);
@@ -24,9 +27,18 @@ router
         }
 
         try {
-            const movieInfo = await getMovieInfo(movieId);
-            console.log(movieInfo);
-            res.render('movie', {movieInfo: movieInfo});
+            let movieInfo = await getMovieInfo(movieId);
+            let movieCast = await getMovieCast(movieId);
+            movieCast = movieCast.filter(castMember => castMember.order >= 0 && castMember.order < 5 );
+            let movieActivity = await getLogsByMovieId(movieId);
+            let activityInfo = calculateMovieStats(movieActivity);
+
+            res.render('movie', {
+                movieInfo: movieInfo,
+                movieCast: movieCast,
+                activityInfo: activityInfo,
+                isAuthenticated: isAuthenticated
+            });
         } catch (error) {
             return res.status(500).json({error: error});
         }
@@ -36,16 +48,16 @@ router
         // If add to activity button is clicked: popform form with info to enter shows, on that submit it is called here
         // Checks button was clicked and makes the DB call to add to that function
         // Those buttons will  be regular buttons that have client-side JS associated to make the call to this route
-        let userId = req.session.user.id;
+        let userId = req.session.user._id;
         let type = xss(req.body.type); // Type will be, activity, watchlist, or likes
-        let movieId = xss(req.body.movieId);
+        let movieId = xss(req.params.id);
         let review = undefined;
         let rating = undefined;
         let date = undefined;
 
         try {
             userId = validation.checkId(userId, "User ID");
-            type = validation.checkString(type, "Button Type??????????????????");
+            type = validation.checkString(type, "Add Activity");
             movieId = await validation.checkMovieId(movieId, "Movie ID");
 
             if(type  === "activity") {
@@ -62,7 +74,7 @@ router
             if(type === "activity") {
                 response = await activityData.createLog(movieId, userId, review, rating, date);
             } else if(type === "watchlist") {
-                response  = await userData.updateUserWatchList(userId, movieId, "add");
+                response  = await userData.updateUserWatchlist(userId, movieId, "add");
             } else if(type === "likes") {
                 response = await userData.updateUserLikes(userId, movieId, "add");
             } else {
@@ -72,6 +84,7 @@ router
             res.json({success: true});
 
         } catch (error) {
+            console.log(error);
             return res.status(500).json({error: error});
         }
         

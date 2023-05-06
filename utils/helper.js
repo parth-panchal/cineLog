@@ -109,7 +109,7 @@ const getMovieReleaseYear = async (movieId) => {
 };
 
 const getMovieCast = async (movieId) => {
-  const endpoint = `/movie/${movieId}`;
+  const endpoint = `/movie/${movieId}/credits`;
   try {
     const { data } = await axios.get(BASE_URL + endpoint, { params });
     return data.cast;
@@ -127,6 +127,26 @@ const getMovieCrew = async (movieId) => {
     console.log(e);
   }
 };
+
+const calculateMovieStats = movieActivity => {
+  const returnObj = {}
+
+  returnObj.timesWatched = movieActivity.length;
+  
+  const average = (movieActivity.reduce((acc, obj) => {
+    return acc + obj.rating;
+  }, 0) / movieActivity.length);
+  const averageRoundOne = Math.floor(average * 10) / 10
+
+  if(isNaN(averageRoundOne)) {
+    returnObj.averageRating = "Not Yet Rated";
+  } else {
+    returnObj.averageRating = averageRoundOne;
+  }
+  returnObj.reviews = movieActivity.map(activity => activity.review);
+
+  return returnObj;
+}
 
 //console.log(await getMovieCast(550));
 
@@ -146,4 +166,5 @@ export {
   getMovieReleaseYear,
   getMovieCast,
   getMovieCrew,
+  calculateMovieStats
 };
