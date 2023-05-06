@@ -6,7 +6,8 @@
     </select>
         
     <label for="searchTerm" class="sr-only"> Search for Movies/Users</label>
-    <input class="form-control me-2" type="search" aria-label="Search" name="searchTerm" id="searchTerm" placeholder="Search for Movies/Users">
-    
+    <input class="form-control me-2" type="search" aria-label="Search" name="searchTerm" id="searchTerm" placeholder="Search for Movies/Users" required>
+    <div id="searchFormErrorDiv" class="form-text error" hidden></div>
+
     <button class="btn btn-outline-success" type="submit">Search</button>
 </form>
