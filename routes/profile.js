@@ -299,6 +299,10 @@ router.route("/activity").get(async (req, res) => {
     } catch (e) {
       console.log(e); //change this later
     }
+    logs = logs.sort((a, b) => {
+      return new Date(b.date) - new Date(a.date);
+    });
+    console.log(logs);
     return res.render("profile", { logs: logs, script_partial: "activity" });
   } catch (e) {
     return res.render("profile", { error: e });
