@@ -27,17 +27,32 @@ router
         }
 
         try {
+            if(isAuthenticated) {
+                let userId = xss(req.session.user._id);
+                let userInfo = await getUserById(userId);
+                
+            }
+            
             let movieInfo = await getMovieInfo(movieId);
             let movieCast = await getMovieCast(movieId);
             movieCast = movieCast.filter(castMember => castMember.order >= 0 && castMember.order < 5 );
             let movieActivity = await getLogsByMovieId(movieId);
             let activityInfo = calculateMovieStats(movieActivity);
+            let today = new Date();
+            const year = today.toLocaleString("default", { year: "numeric" });
+            const month = today.toLocaleString("default", { month: "2-digit" });
+            const day = today.toLocaleString("default", { day: "2-digit" });
+            
+            // Generate yyyy-mm-dd date string
+            var formattedDate = year + "-" + month + "-" + day;
+
 
             res.render('movie', {
                 movieInfo: movieInfo,
                 movieCast: movieCast,
                 activityInfo: activityInfo,
-                isAuthenticated: isAuthenticated
+                isAuthenticated: isAuthenticated,
+                currDate: formattedDate
             });
         } catch (error) {
             return res.status(500).json({error: error});

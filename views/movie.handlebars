@@ -26,41 +26,43 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#activityModal">Add to Activity</button>
     <button type="button" class="btn btn-primary" id="addToWatchlistBtn">Add to Watchlist</button>
     <button type="button" class="btn btn-primary" id="addToLikesBtn">Add to Likes</button>
-{{/if}}
+    <div id="backendError" class="error" hidden></div>
 
-<div class="modal fade" id="activityModal" tabindex="-1" role="dialog" aria-labelledby="activityModal" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="ActivityTitle">Add Activity</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="" method="post" id="activityCreateForm" name="activityCreateForm">
-            <div class="mb-3">
-                <label for="formCreateRating" class="form-label">Rating: </label>
-                <input type="range" class="form-range" name="formCreateRating" id="formCreateRating" min="0.5" max="5" step="0.5" value="2.5">
-                <output id="ratingValue">2.5</output>/5 stars
-            </div> 
-            <div class="mb-3">           
-                <label for="formCreateReview" class="form-label">Review: </label>
-                <input type="textarea" class="form-control" name="formCreateReview" id="formCreateReview" rows="3">
-            </div>
-            <div class="mb-3">
-                <label for="formCreateDate">Date Watched: </label>
-                <input type="date" name="formCreateDate" id="formCreateDate">
-            </div>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button type="submit" class="btn btn-outline-primary btn-sm">Submit</button>
-                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-            </div>
-        </form>
-      </div>
+    <div class="modal fade" id="activityModal" tabindex="-1" role="dialog" aria-labelledby="activityModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="ActivityTitle">Add Activity</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="" method="post" id="activityCreateForm" name="activityCreateForm">
+                <div class="mb-3">
+                    <label for="formCreateRating" class="form-label">Rating: </label>
+                    <input type="range" class="form-range" name="formCreateRating" id="formCreateRating" min="0.5" max="5" step="0.5" value="2.5" required>
+                    <output id="ratingValue">2.5</output>/5 stars
+                </div> 
+                <div class="mb-3">           
+                    <label for="formCreateReview" class="form-label">Review: </label>
+                    <input type="textarea" class="form-control" name="formCreateReview" id="formCreateReview" rows="3" required>
+                </div>
+                <div class="mb-3">
+                    <label for="formCreateDate">Date Watched: </label>
+                    <input type="date" name="formCreateDate" id="formCreateDate" min="1980-01-01" max="{{currDate}}" required>
+                </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-outline-primary btn-sm">Submit</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                </div>
+                <div id="error" class="error" hidden></div>
+            </form>
+        </div>
+        </div>
     </div>
-  </div>
-</div>
+    </div>
+{{/if}}
 {{!-- 
     Synopsis                -- Done
     Cast                    -- Done              
