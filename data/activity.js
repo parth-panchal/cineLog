@@ -54,6 +54,23 @@ const getLogsByUserId = async (userId) => {
   return userLogs;
 };
 
+const getLogsByMovieId = async (movieId) => {
+  validation.checkProvided("Movie ID", movieId);
+  movieId = await validation.checkMovieId(movieId);
+
+  const activityCollection = await activity();
+  let activityArr = await activityCollection.find({ 
+    movieId: movieId
+  }).toArray();
+
+  activityArr = activityArr.map((activity) => {
+    activity._id = activity._id.toString();
+    return activity;
+  });
+
+  return activityArr;
+}
+
 const getAllLogs = async () => {
   const logs = await activity();
   const all = await logs.find({}).toArray();
@@ -131,6 +148,7 @@ export {
   createLog,
   getLogsByUserId,
   getLogById,
+  getLogsByMovieId,
   getAllLogs,
   editLog,
   deleteLog

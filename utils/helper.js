@@ -128,6 +128,32 @@ const getMovieCrew = async (movieId) => {
   }
 };
 
+const calculateMovieStats = movieActivity => {
+  const returnObj = {}
+
+  returnObj.timesWatched = movieActivity.length;
+  
+  const average = (movieActivity.reduce((acc, obj) => {
+    return acc + obj.rating;
+  }, 0) / movieActivity.length);
+  const averageRoundOne = Math.floor(average * 10) / 10
+
+  if(isNaN(averageRoundOne)) {
+    returnObj.averageRating = "Not Yet Rated";
+  } else {
+    returnObj.averageRating = averageRoundOne;
+  }
+  returnObj.reviews = movieActivity.map(activity => activity.review);
+
+  return returnObj;
+}
+
+//console.log(await getMovieCast(550));
+
+/*
+We will require a function which gets the userID from the current session so that's something we need to figure out in the future
+*/
+
 export {
   searchMovie,
   getMovieInfo,
@@ -140,4 +166,5 @@ export {
   getMovieReleaseYear,
   getMovieCast,
   getMovieCrew,
+  calculateMovieStats
 };
