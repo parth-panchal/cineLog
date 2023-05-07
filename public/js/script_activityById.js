@@ -1,7 +1,7 @@
 
 const form = document.getElementById('update-form');
-const deleteModal = document.getElementById('deleteModal');
-const deleteButton = deleteModal.querySelector('.btn-danger');
+//const deleteModal = document.getElementById('deleteModal');
+const deleteButton = document.querySelector('#deleteModal .btn-danger');
 // console.log("check1")
 
 
@@ -68,13 +68,14 @@ saveChangesButton.addEventListener('click', (event) => {
 deleteButton.addEventListener('click', () => {
     const url_d = window.location.href;
     const activityId = url_d.split("/")[4];
-    // console.log(`this is the url ${url_d}`)
+    console.log(`this is the url ${url_d}`)
     // const activityId = '6456789826472b44ced10c41'; 
     const url = `/activity/${activityId}`; 
     fetch(url, {
       method: 'DELETE'
     })
     .then(response => {
+      console.log(response)
       if (!response.ok) {
         throw new Error('Failed to delete log');
       }
