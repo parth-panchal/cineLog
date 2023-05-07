@@ -1,7 +1,8 @@
 import { Router } from "express";
 import xss from "xss";
 import * as validation from "../utils/validation.js";
-import { userData } from "../data/index.js";
+import { activityData, userData } from "../data/index.js";
+import { transformInfo } from "../utils/helper.js";
 const router = Router();
 
 router
@@ -11,6 +12,7 @@ router
         // This will call API for movie details about specific one
         // Redirects to get route if data is present
         let username = xss(req.params.username);
+        let isAuthenticated = req.session.user ? true : false;
 
         try {
             username = validation.checkUsername(username, "Username");
@@ -19,8 +21,31 @@ router
         }
 
         try {
+            let alreadyFollowing = false;
             const userInfo = await userData.getUserByUsername(username);
-            res.render('user', {userInfo: userInfo});
+            const userActivity = await activityData.getLogsByUserId(userInfo._id);
+
+            if(isAuthenticated) {
+                let userId = xss(req.session.user._id);
+                let { following } = await userData.getUserById(userId);
+                if(following.includes(userInfo.username)) alreadyFollowing = true;
+            }
+
+            let activityInfo = await transformInfo(userActivity, "movieInfo", true);
+            let watchlistInfo = await transformInfo(userInfo.watchlist, "movieInfo", false);
+            let likeInfo = await transformInfo(userInfo.likes, "movieInfo", false);
+            let followingInfo = await transformInfo(userInfo.following, "userInfo", false);
+
+            res.render('user', {
+                userInfo: userInfo,
+                userActivity: userActivity,
+                logs: activityInfo,
+                userWatchlist: watchlistInfo,
+                userLikes: likeInfo,
+                following: followingInfo,
+                isAuthenticated: isAuthenticated,
+                alreadyFollowing: alreadyFollowing,
+            });
         } catch (error) {
             return res.status(500).json({error: error});
         }
