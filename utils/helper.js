@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 import { ObjectId } from "mongodb";
 import { activity } from "../config/mongoCollections.js";
 import { checkMovieId } from "./validation.js";
+import { userData } from "../data/index.js";
 dotenv.config();
 
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -148,11 +149,26 @@ const calculateMovieStats = movieActivity => {
   return returnObj;
 }
 
-//console.log(await getMovieCast(550));
+const transformInfo = async (givenArr, type, isActivity) => {
+  let responseArr = [];
+  
+  responseArr = givenArr.reduce(async (previousPromise, currVal) => {
+    let tempArr = await previousPromise;
+    let infoCall;
+    if(type === 'movieInfo' && isActivity) {
+      infoCall = await getMovieInfo(currVal.movieId);
+      currVal.movieTitle = infoCall.title;
+      return tempArr.concat(currVal);
+    } else if(type === 'movieInfo' && !isActivity) {
+      infoCall = await getMovieInfo(currVal);
+    } else if(type === 'userInfo') {
+      infoCall = await userData.getUserById(currVal);
+    }
+    return tempArr.concat(infoCall);
+  }, Promise.resolve([]));    
 
-/*
-We will require a function which gets the userID from the current session so that's something we need to figure out in the future
-*/
+  return responseArr;
+}
 
 export {
   searchMovie,
@@ -166,5 +182,6 @@ export {
   getMovieReleaseYear,
   getMovieCast,
   getMovieCrew,
-  calculateMovieStats
+  calculateMovieStats,
+  transformInfo
 };
