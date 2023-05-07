@@ -48,6 +48,11 @@ router
 
         try {
             const moviesInfo = await searchMovie(searchTerm);
+            if(moviesInfo.results.length === 0) {
+                return res.render('searchResults', {
+                    noResults: true
+                });
+            }
             return res.render('searchResults', {
                 results: moviesInfo.results,
                 noResults: false,
@@ -95,7 +100,11 @@ router
 
         try {
             const users = await userData.getUserByUsernamePartial(searchTerm);
-            console.log(users);
+            if(users.length === 0) {
+                return res.render('searchResults', {
+                    noResults: true
+                });
+            }
             return res.render('searchResults', {
                 results: users,
                 noResults: false,
