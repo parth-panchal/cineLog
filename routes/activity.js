@@ -65,7 +65,7 @@ router
             deletedActivity = await activityData.deleteLog(activityId)
             res.status(200).json({ message: 'Log deleted successfully', deletedActivity });
         } catch (error) {
-            res.status(500).json({ e });
+            res.status(500).json({ error});
         }
 
     })
