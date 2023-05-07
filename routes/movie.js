@@ -6,8 +6,6 @@ import xss from "xss";
 import { activityData, userData } from "../data/index.js";
 import * as validation from "../utils/validation.js";
 import { getMovieCast, getMovieInfo, calculateMovieStats } from "../utils/helper.js";
-import { getLogsByMovieId } from "../data/activity.js";
-import { getUserById } from "../data/users.js";
 
 const router = Router();
 
@@ -32,7 +30,7 @@ router
 
             if(isAuthenticated) {
                 let userId = xss(req.session.user._id);
-                let {likes, watchlist, following} = await getUserById(userId);
+                let {likes, watchlist, following} = await userData.getUserById(userId);
                 if(likes.includes(movieId)) alreadyPresentLikes = true;
                 if(watchlist.includes(movieId)) alreadyPresentWatchlist = true;
             }
@@ -40,7 +38,7 @@ router
             let movieInfo = await getMovieInfo(movieId);
             let movieCast = await getMovieCast(movieId);
             movieCast = movieCast.filter(castMember => castMember.order >= 0 && castMember.order < 5 );
-            let movieActivity = await getLogsByMovieId(movieId);
+            let movieActivity = await activityData.getLogsByMovieId(movieId);
             let activityInfo = calculateMovieStats(movieActivity);
             let today = new Date();
             const year = today.toLocaleString("default", { year: "numeric" });
