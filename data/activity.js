@@ -85,17 +85,19 @@ const editLog = async (activityId, review, rating, date) => {
   //userId = validation.checkId(userId, "User ID");
   review = validation.checkString(review, "Review");
 
-  //rating = validation.checkRating(rating, "Rating");
+  rating = validation.checkRating(rating, "Rating");
   
-  //date = validation.checkDate(date, "Date");
+  date = validation.checkDate(date, "Date");
 
-
+//Atharva testing here!!!!!!!!!!!!!! commented below for checking
   //movieId = validation.checkMovieId(movieId, "Movie ID");
-  //userId = validation.checkId(userId, "User ID");
+  console.log(`${movieId}in data now`)
+  userId = validation.checkId(userId, "User ID");
 
-  const activities = await activity();
+  const activities = await activity(); 
   // console.log(activities)
   const log = await getLogById(activityId);
+  console.log(`${log} log in data now`)
   // console.log("log$$$$$$$$")
   
   const update = {
