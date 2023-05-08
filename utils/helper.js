@@ -35,9 +35,12 @@ Calls TheMovieDB API endpoint to search for movie info
 Returns data: Object, contains movie information fields
 */
 const getMovieInfo = async (movieId) => {
+  //console.log(`movie id is this ${movieId}`)
   const endpoint = `/movie/${movieId}`;
+  //console.log(`movie id is this ${endpoint}`)
   try {
     const { data } = await axios.get(BASE_URL + endpoint, { params });
+    //console.log(data)
     return data;
   } catch (error) {
     // console.log(error);

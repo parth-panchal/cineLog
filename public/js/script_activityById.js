@@ -1,6 +1,6 @@
 
 const form = document.getElementById('update-form');
-//const deleteModal = document.getElementById('deleteModal');
+const deleteModal = document.getElementById('deleteModal');
 const deleteButton = document.querySelector('#deleteModal .btn-danger');
 // console.log("check1")
 
@@ -9,9 +9,9 @@ const saveChangesButton = document.querySelector('#editModal .btn-danger');
 saveChangesButton.addEventListener('click', (event) => {
   event.preventDefault(); // prevent form submission
 //   console.log("button clicked")
-    event.preventDefault(); // prevent default form submission
 
     const movieId = document.getElementById('movieId').value
+    console.log(`${movieId}ljksdsjncsiodjidjsi&&&&&&&&&`)
     //const data_movieId = { movieId: movieId };
 
     const userId = document.getElementById('userId').value
@@ -53,11 +53,12 @@ saveChangesButton.addEventListener('click', (event) => {
         return response.json(); 
     })
     .then(response => {
-       
+      console.log(`${movieId}^^^^^^^^^^^^^`)
+        console.log("check 3")
         console.log(response);
+        //location.reload(); // Reload the page to refresh the datajjjj
     })
-    .catch(error => {
-        
+    .catch(error => { 
         console.error(error);
     });
 });
@@ -67,6 +68,7 @@ saveChangesButton.addEventListener('click', (event) => {
 
 deleteButton.addEventListener('click', () => {
     const url_d = window.location.href;
+    // console.log("hfghjghfhghjhgjfhghjkhjghghjlkhjghghjhjghfghjhjg")
     const activityId = url_d.split("/")[4];
     console.log(`this is the url ${url_d}`)
     // const activityId = '6456789826472b44ced10c41'; 
@@ -75,16 +77,18 @@ deleteButton.addEventListener('click', () => {
       method: 'DELETE'
     })
     .then(response => {
-      console.log(response)
-      if (!response.ok) {
-        throw new Error('Failed to delete log');
+      console.log("check21")
+      if (!response) {
+        
+        throw new Error('Failed to delete log');//error in activity data files hence the code is throwing this error
       }
+  
       return response.json(); 
     })
     .then(response => {
-  
-      console.log(response)
-      deleteModal.modal('hide');
+      
+      console.log(response);
+      //deleteModal.modal('hide');
     })
     .catch(error => {
       console.error(error);

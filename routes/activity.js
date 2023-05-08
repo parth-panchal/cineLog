@@ -75,31 +75,22 @@ router
         // console.log(activityInfo)
         let activityId = xss(req.params.id);
         //user session paused for testing
-        // let userId = xss(req.session.user.id);
-        let movieId = xss(req.params.movieId);
+        let userId = xss(req.session.user._id);
+        let movieId = xss(activityInfo.movieId);
+        console.log(`This is movie id in the routes${movieId}`)
         // let userId = xss(req.params.userId);
         // let review = xss(req.params.review);
-        // let movieId = "7968"; //hardcoded
-        let userId = "23"; //hardcoded
+        // let movieId = "147196"; //hardcoded
+        // let userId = "23"; //hardcoded
         let review = xss(activityInfo.review);; 
         let rating = xss(activityInfo.rating);
         let date = xss(activityInfo.date);
-        //let movieId = xss(req.body.movieId);
-        //validation.checkProvided(movieId, userId, review, rating);
-        //movieId = await validation.checkMovieId(movieId, "Movie ID");
-        //userId = validation.checkId(userId, "User ID"); 
-        //review = validation.checkString(review, "Review");
+        // validation.checjjjjjjjjjjjjjjjjjjjjjjjkProvided( userId, review, rating);
+        // // movieId = await validation.checkMovieId(movieId, "Movie ID");
+        // userId = validation.checkId(userId, "User ID"); 
+        // review = validation.checkString(review, "Review");
         // rating = validation.checkRating(rating, "Rating");
         // console.log("check 2")
-
-        // date = validation.checkDate(date, "Date");
-        // console.log("check 3")
-        // console.log(activityId)
-        console.log(movieId)
-        console.log(userId)
-        // console.log(review)
-        // console.log(rating)
-        // console.log(date)
 
         //here user id will remain the same
         //the only things that the user can change are review rating movie id and date
