@@ -301,6 +301,7 @@ const updateUserFollowing = async (userId, followingUserId, operation) => {
   const userCollection = await users();
 
   if (operation === "add") {
+    if(userId === followingUserId) throw `Error: User cannot follow own profile`;
     const existingUser = await getUserById(userId);
     if (existingUser.following.includes(followingUserId))
       throw `Error: User ${followingUserId} already exist in ${userId} follow list`;

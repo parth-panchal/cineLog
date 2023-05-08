@@ -447,7 +447,12 @@ const checkString = (strVal, name) => {
             if(result.success) {
                 addToWatchlistBtn.text('Added to Watchlist');
                 addToWatchlistBtn.prop('disabled', true);
-            }
+            } else {
+                backendErrorDiv.text('An error has occurred. Please try again later.');
+                backendErrorDiv.removeAttr("hidden");
+                return;
+            } 
+            
         } catch (error) {
             console.log(error.responseJSON.error);
             backendErrorDiv.text(error.responseJSON.error);
@@ -475,13 +480,52 @@ const checkString = (strVal, name) => {
             if(result.success) {
                 addToLikesBtn.text("Added to Likes");
                 addToLikesBtn.prop('disabled', true);
+            } else {
+                backendErrorDiv.text('An error has occurred. Please try again later.');
+                backendErrorDiv.removeAttr("hidden");
+                return;
             }
+            
         } catch (error) {
             console.log(error.responseJSON.error);
             backendErrorDiv.text(error.responseJSON.error);
             backendErrorDiv.removeAttr("hidden");
             return;
         }
-    }); 
+    });
+    
+    // ===================== User Page =====================
+    
+    let addToFollowBtn = $('#addToFollowBtn');
+
+    addToFollowBtn.click(async () => {
+        backendErrorDiv.text('');
+        backendErrorDiv.attr("hidden", true);
+
+        let requestConfig = {
+            method: 'PATCH',
+            url: location.path,
+            contentType: 'application/json',
+        };
+
+        try {
+            const result = await $.ajax(requestConfig);
+
+            if(result.success) {
+                addToFollowBtn.text("Added to Following");
+                addToFollowBtn.prop('disabled', true);
+            } else {
+                backendErrorDiv.text('An error has occurred. Please try again later.');
+                backendErrorDiv.removeAttr("hidden");
+                return;
+            }
+
+        } catch (error) {
+            console.log(error.responseJSON.error);
+            backendErrorDiv.text(error.responseJSON.error);
+            backendErrorDiv.removeAttr("hidden");
+            return;
+        }
+    })
 
 })(window.jQuery);
