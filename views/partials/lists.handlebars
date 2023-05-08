@@ -1,5 +1,6 @@
-<h1>My Lists</h1>
-
+{{#unless searchedUser}}
+    <h1>My Lists</h1>
+{{/unless}}
 {{#if lists}}
 <ul>
     {{#each lists}}
@@ -9,9 +10,15 @@
     {{/each}}
 </ul>
 {{else}}
-<p>You haven't created any lists yet.</p>
+    {{#unless searchedUser}}
+        <p>You haven't created any lists yet.</p>
+    {{else}}
+        <p>No lists available</p>
+    {{/unless}}
 {{/if}}
 
-<form method="GET" action="/lists/newList">
-    <button type="submit">Create New List</button>
-</form>
+{{#unless searchedUser}}
+    <form method="GET" action="/lists/newList">
+        <button type="submit">Create New List</button>
+    </form>
+{{/unless}}

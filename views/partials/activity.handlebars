@@ -1,13 +1,18 @@
-<h1>My Activity</h1>
-
+{{#unless searchedUser}}
+    <h1>My Activity</h1>
+{{/unless}}
 {{#if logs}}
-<ul>
-    {{#each logs}}
-    <li>
-        <a href="/activity/{{_id}}">{{movieTitle}} logged on {{date}}</a>
-    </li>
-    {{/each}}
-</ul>
+    <ul>
+        {{#each logs}}
+        <li>
+            <a href="/activity/{{_id}}">{{movieTitle}} logged on {{date}}</a>
+        </li>
+        {{/each}}
+    </ul>
 {{else}}
-<p>You haven't logged any movies yet.</p>
+    {{#unless searchedUser}}
+        <p>You haven't logged any movies yet.</p>
+    {{else}}
+        <p>No activity available</p>
+    {{/unless}}
 {{/if}}
