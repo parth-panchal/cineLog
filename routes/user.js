@@ -45,6 +45,7 @@ router
                 following: followingInfo,
                 isAuthenticated: isAuthenticated,
                 alreadyFollowing: alreadyFollowing,
+                searchedUser: true
             });
         } catch (error) {
             return res.status(500).json({error: error});
