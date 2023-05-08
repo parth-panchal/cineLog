@@ -118,20 +118,8 @@ router
     }
     try {
       let user = await userData.getUserById(req.session.user._id);
-      let userWatchlistNumbers = user.watchlist;
-      let userWatchlist = [];
-      try {
-        userWatchlist = await userWatchlistNumbers.reduce(
-          async (previousPromise, movieId) => {
-            let arr = await previousPromise;
-            let movie = await helper.getMovieInfo(movieId);
-            return arr.concat(movie);
-          },
-          Promise.resolve([])
-        );
-      } catch (e) {
-        console.log(e); //change this later
-      }
+      let userWatchlist = await helper.transformInfo(user.watchlist, "movieInfo", false);
+
       return res.render("profile", {
         isAuthenticated: true,
         userWatchlist: userWatchlist,
@@ -172,20 +160,8 @@ router
         req.body.movieId,
         req.body.operation
       );
-      let updatedWatchlistNumbers = updatedWatchlistNumbersObject.watchlist;
-      let updatedWatchlist = [];
-      try {
-        updatedWatchlist = await updatedWatchlistNumbers.reduce(
-          async (previousPromise, movieId) => {
-            let arr = await previousPromise;
-            let movie = await helper.getMovieInfo(movieId);
-            return arr.concat(movie);
-          },
-          Promise.resolve([])
-        );
-      } catch (e) {
-        console.log(e);
-      }
+      let updatedWatchlist = await helper.transformInfo(updatedWatchlistNumbersObject.watchlist, "movieInfo", false); 
+
       return res.render("profile", {
         isAuthenticated: true,
         userWatchlist: updatedWatchlist,
@@ -207,20 +183,8 @@ router
     }
     try {
       let user = await userData.getUserById(req.session.user._id);
-      let userLikeNumbers = user.likes;
-      let userLikes = [];
-      try {
-        userLikes = await userLikeNumbers.reduce(
-          async (previousPromise, movieId) => {
-            let arr = await previousPromise;
-            let movie = await helper.getMovieInfo(movieId);
-            return arr.concat(movie);
-          },
-          Promise.resolve([])
-        );
-      } catch (e) {
-        console.log(e); //change this later
-      }
+      let userLikes = await helper.transformInfo(user.likes, "movieInfo", false);
+
       return res.render("profile", {
         isAuthenticated: true,
         userLikes: userLikes,
@@ -261,20 +225,8 @@ router
         req.body.movieId,
         req.body.operation
       );
-      let updatedLikesNumbers = userUpdatedResp.likes;
-      let updatedLikes = [];
-      try {
-        updatedLikes = await updatedLikesNumbers.reduce(
-          async (previousPromise, movieId) => {
-            let arr = await previousPromise;
-            let movie = await helper.getMovieInfo(movieId);
-            return arr.concat(movie);
-          },
-          Promise.resolve([])
-        );
-      } catch (e) {
-        console.log(e); //change this later
-      }
+      let updatedLikes = await helper.transformInfo(userUpdatedResp.likes, "movieInfo", false);
+      
       return res.render("profile", {
         isAuthenticated: true,
         userLikes: updatedLikes,
@@ -296,25 +248,11 @@ router.route("/activity").get(async (req, res) => {
     let logsWithoutMovieTitle = await activityData.getLogsByUserId(
       req.session.user._id
     );
-    let logs = [];
-    try {
-      logs = await logsWithoutMovieTitle.reduce(
-        async (previousPromise, log) => {
-          let arr = await previousPromise;
-          let movie = await helper.getMovieInfo(log["movieId"]);
-          let movieTitle = movie.title;
-          log["movieTitle"] = movieTitle;
-          return arr.concat(log);
-        },
-        Promise.resolve([])
-      );
-    } catch (e) {
-      console.log(e); //change this later
-    }
+    let logs = await helper.transformInfo(logsWithoutMovieTitle, "movieInfo", true);
+
     logs = logs.sort((a, b) => {
       return new Date(b.date) - new Date(a.date);
     });
-    console.log(logs);
     return res.render("profile", {
       isAuthenticated: true, 
       logs: logs, 
@@ -355,20 +293,8 @@ router
     }
     try {
       let user = await userData.getUserById(req.session.user._id);
-      let profilesFollowedIds = user.following;
-      let profilesFollowed = [];
-      try {
-        profilesFollowed = await profilesFollowedIds.reduce(
-          async (previousPromise, profileId) => {
-            let arr = await previousPromise;
-            let profile = await userData.getUserById(profileId);
-            return arr.concat(profile);
-          },
-          Promise.resolve([])
-        );
-      } catch (e) {
-        console.log(e); //change this later
-      }
+      let profilesFollowed = await helper.transformInfo(user.following, "userInfo", false);
+      
       return res.render("profile", {
         isAuthenticated: true,
         following: profilesFollowed,
@@ -399,20 +325,8 @@ router
         req.body.followingId,
         req.body.operation
       );
-      let updatedFollowingIds = updatedFollowingIdsObject.following;
-      let updatedFollowing = [];
-      try {
-        updatedFollowing = await updatedFollowingIds.reduce(
-          async (previousPromise, userId) => {
-            let arr = await previousPromise;
-            let profile = await userData.getUserById(userId);
-            return arr.concat(profile);
-          },
-          Promise.resolve([])
-        );
-      } catch (e) {
-        console.log(e); //change this later
-      }
+      let updatedFollowing = await helper.transformInfo(updatedFollowingIdsObject.following, "userInfo", false);
+      
       return res.render("profile", {
         isAuthenticated: true,
         following: updatedFollowing,
