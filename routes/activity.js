@@ -59,9 +59,7 @@ router
         let activityInfo = req.body;
         let activityId = xss(req.params.id);
         let userId = xss(req.session.user._id);
-        let movieId = xss(activityInfo.movieId);
-        console.log(`This is movie id in the routes${movieId}`)
-        
+        let movieId = xss(activityInfo.movieId);        
         let review = xss(activityInfo.review);; 
         let rating = xss(activityInfo.rating);
         let date = xss(activityInfo.date);

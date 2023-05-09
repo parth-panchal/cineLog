@@ -11,13 +11,11 @@ saveChangesButton.addEventListener('click', (event) => {
   const old_date = document.getElementById('old_date').innerHTML
 
   const movieId = document.getElementById('movieId').innerHTML;
-  console.log(movieId);
   const userId = document.getElementById('userId').value
   let review = document.getElementById('review').value;
 
   let rating = document.getElementById('rating').value;
   let date = document.getElementById('date').value;
-  console.log(date)
   const url_d = window.location.href;
   const activityId = url_d.split("/")[4];
   const url = `/activity/${activityId}`;
@@ -102,7 +100,6 @@ saveChangesButton.addEventListener('click', (event) => {
     error_div.hidden = true
   }
   const parts = date.split("-");
-  console.log(parts)
   if (parts.length !== 3) {
     event.preventDefault();
     valid = false
