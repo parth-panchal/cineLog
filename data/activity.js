@@ -72,6 +72,7 @@ const getAllLogs = async () => {
 };
 
 // Edit an activity log
+
 const editLog = async (activityId, movieId, userId, review, rating, date) => {
   validation.checkProvided(activityId, review, rating, date);
   activityId = validation.checkId(activityId, "Activity ID");
@@ -89,8 +90,6 @@ const editLog = async (activityId, movieId, userId, review, rating, date) => {
   const log = await getLogById(activityId);
   
   const update = {
-    movieId: movieId,
-    userId: userId,
     review: review,
     rating: rating,
     date: date,

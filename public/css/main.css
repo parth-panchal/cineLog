@@ -4,6 +4,7 @@
     align-items: center;
   }
 
+
 /* Classes */
 .sr-only:not(:focus):not(:active) {
     clip: rect(0 0 0 0);
@@ -24,6 +25,7 @@
 body {
     background-color: white;
 }
+
 
 nav {
     background-color: #f9f9f9;
@@ -53,6 +55,7 @@ nav a:hover {
     color: #fff;
     border-radius: 5px;
 }
+
 
 img{
     width: 300px;
