@@ -32,6 +32,7 @@ async function searchMovies() {
 
 function displaySearchResults(movies) {
   const searchResults = document.getElementById("searchResults");
+  searchResults.classList.add("horizontal-list");
   const selectedMovies = document.getElementById("selectedMovies");
   searchResults.innerHTML = "";
 

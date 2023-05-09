@@ -51,133 +51,16 @@ body {
   line-height: 1.6;
 }
 
-header,
+/* header,
 footer {
   padding: 20px;
   background-color: #222;
   color: #fff;
-}
+} */
 
 main {
   padding: 20px;
 }
-
-/* .list-details {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.movies {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-}
-
-.movies li {
-  list-style-type: none;
-  background-color: #f8f8f8;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: 0.3s;
-}
-
-.movies li:hover {
-  transform: scale(1.05);
-}
-
-.movie-poster {
-  width: 100%;
-  height: 300px;
-  overflow: hidden;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
-
-.movie-poster img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.movie-details {
-  text-align: left;
-} */
-
-/* .list-details {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.movies {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-.movies li {
-  list-style-type: none;
-  background-color: #f8f8f8;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: 0.3s;
-}
-
-.movies li:hover {
-  transform: scale(1.05);
-}
-
-.movie-poster {
-  width: 100%;
-  height: 350px;
-  overflow: hidden;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  position: relative;
-}
-
-.movie-poster::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
-}
-
-.movie-poster img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-.movie-details {
-  text-align: left;
-}
-
-.movie-details h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.movie-details a {
-  text-decoration: none;
-  color: inherit;
-}
-
-.movie-details a:hover {
-  text-decoration: underline;
-}
-
-.movie-details p {
-  font-size: 1rem;
-  margin-bottom: 5px;
-} */
 
 .list-details {
   text-align: center;
@@ -255,4 +138,17 @@ main {
 .movie-details p {
   font-size: 1rem;
   margin-bottom: 5px;
+}
+
+.horizontal-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+}
+
+.horizontal-list li {
+  flex: 1 0 21%; /* This will allow 4 items per row, you can adjust this percentage according to your needs */
+  margin: 0.5em;
+  list-style-type: none;
 }
