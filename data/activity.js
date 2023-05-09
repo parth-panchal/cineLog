@@ -32,16 +32,10 @@ const createLog = async (movieId, userId, review, rating, date) => {
 
 // Get an activity log by its _id
 const getLogById = async (activityId) => {
-  // console.log(`Activity id is ${activityId}`)
-
   activityId = validation.checkId(activityId, "Activity ID");
   activityId = activityId.toString();
   const logs = await activity();
-  // console.log(logs)
-  // console.log("#########################")
   const log = await logs.findOne({ _id: new ObjectId(activityId) });
-  // console.log("#########################")
-  // console.log(log)
   if (!log) throw "Error: activity not found";
   return log;
 };
@@ -89,8 +83,7 @@ const editLog = async (activityId, review, rating, date) => {
   
   date = validation.checkDate(date, "Date");
 
-//Atharva testing here!!!!!!!!!!!!!! commented below for checking
-  //movieId = validation.checkMovieId(movieId, "Movie ID");
+  movieId = validation.checkMovieId(movieId, "Movie ID");
   console.log(`${movieId}in data now`)
   userId = validation.checkId(userId, "User ID");
 
@@ -98,7 +91,6 @@ const editLog = async (activityId, review, rating, date) => {
   // console.log(activities)
   const log = await getLogById(activityId);
   console.log(`${log} log in data now`)
-  // console.log("log$$$$$$$$")
   
   const update = {
     review: review,
@@ -133,14 +125,13 @@ const deleteLog = async (activityId) => {
   activityId = validation.checkId(activityId, "Activity ID");
   const logs = await activity();
   const deleteDate = await logs.findOne({ _id: new ObjectId(activityId) });
-  // console.log(deleteDate.date);
   const deletedLog = await logs.findOneAndDelete({
     _id: new ObjectId(activityId),
   });
   if (deletedLog.lastErrorObject.n === 0)
     throw "Error: could not delete activity";
   await updateTrending(activityId, deleteDate.date, "delete");
-  return { activityId: activityId, deleted: true }; // will change the return object later based on requirements
+  return { activityId: activityId, deleted: true }; 
 };
 
 export {
