@@ -22,16 +22,16 @@ saveChangesButton.addEventListener('click', (event) => {
   let error_div = document.getElementById('err_c');
   let valid = true;
 
-  if(movieId !== old_moviedId) {
-    event.preventDefault();
-    valid = false;
-    rating = '';
-    error_div.hidden = false;
-    error_div.innerHTML = 'No changes can be made to movieId';
-    return;
-  }else {
-    error_div.hidden = true;
-  }
+  // if(movieId !== old_moviedId) {
+  //   event.preventDefault();
+  //   valid = false;
+  //   rating = '';
+  //   error_div.hidden = false;
+  //   error_div.innerHTML = 'No changes can be made to movieId';
+  //   return;
+  // }else {
+  //   error_div.hidden = true;
+  // }
 
   if (rating === old_rating && review === old_review && date === old_date) {
     event.preventDefault();
