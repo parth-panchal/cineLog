@@ -5,7 +5,9 @@
 <ul>
     {{#each lists}}
     <li>
+
         <a href="/list/{{_id}}">{{title}}</a>
+
     </li>
     {{/each}}
 </ul>
@@ -18,8 +20,10 @@
 {{/if}}
 
 {{#unless searchedUser}}
+
     <form method="GET" action="/profile/lists/newList">
         <button type="submit" class="btn btn-primary">Create New List</button>
     </form>
+
 
 {{/unless}}

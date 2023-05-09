@@ -21,7 +21,9 @@
 <p class="about">
 <h2>Tech Stack used:</h2>
 <ul>
-    <li>Back end:<a href="https://nodejs.org/en">Node.js</a>, <a href="https://expressjs.com/">Express</a></li>
+
+    <li>Back end: <a href="https://nodejs.org/en">Node.js</a>, <a href="https://expressjs.com/">Express</a></li>
+
     <li>Database: <a href="https://www.mongodb.com/">MongoDB</a></li>
     <li>Front end: <a href="https://handlebarsjs.com/">Handlebars</a>, <a href="https://getbootstrap.com/">Bootstrap</a>
     </li>
@@ -42,8 +44,10 @@
 {{/if}}
 
 {{#if isAuthenticated}}
-{{#if userRecommendations}}
+
 <h1>User Recommendations</h1>
+{{#if userRecommendations}}
+
 <ul>
     {{#each userRecommendations}}
     <li>

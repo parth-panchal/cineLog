@@ -100,6 +100,7 @@ const checkMovieArray = (movies, name) => {
   if (movies.length === 0)
     throw `Error: ${name} must have at least one element`;
   movies.forEach(async (elem) => {
+
     elem = Number(elem);
     elem = await checkMovieId(elem);
   });
