@@ -56,9 +56,7 @@ const checkString = (strVal, name) => {
   //I've seen some websites that allow users to give half stars, so I think this is a good idea.
   const checkRating = (rating) => {
     rating = checkNumber(parseFloat(rating), "Rating");
-    console.log(rating);
     if (rating < 0.5 || rating > 5) throw "Error: Rating must be between 0.5 and 5";
-    console.log("here");
     if (rating % 0.5 !== 0) throw "Error: Rating must be a multiple of 0.5";
     return rating;
   };
