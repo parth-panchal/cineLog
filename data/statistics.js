@@ -72,10 +72,10 @@ const getMostWatchedMovie = async (userId) => {
   let mostWatchedMovie = null;
   for (let i = 0; i < all.length; i++) {
     let movie = all[i];
-    counts[movie.original_title] = (counts[movie.original_title] || 0) + 1;
-    if (counts[movie.original_title] > maxCount) {
-      maxCount = counts[movie.original_title];
-      mostWatchedMovie = movie.original_title;
+    counts[movie.title] = (counts[movie.title] || 0) + 1;
+    if (counts[movie.title] > maxCount) {
+      maxCount = counts[movie.title];
+      mostWatchedMovie = movie.title;
     }
   }
   return mostWatchedMovie;
