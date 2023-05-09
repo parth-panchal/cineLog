@@ -13,17 +13,18 @@ router
     .route('/:id')
     .get(async (req, res) => {
         let activityId = xss(req.params.id); 
+        let isAuthenticated = req.session.user ? true : false;
 
         try {
             activityId = await validation.checkId(activityId)
         } catch (error) {
-            return res.status(400).render('error').json({error: error});
+            return res.status(400).render('error', {isAuthenticated: isAuthenticated}).json({error: error});
         }
         
         try {
             const activityInfo = await activityData.getLogById(activityId);
             const movieInfo = await getMovieInfo(activityInfo.movieId);
-            res.status(200).render('activityById', {title: "Activity", results : activityInfo, movieName : movieInfo.title, poster_path : movieInfo.poster_path });
+            res.status(200).render('activityById', {title: "Activity", results : activityInfo, movieName : movieInfo.title, poster_path : movieInfo.poster_path, isAuthenticated: isAuthenticated });
           } catch (e) {
             res.status(404).render('error',{ error: "Activity not found with the provided id"});
             //render the error handlebar for all the catch
