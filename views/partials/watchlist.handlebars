@@ -1,19 +1,26 @@
-<h1>My Watchlist</h1>
-
+{{#unless searchedUser}}
+    <h1>My Watchlist</h1>
+{{/unless}}
 {{#if userWatchlist}}
 <ul>
     {{#each userWatchlist}}
     <li>
         <a href="/movie/{{id}}">{{title}}</a>
-        <form method="POST" action="/profile/watchlist">
-            <input type="hidden" name="_method" value="PATCH">
-            <input type="hidden" name="movieId" value="{{id}}">
-            <input type="hidden" name="operation" value="remove">
-            <button type="submit">Remove from watchlist</button>
-        </form>
+        {{#unless ../searchedUser}}
+            <form method="POST" action="/profile/watchlist">
+                <input type="hidden" name="_method" value="PATCH">
+                <input type="hidden" name="movieId" value="{{id}}">
+                <input type="hidden" name="operation" value="remove">
+                <button type="submit">Remove from watchlist</button>
+            </form>
+        {{/unless}}
     </li>
     {{/each}}
 </ul>
 {{else}}
-<p>Your watchlist is empty.</p>
+    {{#unless searchedUser}}
+        <p>Your watchlist is empty.</p>
+    {{else}}
+        <p>No watchlist available</p>
+    {{/unless}}
 {{/if}}

@@ -1,19 +1,26 @@
-<h1>Profiles I Follow</h1>
-
+{{#unless searchedUser}}
+    <h1>Profiles I Follow</h1>
+{{/unless}}
 {{#if following}}
 <ul>
     {{#each following}}
     <li>
         <a href="/{{username}}">{{username}}</a>
-        <form method="POST" action="/profile/following">
-            <input type="hidden" name="_method" value="PATCH">
-            <input type="hidden" name="followingId" value="{{_id}}">
-            <input type="hidden" name="operation" value="remove">
-            <button type="submit">Unfollow</button>
-        </form>
+        {{#unless ../searchedUser}}
+            <form method="POST" action="/profile/following">
+                <input type="hidden" name="_method" value="PATCH">
+                <input type="hidden" name="followingId" value="{{_id}}">
+                <input type="hidden" name="operation" value="remove">
+                <button type="submit">Unfollow</button>
+            </form>
+        {{/unless}}
     </li>
     {{/each}}
 </ul>
 {{else}}
-<p>You are not following any profiles.</p>
+    {{#unless searchedUser}}
+        <p>You are not following any profiles.</p>
+    {{else}}
+        <p>No followers available</p>
+    {{/unless}}
 {{/if}}

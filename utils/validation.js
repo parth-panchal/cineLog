@@ -58,7 +58,7 @@ const checkUsername = (username) => {
 //so the rating must be between 0 and 5, and must be a multiple of 0.5.
 //I've seen some websites that allow users to give half stars, so I think this is a good idea.
 const checkRating = (rating) => {
-  rating = checkNumber(parseInt(rating), "Rating");
+  rating = checkNumber(parseFloat(rating), "Rating");
   if (rating < 0.5 || rating > 5) throw "Error: Rating must be between 0 and 5";
   if (rating % 0.5 !== 0) throw "Error: Rating must be a multiple of 0.5";
   return rating;

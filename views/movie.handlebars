@@ -22,7 +22,13 @@
 {{/each}}
 
 {{#if isAuthenticated}}
-    <p>People You Follow Who've Watched This: </p>
+    <p>People You Follow Who've Watched This: 
+        {{#each followingInfo}}
+            {{this}} &ensp;
+        {{else}}
+            None
+        {{/each}}
+    </p>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#activityModal">Add to Activity</button>
     {{#if alreadyPresentWatchlist}}
         <button type="button" class="btn btn-primary" disabled>Added to Watchlist</button>

@@ -39,6 +39,7 @@ router
     try {
       let userDetails = await userData.getUserById(req.session.user._id); //not sure if this is the right way to get the user id
       return res.render("profile", {
+        isAuthenticated: true,
         userDetails: userDetails,
         script_partial: "userInfo",
       }); //use id userDetails in homepage hbs to get details
@@ -82,6 +83,7 @@ router
         user.password
       );
       return res.render("profile", {
+        isAuthenticated: true,
         userUpdates: userUpdates,
         script_partial: "userInfo",
       });
@@ -116,21 +118,10 @@ router
     }
     try {
       let user = await userData.getUserById(req.session.user._id);
-      let userWatchlistNumbers = user.watchlist;
-      let userWatchlist = [];
-      try {
-        userWatchlist = await userWatchlistNumbers.reduce(
-          async (previousPromise, movieId) => {
-            let arr = await previousPromise;
-            let movie = await helper.getMovieInfo(movieId);
-            return arr.concat(movie);
-          },
-          Promise.resolve([])
-        );
-      } catch (e) {
-        console.log(e); //change this later
-      }
+      let userWatchlist = await helper.transformInfo(user.watchlist, "movieInfo", false);
+
       return res.render("profile", {
+        isAuthenticated: true,
         userWatchlist: userWatchlist,
         script_partial: "watchlist",
       });
@@ -147,7 +138,10 @@ router
       req.body.movieId = await validation.checkMovieId(req.body.movieId);
       req.body.operation = validation.checkOperation(req.body.operation);
     } catch (e) {
-      return res.render("profile", { error: e });
+      return res.render("profile", { 
+        isAuthenticated: true,
+        error: e 
+      });
     }
     //adding validation to check if movie exists in user watchlist
     try {
@@ -166,21 +160,10 @@ router
         req.body.movieId,
         req.body.operation
       );
-      let updatedWatchlistNumbers = updatedWatchlistNumbersObject.watchlist;
-      let updatedWatchlist = [];
-      try {
-        updatedWatchlist = await updatedWatchlistNumbers.reduce(
-          async (previousPromise, movieId) => {
-            let arr = await previousPromise;
-            let movie = await helper.getMovieInfo(movieId);
-            return arr.concat(movie);
-          },
-          Promise.resolve([])
-        );
-      } catch (e) {
-        console.log(e);
-      }
+      let updatedWatchlist = await helper.transformInfo(updatedWatchlistNumbersObject.watchlist, "movieInfo", false); 
+
       return res.render("profile", {
+        isAuthenticated: true,
         userWatchlist: updatedWatchlist,
         script_partial: "watchlist",
       });
@@ -200,21 +183,10 @@ router
     }
     try {
       let user = await userData.getUserById(req.session.user._id);
-      let userLikeNumbers = user.likes;
-      let userLikes = [];
-      try {
-        userLikes = await userLikeNumbers.reduce(
-          async (previousPromise, movieId) => {
-            let arr = await previousPromise;
-            let movie = await helper.getMovieInfo(movieId);
-            return arr.concat(movie);
-          },
-          Promise.resolve([])
-        );
-      } catch (e) {
-        console.log(e); //change this later
-      }
+      let userLikes = await helper.transformInfo(user.likes, "movieInfo", false);
+
       return res.render("profile", {
+        isAuthenticated: true,
         userLikes: userLikes,
         script_partial: "likes",
       });
@@ -231,7 +203,10 @@ router
       req.body.movieId = await validation.checkMovieId(req.body.movieId);
       req.body.operation = validation.checkOperation(req.body.operation);
     } catch (e) {
-      return res.render("profile", { error: e });
+      return res.render("profile", {
+        isAuthenticated: true, 
+        error: e 
+      });
     }
     //adding validation to check if movie exists in user likes
     try {
@@ -250,21 +225,10 @@ router
         req.body.movieId,
         req.body.operation
       );
-      let updatedLikesNumbers = userUpdatedResp.likes;
-      let updatedLikes = [];
-      try {
-        updatedLikes = await updatedLikesNumbers.reduce(
-          async (previousPromise, movieId) => {
-            let arr = await previousPromise;
-            let movie = await helper.getMovieInfo(movieId);
-            return arr.concat(movie);
-          },
-          Promise.resolve([])
-        );
-      } catch (e) {
-        console.log(e); //change this later
-      }
+      let updatedLikes = await helper.transformInfo(userUpdatedResp.likes, "movieInfo", false);
+      
       return res.render("profile", {
+        isAuthenticated: true,
         userLikes: updatedLikes,
         script_partial: "likes",
       });
@@ -284,28 +248,19 @@ router.route("/activity").get(async (req, res) => {
     let logsWithoutMovieTitle = await activityData.getLogsByUserId(
       req.session.user._id
     );
-    let logs = [];
-    try {
-      logs = await logsWithoutMovieTitle.reduce(
-        async (previousPromise, log) => {
-          let arr = await previousPromise;
-          let movie = await helper.getMovieInfo(log["movieId"]);
-          let movieTitle = movie.title;
-          log["movieTitle"] = movieTitle;
-          return arr.concat(log);
-        },
-        Promise.resolve([])
-      );
-    } catch (e) {
-      console.log(e); //change this later
-    }
+    let logs = await helper.transformInfo(logsWithoutMovieTitle, "movieInfo", true);
+
     logs = logs.sort((a, b) => {
       return new Date(b.date) - new Date(a.date);
     });
-    console.log(logs);
-    return res.render("profile", { logs: logs, script_partial: "activity" });
+    return res.render("profile", {
+      isAuthenticated: true, 
+      logs: logs, 
+      script_partial: "activity" });
   } catch (e) {
-    return res.render("profile", { error: e });
+    return res.render("profile", { 
+      isAuthenticated: true,
+      error: e });
   }
 });
 
@@ -318,7 +273,10 @@ router.route("/lists").get(async (req, res) => {
   }
   try {
     let lists = await listData.getAllLists(req.session.user._id);
-    return res.render("profile", { lists: lists, script_partial: "lists" });
+    return res.render("profile", { 
+      isAuthenticated: true,
+      lists: lists, 
+      script_partial: "lists" });
   } catch (e) {
     res.render("error", { error: e });
   }
@@ -335,21 +293,10 @@ router
     }
     try {
       let user = await userData.getUserById(req.session.user._id);
-      let profilesFollowedIds = user.following;
-      let profilesFollowed = [];
-      try {
-        profilesFollowed = await profilesFollowedIds.reduce(
-          async (previousPromise, profileId) => {
-            let arr = await previousPromise;
-            let profile = await userData.getUserById(profileId);
-            return arr.concat(profile);
-          },
-          Promise.resolve([])
-        );
-      } catch (e) {
-        console.log(e); //change this later
-      }
+      let profilesFollowed = await helper.transformInfo(user.following, "userInfo", false);
+      
       return res.render("profile", {
+        isAuthenticated: true,
         following: profilesFollowed,
         script_partial: "following",
       });
@@ -378,21 +325,10 @@ router
         req.body.followingId,
         req.body.operation
       );
-      let updatedFollowingIds = updatedFollowingIdsObject.following;
-      let updatedFollowing = [];
-      try {
-        updatedFollowing = await updatedFollowingIds.reduce(
-          async (previousPromise, userId) => {
-            let arr = await previousPromise;
-            let profile = await userData.getUserById(userId);
-            return arr.concat(profile);
-          },
-          Promise.resolve([])
-        );
-      } catch (e) {
-        console.log(e); //change this later
-      }
+      let updatedFollowing = await helper.transformInfo(updatedFollowingIdsObject.following, "userInfo", false);
+      
       return res.render("profile", {
+        isAuthenticated: true,
         following: updatedFollowing,
         script_partial: "following",
       });
@@ -412,11 +348,13 @@ router.route("/statistics").get(async (req, res) => {
     let statistics = await statsData.allStats(req.session.user._id);
     if (statistics == null) {
       return res.render("profile", {
+        isAuthenticated: true,
         statsAvailable: false,
         script_partial: "statistics",
       });
     }
     return res.render("profile", {
+      isAuthenticated: true,
       statsAvailable: true,
       totalMoviesWatched: statistics.totalMoviesWatched,
       totalTimeWatched: statistics.totalTimeWatched,

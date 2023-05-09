@@ -5,9 +5,7 @@ import { Router } from "express";
 import xss from "xss";
 import { activityData, userData } from "../data/index.js";
 import * as validation from "../utils/validation.js";
-import { getMovieCast, getMovieInfo, calculateMovieStats } from "../utils/helper.js";
-import { getLogsByMovieId } from "../data/activity.js";
-import { getUserById } from "../data/users.js";
+import { getMovieCast, getMovieInfo, calculateMovieStats, transformInfo } from "../utils/helper.js";
 
 const router = Router();
 
@@ -29,18 +27,35 @@ router
         try {
             let alreadyPresentLikes = false;
             let alreadyPresentWatchlist = false;
+            let movieActivity = await activityData.getLogsByMovieId(movieId);
+            let followingInfo = undefined;
 
             if(isAuthenticated) {
                 let userId = xss(req.session.user._id);
-                let {likes, watchlist, following} = await getUserById(userId);
+                let {likes, watchlist, following} = await userData.getUserById(userId);
+
                 if(likes.includes(movieId)) alreadyPresentLikes = true;
                 if(watchlist.includes(movieId)) alreadyPresentWatchlist = true;
+
+                // Filter the array of follower ids to those that have watched the movie
+                // Watched being created an activity for it
+                let followersThatWatchedMovie = following.filter(follower => {
+                    return movieActivity.some(activity => {
+                        return activity.userId === follower;
+                    })
+                });
+
+                if(followersThatWatchedMovie.length > 0) {
+                    // Get the user information for those followers
+                    followingInfo = await transformInfo(followersThatWatchedMovie, "userInfo", false);
+                    // Filter the array of user info objects to return only their usernames
+                    followingInfo = followingInfo.map(follower => follower.username);
+                }
             }
             
             let movieInfo = await getMovieInfo(movieId);
             let movieCast = await getMovieCast(movieId);
             movieCast = movieCast.filter(castMember => castMember.order >= 0 && castMember.order < 5 );
-            let movieActivity = await getLogsByMovieId(movieId);
             let activityInfo = calculateMovieStats(movieActivity);
             let today = new Date();
             const year = today.toLocaleString("default", { year: "numeric" });
@@ -54,6 +69,7 @@ router
                 movieInfo: movieInfo,
                 movieCast: movieCast,
                 activityInfo: activityInfo,
+                followingInfo, followingInfo,
                 isAuthenticated: isAuthenticated,
                 currDate: formattedDate,
                 alreadyPresentLikes,

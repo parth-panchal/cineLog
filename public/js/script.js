@@ -55,8 +55,10 @@ const checkString = (strVal, name) => {
   //so the rating must be between 0 and 5, and must be a multiple of 0.5.
   //I've seen some websites that allow users to give half stars, so I think this is a good idea.
   const checkRating = (rating) => {
-    rating = checkNumber(parseInt(rating), "Rating");
-    if (rating < 0.5 || rating > 5) throw "Error: Rating must be between 0 and 5";
+    rating = checkNumber(parseFloat(rating), "Rating");
+    console.log(rating);
+    if (rating < 0.5 || rating > 5) throw "Error: Rating must be between 0.5 and 5";
+    console.log("here");
     if (rating % 0.5 !== 0) throw "Error: Rating must be a multiple of 0.5";
     return rating;
   };
@@ -144,6 +146,138 @@ const checkString = (strVal, name) => {
   };
 
 (function ($) { 
+
+    // ===================== Sign Up =====================
+
+    let signupForm = $(`#signUpForm`),
+        firstNameInput = $(`#firstNameInput`),
+        lastNameInput = $(`#lastNameInput`),
+        usernameInput = $(`#usernameInput`),
+        passwordInput = $(`#passwordInput`),
+        confirmPassInput = $(`#confirmPasswordInput`),
+        signupErrorDiv = $(`#signupErrorDiv`);
+
+    signupForm.submit(async (event) => {
+        let firstName = firstNameInput.val();
+        let lastName = lastNameInput.val();
+        let username = usernameInput.val();
+        let pass = passwordInput.val();
+        let confirmPass = confirmPassInput.val();
+
+        let errors = [];
+        signupErrorDiv.text('');
+        signupErrorDiv.attr("hidden", true);
+
+        if(!firstName) {
+            errors.push("You must enter a value for First Name");
+        }
+
+        if(!lastName) {
+            errors.push("You must enter a value for Last Name");
+        }
+
+        if(!username) {
+            errors.push("You must enter a value for Username");
+        }
+
+        if(!pass) {
+            errors.push("You must enter a value for Password");
+        }
+
+        if(!confirmPass) {
+            errors.push("You must enter a value for Confirm Password");
+        }
+
+        if(errors.length > 0) {
+            event.preventDefault();
+            signupErrorDiv.text(errors);
+            signupErrorDiv.removeAttr("hidden");
+            return;
+        }
+
+        try {
+            firstName = checkName(firstName, "First Name");
+        } catch (error) {
+            errors.push(error);
+        }
+
+        try {
+            lastName = checkName(lastName, "Last Name");
+        } catch (error) {
+            errors.push(error);
+        }
+
+        try {
+            username = checkUsername(username);
+        } catch (error) {
+            errors.push(error);
+        }
+
+        try {
+            pass = checkPassword(pass);
+        } catch (error) {
+            errors.push(error);
+        }
+
+        if(confirmPass !== pass) errors.push("Error: Password and Confirm Password do not match");
+
+        if(errors.length > 0) {
+            event.preventDefault();
+            signupErrorDiv.text(errors);
+            signupErrorDiv.removeAttr("hidden");
+            return;
+        }
+        
+    })
+
+    // ===================== Sign Up =====================
+
+    let loginForm = $('#loginForm'),
+        loginErrorDiv = $('#loginErrorDiv');
+    
+    loginForm.submit(async (event) => {
+        let username = usernameInput.val();
+        let pass = passwordInput.val();
+
+        let errors = [];
+        loginErrorDiv.text('');
+        loginErrorDiv.attr("hidden", true);
+
+        if(!username) {
+            errors.push("You must enter a value for Username");
+        }
+
+        if(!pass) {
+            errors.push("You must enter a value for Password");
+        }
+
+        if(errors.length > 0) {
+            event.preventDefault();
+            loginErrorDiv.text(errors);
+            loginErrorDiv.removeAttr("hidden");
+            return;
+        }
+
+        try {
+            username = checkUsername(username);
+        } catch (error) {
+            errors.push(error);
+        }
+
+        try {
+            pass = checkPassword(pass);
+        } catch (error) {
+            errors.push(error);
+        }
+
+        if(errors.length > 0) {
+            event.preventDefault();
+            signupErrorDiv.text(errors);
+            signupErrorDiv.removeAttr("hidden");
+            return;
+        }
+    })
+
     // ===================== Search Bar =====================
 
     let searchForm = $('#searchForm'),
@@ -315,7 +449,12 @@ const checkString = (strVal, name) => {
             if(result.success) {
                 addToWatchlistBtn.text('Added to Watchlist');
                 addToWatchlistBtn.prop('disabled', true);
-            }
+            } else {
+                backendErrorDiv.text('An error has occurred. Please try again later.');
+                backendErrorDiv.removeAttr("hidden");
+                return;
+            } 
+            
         } catch (error) {
             console.log(error.responseJSON.error);
             backendErrorDiv.text(error.responseJSON.error);
@@ -343,13 +482,52 @@ const checkString = (strVal, name) => {
             if(result.success) {
                 addToLikesBtn.text("Added to Likes");
                 addToLikesBtn.prop('disabled', true);
+            } else {
+                backendErrorDiv.text('An error has occurred. Please try again later.');
+                backendErrorDiv.removeAttr("hidden");
+                return;
             }
+            
         } catch (error) {
             console.log(error.responseJSON.error);
             backendErrorDiv.text(error.responseJSON.error);
             backendErrorDiv.removeAttr("hidden");
             return;
         }
-    }); 
+    });
+    
+    // ===================== User Page =====================
+    
+    let addToFollowBtn = $('#addToFollowBtn');
+
+    addToFollowBtn.click(async () => {
+        backendErrorDiv.text('');
+        backendErrorDiv.attr("hidden", true);
+
+        let requestConfig = {
+            method: 'PATCH',
+            url: location.path,
+            contentType: 'application/json',
+        };
+
+        try {
+            const result = await $.ajax(requestConfig);
+
+            if(result.success) {
+                addToFollowBtn.text("Added to Following");
+                addToFollowBtn.prop('disabled', true);
+            } else {
+                backendErrorDiv.text('An error has occurred. Please try again later.');
+                backendErrorDiv.removeAttr("hidden");
+                return;
+            }
+
+        } catch (error) {
+            console.log(error.responseJSON.error);
+            backendErrorDiv.text(error.responseJSON.error);
+            backendErrorDiv.removeAttr("hidden");
+            return;
+        }
+    })
 
 })(window.jQuery);

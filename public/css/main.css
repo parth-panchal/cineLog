@@ -1,5 +1,8 @@
 /* IDs */
-
+#headerBtn {
+    display: flex;
+    align-items: center;
+  }
 
 /* Classes */
 .sr-only:not(:focus):not(:active) {
