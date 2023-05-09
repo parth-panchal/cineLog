@@ -38,6 +38,7 @@ const getMovieInfo = async (movieId) => {
   const endpoint = `/movie/${movieId}`;
   try {
     const { data } = await axios.get(BASE_URL + endpoint, { params });
+    console.log(data);
     return data;
   } catch (error) {
     // console.log(error);

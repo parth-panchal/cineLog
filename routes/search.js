@@ -60,6 +60,27 @@ router
             });
         }
     });
+router
+    .route('/movi/:searchTerm')
+    .get(async (req, res) => {
+        let searchTerm = xss(req.params.searchTerm);
+        // console.log(searchTerm);
+
+        try {
+            searchTerm = validation.checkString(searchTerm, "Movie Title");
+        } catch (error) {
+            return res.status(400).json({error: error});
+        }
+
+        try {
+            const moviesInfo = await searchMovie(searchTerm);
+            // console.log(moviesInfo.results);
+            return res.json(moviesInfo);
+            
+        } catch (error) {
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    });
 
 router
     .route('/users/:searchTerm')

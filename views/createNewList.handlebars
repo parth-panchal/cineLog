@@ -1,17 +1,15 @@
-<h1>New List</h1>
-<div class="search-container">
-  <form>
-    <div class="mb-3">
-                    <label for="nameInput" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="nameInput" name="nameInput">
-                </div>
-
-    <div class="input-container">
-      <label for="search-input">ADD A FILM</label>
-      <input type="text" id="search-input" placeholder="Enter name of film...">
-    </div>
-    <ul id="search-results"></ul>
-  </form>
-</div>
-
-<script type="module" src="/public/js/scriptList.js"></script>
+<form id="createListForm" action="/profile/lists/newlist" method="POST">
+  <label for="listName">List Name:</label>
+  <input type="text" id="listName" name="listName" required />
+  <br />
+  <label for="searchMovie">Search Movie:</label>
+  <input type="text" id="searchMovie" name="searchMovie" />
+  <button type="button">Search</button>
+  <div id="searchResults"></div>
+  <br />
+  <label>Selected Movies:</label>
+  <ul id="selectedMovies"></ul>
+  <br />
+  <button type="submit">Create List</button>
+</form>
+<script defer src="/public/js/scriptList.js"></script>

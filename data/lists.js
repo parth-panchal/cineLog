@@ -44,7 +44,7 @@ const getAllLists = async (userId) => {
   const user = await userData.getUserById(userId);
 
   let movieList = user.lists;
-  if (movieList.length === 0) throw "No lists present for this user Id";
+  // if (movieList.length === 0) throw "No lists present for this user Id";
   movieList.forEach((element) => {
     element._id = element._id.toString();
   });
@@ -134,8 +134,13 @@ const updateList = async (listId, title, movies) => {
   if (updatedInfo.lastErrorObject.n === 0) {
     throw "could not update the list successfully";
   }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  // updatedInfo.value._id = updatedInfo.value._id.toString();
+  // return updatedInfo.value;
+  const latestList = updatedInfo.value.lists.find(
+    (list) => list._id.toString() === listId
+  );
+  
+  return latestList;
 };
 
 export { createList, getAllLists, getListById, deleteList, updateList };

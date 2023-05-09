@@ -311,6 +311,8 @@ router.route("/activity").get(async (req, res) => {
 
 router.route("/lists").get(async (req, res) => {
   req.session.user._id = xss(req.session.user._id);
+  const deleteSuccess = req.session.deleteSuccess;
+  req.session.deleteSuccess = false; // Reset the session variable
   try {
     req.session.user._id = validation.checkId(req.session.user._id);
   } catch (e) {
@@ -318,11 +320,40 @@ router.route("/lists").get(async (req, res) => {
   }
   try {
     let lists = await listData.getAllLists(req.session.user._id);
-    return res.render("profile", { lists: lists, script_partial: "lists" });
+    return res.render("profile", { lists: lists, script_partial: "lists", deleteSuccess });
   } catch (e) {
     res.render("error", { error: e });
   }
 });
+
+router
+  .route("/lists/newlist")
+  //middleware such that only logged in users should be able to create a list
+  .get(async (req, res) => {
+    //code here for GET
+    return res.render("createNewList", { title: "New list page" });
+  })
+  .post(async (req, res) => {
+    //code to POST lists for a user
+    let userId;
+    try {
+      userId = req.session.user._id;
+      userId = validation.checkId(userId, "User ID");
+    } catch (error) {
+      return res
+        .status(400)
+        .render("error", { error: "User must be authenticated" });
+    }
+    const listInfo = req.body;
+    try {
+      let title = validation.checkString(xss(listInfo.title), "Title");
+      let movies = validation.checkMovieArray(listInfo.movies, "Movies");
+      const list = await listData.createList(userId, title, movies);
+      return res.status(200).json(list);
+    } catch (e) {
+      return res.status(404).json(e);
+    }
+  });
 
 router
   .route("/following")
