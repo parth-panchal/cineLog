@@ -1,6 +1,32 @@
-<p class="about">This is our app CineLog. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae amet
-    suscipit rerum temporibus perferendis fuga sequi maxime itaque voluptates aperiam dolorem, id non. Officiis sequi
-    asperiores nobis commodi, ipsam facere.</p>
+<h1>About our application</h1>
+<p class="about">
+    In today's digital age, movie watching has become an integral part of our leisure time. With numerous options
+    available, it can often be challenging to keep track of the movies we have watched and those we want to watch. To
+    address this
+    issue, we have built an application that allows users to log and keep track of the movies they have watched, just
+    like how one would maintain a daily diary/journal of entries arranged by date.</p>
+<p class="about">
+    The purpose of this movie tracking application is to provide users with an easy and efficient way to keep track of
+    the movies they watch, rate them, and write reviews. Users will be able to create a personal account, search for
+    movies,
+    add them to their watchlist, mark them as watched, and keep track of their progress.</p>
+<p class="about">
+    Our movie logging app is the perfect solution for anyone who loves movies and wants to keep track of the ones
+    they've watched. With our comprehensive movie database and user-friendly interface, you can easily log movies, rate
+    them, and write reviews. You can also create custom watchlists and track your progress as you watch. Plus, with
+    features
+    like trending movies and personalized recommendations, you'll always have something new to watch. So whether you're
+    a
+    casual movie-goer or a film buff, our app has everything you need to organize your movie-watching experience.</p>
+<p class="about">
+<h2>Tech Stack used:</h2>
+<ul>
+    <li>Back end:<a href="https://nodejs.org/en">Node.js</a>, <a href="https://expressjs.com/">Express</a></li>
+    <li>Database: <a href="https://www.mongodb.com/">MongoDB</a></li>
+    <li>Front end: <a href="https://handlebarsjs.com/">Handlebars</a>, <a href="https://getbootstrap.com/">Bootstrap</a>
+    </li>
+</ul>
+</p>
 {{!-- Trending --}}
 <h1>Trending movies</h1>
 {{#if trendingList}}
@@ -15,9 +41,9 @@
 <p>No trending movies yet.</p>
 {{/if}}
 
+{{#if isAuthenticated}}
 {{#if userRecommendations}}
 <h1>User Recommendations</h1>
-{{#if userRecommendations}}
 <ul>
     {{#each userRecommendations}}
     <li>
@@ -29,5 +55,5 @@
 <p>No recommendations yet.</p>
 {{/if}}
 {{else}}
-<p>You need to log in to see recommendations.</p>
+<p>You need to log in to see recommendations</p>
 {{/if}}
