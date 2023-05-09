@@ -84,13 +84,10 @@ const editLog = async (activityId, review, rating, date) => {
   date = validation.checkDate(date, "Date");
 
   movieId = validation.checkMovieId(movieId, "Movie ID");
-  console.log(`${movieId}in data now`)
   userId = validation.checkId(userId, "User ID");
 
   const activities = await activity(); 
-  // console.log(activities)
   const log = await getLogById(activityId);
-  console.log(`${log} log in data now`)
   
   const update = {
     review: review,
