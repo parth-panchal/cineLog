@@ -110,3 +110,8 @@ img{
     #err_c {
         color: red;
     }
+
+    .table_class{
+    border: 1px solid black; 
+    padding: 8px;
+    }
