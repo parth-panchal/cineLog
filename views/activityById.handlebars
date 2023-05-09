@@ -2,32 +2,37 @@
     {{#if results}}
     <h2 id="activityById_mname"></h2>
     <img src="https://image.tmdb.org/t/p/w500{{poster_path}}" alt="Poster for {{title}}" class="img-thumbnail">
-      <table>
+    <table>
           <tr>
             <th style="border: 1px solid black; padding: 8px;">Movie Name</th>
-            <td style="border: 1px solid black; padding: 8px;">{{movieName}}</td>
+            <td style="border: 1px solid black; padding: 8px;" id="old_movieName">{{movieName}}</td>
           </tr>
           <tr>
-            <th style="border: 1px solid black; padding: 8px;">Movie Id</th>
-            <td style="border: 1px solid black; padding: 8px;">{{results.movieId}}</td>
+            <th style="border: 1px solid black; padding: 8px;">Movie ID</th>
+            <td style="border: 1px solid black; padding: 8px;" id="old_movieid">{{results.movieId}}</td>
           </tr>
           <tr>
             <th style="border: 1px solid black; padding: 8px;">User ID</th>
-            <td style="border: 1px solid black; padding: 8px;">{{results.userId}}</td>
+            <td style="border: 1px solid black; padding: 8px;" id="old_userId">{{results.userId}}</td>
           </tr>
           <tr>
             <th style="border: 1px solid black; padding: 8px;">Review</th>
-            <td style="border: 1px solid black; padding: 8px;">{{results.review}}</td>=
+            <td style="border: 1px solid black; padding: 8px;" id="old_review">{{results.review}}</td>=
           </tr>
           <tr>
             <th style="border: 1px solid black; padding: 8px;">Rating</th>
-            <td style="border: 1px solid black; padding: 8px;">{{results.rating}}</td>
+            <td style="border: 1px solid black; padding: 8px;" id="old_rating">{{results.rating}}</td>
           </tr>
           <tr>
             <th style="border: 1px solid black; padding: 8px;">Date</th>
-            <td style="border: 1px solid black; padding: 8px;">{{results.date}}</td>
+            <td style="border: 1px solid black; padding: 8px;" id="old_date">{{results.date}}</td>
           </tr>
       </table>
+      <div id="err_c">
+                {{#if error}}
+                <p>{{error}}</p>
+                {{/if}}
+      </div>
       <button type="button" class="btn btn-danger" onClick= "showDelete()">DELETE</button>
       <button type="button" class="btn btn-primary" onClick= "showEdit()">EDIT</button>
     
@@ -43,16 +48,37 @@
       $('#deleteModal').modal('hide');
       window.location.href = '/profile/';
       //location.reload();
-      alert("Activity has been deleted!");
+     alert("Activity has been deleted!");
     }
-    function hideEdit() {
+    function cancelDelete() {
+      //add here goto profile
+      $('#deleteModal').modal('hide');
+      //window.location.href = '/profile/';
+      //location.reload();
+      //alert("Activity has been deleted!");
+    }
+    function cancelEdit() {
       //add here goto href="/activity/{{results.activityId}}"
       //window.location.href = '/activity/' + results.activityId;
       $('#editModal').modal('hide');
       
-      alert("Activity has been edited!");
-      location.reload();
+      //alert("Activity has been edited!");
+      //location.reload();
     }
+
+
+    function hideEdit() 
+    {
+      
+      $('#editModal').modal('hide');
+      // alert("Activity has been edited!");
+      // window.location.href = '/profile/';
+      // location.reload();
+    }
+      
+      //alert("Activity has been edited!");
+      //window.location.href = '/profile/'
+      //location.reload();
 </script>
 
   <!-- DELETE modal -->
@@ -61,13 +87,13 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" href="profile/activity">Confirm Delete</h4>
-        <button type="button" class="close" onClick= "hideDelete()">&times;</button>
+        <button type="button" class="close" onClick= "cancelDelete()">&times;</button>
       </div>
       <div class="modal-body">
         <p>Are you sure you want to delete this log?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onClick= "hideDelete()">Cancel</button>
+        <button type="button" class="btn btn-secondary" onClick= "cancelDelete()">Cancel</button>
         <button type="button" class="btn btn-danger" onClick= "hideDelete()">Delete</button>
       </div>
     </div>
@@ -80,17 +106,11 @@
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">Edit Log</h4>
-          <button type="button" class="close" data-dismiss="modal" onClick= "hideEdit()">&times;</button>
+          <button type="button" class="close" data-dismiss="modal" onClick= "cancelEdit()">&times;</button>
         </div>
         <div class="modal-body">
           <form method="PATCH" action="/{{activityId}}" id="update-form">
-            <div class="form-group">
-              <label for="review">Movie ID:</label>
-              <input type="text" class="form-control" id="movieId" value="{{results.movieId}}" readonly>
-              {{!-- <p><strong>Movie ID: </strong> <a id="movieId">{{results.movieId}}</a> </p> --}}
-              {{!-- <label for="movieName">Movie Name</label>
-              <textarea class="form-control" id="movieName">{{movieName}}</textarea> --}}
-            </div>
+            
             <div class="form-group">
               <p><strong>Movie Name: </strong> {{movieName}} </p>
               {{!-- <label for="movieName">Movie Name</label>
@@ -105,32 +125,51 @@
             </div>
 
             <div class="form-group">
+              <label for="review">Movie ID:</label>
+              <input type="text" class="form-control" id="movieId" value="{{results.movieId}}" readonly>
+              {{!-- <p><strong>Movie ID: </strong> <a id="movieId">{{results.movieId}}</a> </p> --}}
+              {{!-- <label for="movieName">Movie Name</label>
+              <textarea class="form-control" id="movieName">{{movieName}}</textarea> --}}
+            </div>
+            
+
+
+            <div class="form-group">
               <label for="review">Review:</label>
               <input type="text" class="form-control" id="review" value="{{results.review}}">
+
+              
               {{!-- <textarea class="form-control" id="review">{{results.review}}</textarea> --}}
             </div>
 
-            <div class="form-group">
+            {{!-- <div class="form-group">
               <label for="rating">Rating:</label>
               <input type="number" class="form-control" id="rating" value="{{results.rating}}">
-            </div>
+            </div> --}}
+
+            <div class="form-group">
+                    <label for="rating">Rating: </label>
+                    <input type="number" class="form-control" id="rating" min="0.5" max="5" step="0.5" value="{{results.rating}}">
+                    {{!-- <output for="rating" id="ratingOutput">{{results.rating}}</output> --}}
+            </div> 
 
             <div class="form-group">
               <label for="date">Date:</label>
               <input type="text" class="form-control" id="date" value="{{results.date}}">
             </div>
-
+            
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick= "hideEdit()">Cancel</button>
-              <button type="button" class="btn btn-danger" onClick= "hideEdit()">Save Changes</button>
-            </div>
-        
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick= "cancelEdit()">Cancel</button>
+              <button type="button" class="btn btn-danger" id = "submit" onClick= "hideEdit()">Save Changes</button>
+            </div>      
           </form>
         </div>
       </div>
     </div>
   </div>
+  
 <script src = "/public/js/script_activityById.js"> </script>
+<!--script src = "/public/js/Clienterrorhandling.js"> </script-->
 
 
 
