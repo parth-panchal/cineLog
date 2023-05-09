@@ -38,6 +38,14 @@ const createList = async (userId, title, movies) => {
   return newList;
 };
 
+const findUserIdByListId = async (listId) => {
+  listId = validation.checkId(listId, "List ID");
+  const userCollection = await users();
+  const user = await userCollection.findOne({ 'lists': { $elemMatch: { '_id': new ObjectId(listId) } } });
+  user._id = user._id.toString();
+  return user._id;
+}
+
 const getAllLists = async (userId) => {
   //check userID
   userId = validation.checkId(userId, "User ID");
@@ -143,4 +151,4 @@ const updateList = async (listId, title, movies) => {
   return latestList;
 };
 
-export { createList, getAllLists, getListById, deleteList, updateList };
+export { createList, getAllLists, getListById, deleteList, updateList, findUserIdByListId };

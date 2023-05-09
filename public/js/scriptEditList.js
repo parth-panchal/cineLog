@@ -1,7 +1,6 @@
 const form = document.getElementById("editListForm");
 const listId = form.dataset.listId;
 
-console.log(listId)
 
 // Get list data from the server
 async function getListData(listId) {
@@ -44,14 +43,14 @@ async function populateListData(listId) {
 
 populateListData(listId);
 
-function showAlert(message, timeout = 3000) {
+function showAlert(message, color,timeout = 3000) {
   const alertDiv = document.createElement("div");
   alertDiv.textContent = message;
   alertDiv.style.position = "fixed";
   alertDiv.style.top = "20px";
   alertDiv.style.right = "20px";
   alertDiv.style.padding = "10px";
-  alertDiv.style.backgroundColor = "red";
+  alertDiv.style.backgroundColor = color;
   alertDiv.style.color = "white";
   alertDiv.style.zIndex = "1000";
   document.body.appendChild(alertDiv);
@@ -78,6 +77,7 @@ async function searchMovies() {
 
 function displaySearchResults(movies) {
   const searchResults = document.getElementById("searchResults");
+  searchResults.classList.add("horizontal-list");
   const selectedMovies = document.getElementById("selectedMovies");
   searchResults.innerHTML = "";
 
@@ -99,7 +99,7 @@ function displaySearchResults(movies) {
         `#selectedMovies [data-movie-id="${movie.id}"]`
       );
       if (existingItem) {
-        showAlert("Movie already added to the list");
+        showAlert("Movie already added to the list","red");
         return;
       }
 
@@ -154,7 +154,7 @@ form?.addEventListener("submit", async (event) => {
   const titleInput = document.getElementById("listName");
   const title = titleInput.value;
   if (!title) {
-    showAlert("Please enter a list title.");
+    showAlert("Please enter a list title.", "red");
     return;
   }
 
@@ -164,20 +164,20 @@ form?.addEventListener("submit", async (event) => {
   );
 
   if (!movieIds) {
-    showAlert("List is empty");
+    showAlert("List is empty", "red");
     return;
   }
 
   const updatedList = await updateList(listId, title, movieIds);
   if (updatedList) {
-    showAlert("List updated successfully");
+    showAlert("List updated successfully", "green");
 
     // Redirect to the list details page
     setTimeout(() => {
       window.location.href = `/list/${updatedList._id}`;
     }, 3000);
   } else {
-    showAlert("Failed to update the list");
+    showAlert("Failed to update the list", "red");
   }
 });
 

@@ -2,6 +2,7 @@
     1: Reroute POST request to PUT/PATCH
     2: Authenticate that user is logged in at every route
 */
+import {findUserIdByListId} from "./data/lists.js"
 
 const exportedMethods = {
   rewriteUnsupportedBrowserMethods(req, res, next) {
@@ -50,6 +51,16 @@ const exportedMethods = {
       next();
     }
   },
+  async ensureCorrectUser(req, res, next) {
+    const correctUserId = await findUserIdByListId(req.params.listId); // this should be the ID of the user who owns the list
+    const userId = req.session.user._id; // this should be the ID of the logged-in user
+    if (correctUserId !== userId) {
+      return res.status(403).render("error",{error:"You are not authorized to access this page."});
+    }
+  
+    next();
+  }
+  
   
 };
 

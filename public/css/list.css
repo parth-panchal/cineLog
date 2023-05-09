@@ -67,13 +67,13 @@ main {
   margin-bottom: 40px;
 }
 
-.movies {
+/* .movies {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   padding: 20px;
   gap: 20px;
-}
+} */
 
 .movies li {
   list-style-type: none;

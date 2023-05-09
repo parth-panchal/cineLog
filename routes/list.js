@@ -3,10 +3,12 @@ const router = Router();
 import { listData } from "../data/index.js";
 import * as validation from "../utils/validation.js";
 import { getMovieInfo } from "../utils/helper.js";
+import middleware from "../middleware.js";
 import xss from "xss";
 
 router
   .route("/:listId")
+  .all(middleware.ensureCorrectUser)
   .get(async (req, res) => {
     //code to GET a list with listId
     let listId;
@@ -25,7 +27,7 @@ router
       });
       return res.status(200).render("listById", { list, movieList: movieData });
     } catch (e) {
-      return res.status(404).json({ error: e });
+      return res.status(404).render("error", {error:e});
     }
   })
   .delete(async (req, res) => {
@@ -45,7 +47,7 @@ router
       req.session.deleteSuccess = true;
       return res.redirect("/profile/lists");
     } catch (e) {
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).render("error", {error:e});;
     }
   });
 
@@ -61,10 +63,7 @@ router.route("/:listId/in").get(async (req, res) => {
   }
   try {
     const list = await listData.getListById(listId);
-    console.log(list);
-    console.log("done");
     const movieData = await getAllMovieInfo(list.movies);
-    console.log(movieData);
     movieData.forEach((elem) => {
       elem.release_date = elem.release_date.slice(0, 4);
     });
@@ -76,6 +75,7 @@ router.route("/:listId/in").get(async (req, res) => {
 
 router
   .route("/:listId/edit")
+  .all(middleware.ensureCorrectUser)
   .get(async (req, res) => {
     let listId;
     try {
@@ -93,7 +93,7 @@ router
       });
       return res.status(200).render("editList", { list, movieList: movieData });
     } catch (e) {
-      return res.status(404).json({ error: e });
+      return res.status(404).render("error", {error:e});
     }
   })
   .put(async (req, res) => {
@@ -102,14 +102,11 @@ router
     try {
       let listId = validation.checkId(xss(req.params.listId), "List ID");
       let title = validation.checkString(xss(listInfo.title), "Title");
-      console.log(title);
       let movies = validation.checkMovieArray(listInfo.movies, "Movies");
-      console.log(movies);
       const updatedlist = await listData.updateList(listId, title, movies);
-      console.log(updatedlist);
       return res.status(200).json(updatedlist);
     } catch (e) {
-      return res.status(404).send(e.message);
+      return res.status(404).render("error", {error:e});
     }
   });
 

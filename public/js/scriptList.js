@@ -1,11 +1,11 @@
-function showAlert(message, timeout = 3000) {
+function showAlert(message, color, timeout = 3000) {
   const alertDiv = document.createElement("div");
   alertDiv.textContent = message;
   alertDiv.style.position = "fixed";
   alertDiv.style.top = "20px";
   alertDiv.style.right = "20px";
   alertDiv.style.padding = "10px";
-  alertDiv.style.backgroundColor = "red";
+  alertDiv.style.backgroundColor = color;
   alertDiv.style.color = "white";
   alertDiv.style.zIndex = "1000";
   document.body.appendChild(alertDiv);
@@ -54,7 +54,7 @@ function displaySearchResults(movies) {
         `#selectedMovies [data-movie-id="${movie.id}"]`
       );
       if (existingItem) {
-        showAlert("Movie already added to the list");
+        showAlert("Movie already added to the list", "red");
         return;
       }
 
@@ -68,6 +68,7 @@ function displaySearchResults(movies) {
       // Create the "x" button to remove the movie from the list
       const removeButton = document.createElement("button");
       removeButton.textContent = "x";
+      removeButton.classList.add("btn", "btn-primary");
       removeButton.style.marginLeft = "10px";
       removeButton.addEventListener("click", () => {
         selectedMovies.removeChild(newItem);
@@ -97,7 +98,6 @@ async function saveList(title, movies) {
       throw "Error saving the list";
     }
     const data = await response.json();
-    // console.log(data);
     return data;
   } catch (error) {
     console.log("Error saving the list:", error);
@@ -113,7 +113,7 @@ form?.addEventListener("submit", async (event) => {
   const titleInput = document.getElementById("listName");
   const title = titleInput.value;
   if (!title) {
-    showAlert("Please enter a list title.");
+    showAlert("Please enter a list title.", "red");
     return;
   }
 
@@ -123,29 +123,32 @@ form?.addEventListener("submit", async (event) => {
   );
 
   if (!movieIds) {
-    showAlert("List is empty");
+    showAlert("List is empty", "red");
     return;
   }
 
   const newList = await saveList(title, movieIds);
   if (newList) {
-    showAlert("List created successfully");
-    // Hide the "Create List" button
-    const createListButton = document.querySelector(
-      "#createListForm button[type='submit']"
-    );
-    createListButton.style.display = "none";
+    showAlert("List created successfully", "green");
 
-    // Create and show the "View List" button
-    const viewListButton = document.createElement("button");
-    viewListButton.textContent = "View List";
-    viewListButton.addEventListener("click", () => {
-      // Redirect to the list details page
-      window.location.href = `/list/${newList._id}`;
-    });
-    createListButton.parentElement.appendChild(viewListButton);
+    window.location.href = `/list/${newList._id}`;
+    // // Hide the "Create List" button
+    // const createListButton = document.querySelector(
+    //   "#createListForm button[type='submit']"
+    // );
+    // createListButton.style.display = "none";
+
+    // // Create and show the "View List" button
+    // const viewListButton = document.createElement("button");
+    // viewListButton.textContent = "View List";
+    // viewListButton.classList.add("btn","btn-primary");
+    // viewListButton.addEventListener("click", () => {
+    //   // Redirect to the list details page
+    //   window.location.href = `/list/${newList._id}`;
+    // });
+    // createListButton.parentElement.appendChild(viewListButton);
   } else {
-    showAlert("Failed to create the list");
+    showAlert("Failed to create the list","red");
   }
 });
 

@@ -4,7 +4,7 @@
     {{!-- <p>Total movies: {{list.movies.length}}</p> --}}
 </section>
 
-<div class="movies">
+<div class="movies horizontal-list">
     <ul>
         {{#each movieList}}
         <li>
@@ -22,8 +22,8 @@
 
 <form id="deleteListForm" method="POST" action="/list/{{list._id}}">
     <input type="hidden" name="_method" value="DELETE">
-    <button type="submit">Delete List</button>
+    <button type="submit" class="btn btn-primary">Delete List</button>
 </form>
 <form id="editListBtn" method="GET" action="/list/{{list._id}}/edit">
-    <button type="submit">Edit List</button>
+    <button type="submit" class="btn btn-primary">Edit List</button>
 </form>
