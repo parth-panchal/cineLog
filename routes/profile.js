@@ -118,7 +118,11 @@ router
     }
     try {
       let user = await userData.getUserById(req.session.user._id);
-      let userWatchlist = await helper.transformInfo(user.watchlist, "movieInfo", false);
+      let userWatchlist = await helper.transformInfo(
+        user.watchlist,
+        "movieInfo",
+        false
+      );
 
       return res.render("profile", {
         isAuthenticated: true,
@@ -138,9 +142,9 @@ router
       req.body.movieId = await validation.checkMovieId(req.body.movieId);
       req.body.operation = validation.checkOperation(req.body.operation);
     } catch (e) {
-      return res.render("profile", { 
+      return res.render("profile", {
         isAuthenticated: true,
-        error: e 
+        error: e,
       });
     }
     //adding validation to check if movie exists in user watchlist
@@ -160,7 +164,11 @@ router
         req.body.movieId,
         req.body.operation
       );
-      let updatedWatchlist = await helper.transformInfo(updatedWatchlistNumbersObject.watchlist, "movieInfo", false); 
+      let updatedWatchlist = await helper.transformInfo(
+        updatedWatchlistNumbersObject.watchlist,
+        "movieInfo",
+        false
+      );
 
       return res.render("profile", {
         isAuthenticated: true,
@@ -183,7 +191,11 @@ router
     }
     try {
       let user = await userData.getUserById(req.session.user._id);
-      let userLikes = await helper.transformInfo(user.likes, "movieInfo", false);
+      let userLikes = await helper.transformInfo(
+        user.likes,
+        "movieInfo",
+        false
+      );
 
       return res.render("profile", {
         isAuthenticated: true,
@@ -204,8 +216,8 @@ router
       req.body.operation = validation.checkOperation(req.body.operation);
     } catch (e) {
       return res.render("profile", {
-        isAuthenticated: true, 
-        error: e 
+        isAuthenticated: true,
+        error: e,
       });
     }
     //adding validation to check if movie exists in user likes
@@ -225,8 +237,12 @@ router
         req.body.movieId,
         req.body.operation
       );
-      let updatedLikes = await helper.transformInfo(userUpdatedResp.likes, "movieInfo", false);
-      
+      let updatedLikes = await helper.transformInfo(
+        userUpdatedResp.likes,
+        "movieInfo",
+        false
+      );
+
       return res.render("profile", {
         isAuthenticated: true,
         userLikes: updatedLikes,
@@ -248,19 +264,25 @@ router.route("/activity").get(async (req, res) => {
     let logsWithoutMovieTitle = await activityData.getLogsByUserId(
       req.session.user._id
     );
-    let logs = await helper.transformInfo(logsWithoutMovieTitle, "movieInfo", true);
+    let logs = await helper.transformInfo(
+      logsWithoutMovieTitle,
+      "movieInfo",
+      true
+    );
 
     logs = logs.sort((a, b) => {
       return new Date(b.date) - new Date(a.date);
     });
     return res.render("profile", {
-      isAuthenticated: true, 
-      logs: logs, 
-      script_partial: "activity" });
-  } catch (e) {
-    return res.render("profile", { 
       isAuthenticated: true,
-      error: e });
+      logs: logs,
+      script_partial: "activity",
+    });
+  } catch (e) {
+    return res.render("profile", {
+      isAuthenticated: true,
+      error: e,
+    });
   }
 });
 
@@ -273,14 +295,43 @@ router.route("/lists").get(async (req, res) => {
   }
   try {
     let lists = await listData.getAllLists(req.session.user._id);
-    return res.render("profile", { 
+    return res.render("profile", {
       isAuthenticated: true,
-      lists: lists, 
-      script_partial: "lists" });
+      lists: lists,
+      script_partial: "lists",
+    });
   } catch (e) {
     res.render("error", { error: e });
   }
 });
+router
+  .route("/lists/newlist")
+  //middleware such that only logged in users should be able to create a list
+  .get(async (req, res) => {
+    //code here for GET
+    return res.render("createNewList", { title: "New list page" });
+  })
+  .post(async (req, res) => {
+    //code to POST lists for a user
+    let userId;
+    try {
+      userId = req.session.user._id;
+      userId = validation.checkId(userId, "User ID");
+    } catch (error) {
+      return res
+        .status(400)
+        .render("error", { error: "User must be authenticated" });
+    }
+    const listInfo = req.body;
+    try {
+      let title = validation.checkString(xss(listInfo.title), "Title");
+      let movies = validation.checkMovieArray(listInfo.movies, "Movies");
+      const list = await listData.createList(userId, title, movies);
+      return res.status(200).json(list);
+    } catch (e) {
+      return res.status(404).json(e);
+    }
+  });
 
 router
   .route("/following")
@@ -293,8 +344,12 @@ router
     }
     try {
       let user = await userData.getUserById(req.session.user._id);
-      let profilesFollowed = await helper.transformInfo(user.following, "userInfo", false);
-      
+      let profilesFollowed = await helper.transformInfo(
+        user.following,
+        "userInfo",
+        false
+      );
+
       return res.render("profile", {
         isAuthenticated: true,
         following: profilesFollowed,
@@ -325,8 +380,12 @@ router
         req.body.followingId,
         req.body.operation
       );
-      let updatedFollowing = await helper.transformInfo(updatedFollowingIdsObject.following, "userInfo", false);
-      
+      let updatedFollowing = await helper.transformInfo(
+        updatedFollowingIdsObject.following,
+        "userInfo",
+        false
+      );
+
       return res.render("profile", {
         isAuthenticated: true,
         following: updatedFollowing,
