@@ -15,7 +15,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const staticDir = express.static(__dirname + "/public");
 
-
 const handlebarsInstance = exphbs.create({
   defaultLayout: "main",
   // Specify helpers which are only registered on this instance.
