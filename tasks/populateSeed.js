@@ -237,7 +237,7 @@ export default async function main() {
 
     try {
         let newLog = await activityData.createLog(
-            40299,
+            556,
             parshId,
             "Eh",
             1.5,
@@ -289,19 +289,6 @@ export default async function main() {
 
     try {
         let newLog = await activityData.createLog(
-            40332,
-            parthId,
-            "So funny! omg rofl!",
-            5,
-            "2021-06-06"
-        );
-        if (newLog) console.log(`Activity added for: ${parthUsername}`);
-    } catch (e) {
-        console.log(e);
-    }
-
-    try {
-        let newLog = await activityData.createLog(
             553,
             jayanId,
             "This is a review",
@@ -315,7 +302,7 @@ export default async function main() {
 
     try {
         let newLog = await activityData.createLog(
-            7334,
+            550,
             jayanId,
             "This is a review as well!",
             4.5,
@@ -328,9 +315,9 @@ export default async function main() {
 
     try {
         let newLog = await activityData.createLog(
-            10093,
+            550,
             jayanId,
-            "This is a review as well!",
+            "This is another reivew for the same movie!",
             5,
             "2021-06-06"
         );
@@ -393,26 +380,19 @@ export default async function main() {
 
     console.log("================================= Watchlist Seeding =================================");
     try {
+        let result = await userData.updateUserWatchlist(parshId, 341, "add");
+        if(result) console.log(`Movie added to watchlist for: ${parshUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
         let result = await userData.updateUserWatchlist(parshId, 550, "add");
         if(result) console.log(`Movie added to watchlist for: ${parshUsername}`);
     } catch (error) {
         console.log(error);
     }
 
-    try {
-        let result = await userData.updateUserWatchlist(parshId, 556, "add");
-        if(result) console.log(`Movie added to watchlist for: ${parshUsername}`);
-    } catch (error) {
-        console.log(error);
-    }
-
-    try {
-        let result = await userData.updateUserWatchlist(parshId, 10499, "add");
-        if(result) console.log(`Movie added to watchlist for: ${parshUsername}`);
-    } catch (error) {
-        console.log(error);
-    }
-    
     console.log("================================= Likes Seeding =================================");
     try {
         let result = await userData.updateUserLikes(parshId, 341, "add");
