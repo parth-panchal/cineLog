@@ -56,6 +56,7 @@ router
 router.route("/:listId/in").get(async (req, res) => {
   //code to GET a list with listId
   let listId;
+  let isAuthenticated = req.session.user ? true : false;
   try {
     listId = validation.checkId(xss(req.params.listId), "List ID");
   } catch (error) {
