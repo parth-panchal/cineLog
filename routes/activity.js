@@ -7,10 +7,12 @@ import { ObjectId } from 'mongodb';
 import * as helpers from "../utils/helper.js"
 import { getMovieInfo } from "../utils/helper.js";
 import * as validation from "../utils/validation.js"
+import middleware from "../middleware.js";
 import xss from "xss";
     
 router
     .route('/:id')
+    .all(middleware.ensureCorrectUserActivity)
     .get(async (req, res) => {
         let isAuthenticated = req.session.user ? true : false;
         let activityId = xss(req.params.id); 
@@ -19,7 +21,7 @@ router
         try {
             activityId = await validation.checkId(activityId)
         } catch (error) {
-            return res.status(400).render('error').json({error: error});
+            return res.status(400).render('error', {isAuthenticated: isAuthenticated}).json({error: error});
         }
         
         try {

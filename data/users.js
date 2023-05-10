@@ -33,7 +33,7 @@ const createUser = async (fName, lName, username, password) => {
     // Catch the error thrown if username is not found in db
     // But don't do anything since, it means the username is available
   }
-  if (existingUsername) throw `Error: User already exists with that username`;
+  if (existingUsername) throw { message: "User already exists with that username" } ;
 
   let newUser = {
     fName: fName, //.toLowerCase(),

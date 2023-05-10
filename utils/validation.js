@@ -177,6 +177,12 @@ const checkOperation = (operation) => {
   return operation;
 };
 
+const checkAlphaNumeric = (givenString, name) => {
+  checkString(givenString, name);
+  let alphaNumericRegex = /^[a-zA-Z0-9]+$/;
+  if(!givenString.match(alphaNumericRegex)) throw `Error: ${name} can only be letters and numbers`;
+}
+
 export {
   checkString,
   checkStringArray,
@@ -192,4 +198,5 @@ export {
   checkName,
   checkPassword,
   checkOperation,
+  checkAlphaNumeric
 };
