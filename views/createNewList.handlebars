@@ -1,0 +1,15 @@
+<form id="createListForm" action="/profile/lists/newlist" method="POST">
+  <label for="listName">List Name:</label>
+  <input type="text" id="listName" name="listName" required />
+  <br />
+  <label for="searchMovie">Search Movie:</label>
+  <input type="text" id="searchMovie" name="searchMovie" />
+  <button type="button" class="btn btn-primary">Search</button>
+  <ul id="searchResults"></ul>
+  <br />
+  <label>Selected Movies:</label>
+  <ul id="selectedMovies"></ul>
+  <br />
+  <button type="submit" class="btn btn-primary">Create List</button>
+</form>
+<script defer src="/public/js/scriptList.js"></script>

@@ -4,8 +4,11 @@
 {{/if}}
 {{#if isMovieSearch}}
     {{#each results}}
-        <img src="https://image.tmdb.org/t/p/w500{{poster_path}}" alt="Poster for {{title}}" class="img-thumbnail">
-        <a href="/movie/{{id}}" class="searchResult-Title">{{title}}</a>
+        
+        <a href="/movie/{{id}}" class="searchResult-Title">
+            <img src="https://image.tmdb.org/t/p/w500{{poster_path}}" alt="Poster for {{title}}" class="img-thumbnail">
+            {{title}}
+        </a>
         <p>{{overview}}</p>
     {{/each}}
 {{else}}

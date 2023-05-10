@@ -1,21 +1,26 @@
-<h1>Movies I Likes</h1>
-
+{{#unless searchedUser}}
+    <h1>Movies I Like</h1>
+{{/unless}}
 {{#if userLikes}}
 <ul>
-    <li>Test</li>
     {{#each userLikes}}
     <li>
         <a href="/movie/{{id}}">{{title}}</a>
-        <form method="POST" action="/likes">
-            <!-- Is this even the correct way to do it? -->
-            <input type="hidden" name="_method" value="PATCH">
-            <input type="hidden" name="movieId" value="{{this.id}}">
-            <input type="hidden" name="operation" value="remove">
-            <button type="submit">Remove</button>
-        </form>
+        {{#unless ../searchedUser}}
+            <form method="POST" action="/profile/likes">
+                <input type="hidden" name="_method" value="PATCH">
+                <input type="hidden" name="movieId" value="{{id}}" hidden>
+                <input type="hidden" name="operation" value="remove">
+                <button type="submit">Remove from likes</button>
+            </form>
+        {{/unless}}
     </li>
     {{/each}}
 </ul>
 {{else}}
-<p>You haven't liked any movies yet.</p>
+    {{#unless searchedUser}}
+        <p>You haven't liked any movies yet.</p>
+    {{else}}
+        <p>No liked movies available</p>
+    {{/unless}}
 {{/if}}

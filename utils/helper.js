@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 import { ObjectId } from "mongodb";
 import { activity } from "../config/mongoCollections.js";
 import { checkMovieId } from "./validation.js";
+import { userData } from "../data/index.js";
 dotenv.config();
 
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -23,6 +24,7 @@ const searchMovie = async (movieTitle) => {
   const endpoint = "/search/movie";
 
   params.query = movieTitle;
+  params.page = 1;
   const { data } = await axios.get(BASE_URL + endpoint, { params });
   delete params.query;
 
@@ -40,7 +42,6 @@ const getMovieInfo = async (movieId) => {
     const { data } = await axios.get(BASE_URL + endpoint, { params });
     return data;
   } catch (error) {
-    // console.log(error);
     throw "Error: Movie not found";
   }
 };
@@ -80,6 +81,7 @@ const getRecommendationsByMovieId = async (movieId) => {
       });
       data.results = data.results.concat(newData.results);
     }
+  params.page = 1;
   return data.results; //array of objects returned
 };
 
@@ -109,7 +111,7 @@ const getMovieReleaseYear = async (movieId) => {
 };
 
 const getMovieCast = async (movieId) => {
-  const endpoint = `/movie/${movieId}`;
+  const endpoint = `/movie/${movieId}/credits`;
   try {
     const { data } = await axios.get(BASE_URL + endpoint, { params });
     return data.cast;
@@ -128,11 +130,47 @@ const getMovieCrew = async (movieId) => {
   }
 };
 
-//console.log(await getMovieCast(550));
+const calculateMovieStats = (movieActivity) => {
+  const returnObj = {};
 
-/*
-We will require a function which gets the userID from the current session so that's something we need to figure out in the future
-*/
+  returnObj.timesWatched = movieActivity.length;
+
+  const average =
+    movieActivity.reduce((acc, obj) => {
+      return acc + obj.rating;
+    }, 0) / movieActivity.length;
+  const averageRoundOne = Math.floor(average * 10) / 10;
+
+  if (isNaN(averageRoundOne)) {
+    returnObj.averageRating = "Not Yet Rated";
+  } else {
+    returnObj.averageRating = averageRoundOne;
+  }
+  returnObj.reviews = movieActivity.map((activity) => activity.review);
+
+  return returnObj;
+};
+
+const transformInfo = async (givenArr, type, isActivity) => {
+  let responseArr = [];
+
+  responseArr = givenArr.reduce(async (previousPromise, currVal) => {
+    let tempArr = await previousPromise;
+    let infoCall;
+    if (type === "movieInfo" && isActivity) {
+      infoCall = await getMovieInfo(currVal.movieId);
+      currVal.movieTitle = infoCall.title;
+      return tempArr.concat(currVal);
+    } else if (type === "movieInfo" && !isActivity) {
+      infoCall = await getMovieInfo(currVal);
+    } else if (type === "userInfo") {
+      infoCall = await userData.getUserById(currVal);
+    }
+    return tempArr.concat(infoCall);
+  }, Promise.resolve([]));
+
+  return responseArr;
+};
 
 export {
   searchMovie,
@@ -146,4 +184,6 @@ export {
   getMovieReleaseYear,
   getMovieCast,
   getMovieCrew,
+  calculateMovieStats,
+  transformInfo,
 };

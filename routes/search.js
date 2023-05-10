@@ -18,6 +18,7 @@ router
 
         try {
             searchTerm = validation.checkString(searchTerm, "Search Term");
+            validation.checkAlphaNumeric(searchTerm, "Search Term");
         } catch (error) {
             return res.status(400).json({error: error});
         }
@@ -39,26 +40,53 @@ router
     .route('/movies/:searchTerm')
     .get(async (req, res) => {
         let searchTerm = xss(req.params.searchTerm);
-        console.log(searchTerm);
-
+        let isAuthenticated = req.session.user ? true : false;
         try {
             searchTerm = validation.checkString(searchTerm, "Movie Title");
+            validation.checkAlphaNumeric(searchTerm, "Search Term");
         } catch (error) {
             return res.status(400).json({error: error});
         }
 
         try {
             const moviesInfo = await searchMovie(searchTerm);
-            console.log(moviesInfo.results);
+            if(moviesInfo.results.length === 0) {
+                return res.render('searchResults', {
+                    noResults: true
+                });
+            }
             return res.render('searchResults', {
                 results: moviesInfo.results,
                 noResults: false,
-                isMovieSearch: true
+                isMovieSearch: true,
+                isAuthenticated
             });
         } catch (error) {
             res.render('searchResults', {
                 noResults: true
             });
+        }
+    });
+router
+    .route('/movi/:searchTerm')
+    .get(async (req, res) => {
+        let searchTerm = xss(req.params.searchTerm);
+        // console.log(searchTerm);
+
+        try {
+            searchTerm = validation.checkString(searchTerm, "Movie Title");
+            validation.checkAlphaNumeric(searchTerm, "Search Term");
+        } catch (error) {
+            return res.status(400).json({error: error});
+        }
+
+        try {
+            const moviesInfo = await searchMovie(searchTerm);
+            // console.log(moviesInfo.results);
+            return res.json(moviesInfo);
+            
+        } catch (error) {
+            res.status(500).json({ error: 'Internal server error' });
         }
     });
 
@@ -75,7 +103,11 @@ router
 
         try {
             const users = await userData.getUserByUsernamePartial(searchTerm);
-            console.log(users);
+            if(users.length === 0) {
+                return res.render('searchResults', {
+                    noResults: true
+                });
+            }
             return res.render('searchResults', {
                 results: users,
                 noResults: false,

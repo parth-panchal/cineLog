@@ -33,7 +33,7 @@ const createUser = async (fName, lName, username, password) => {
     // Catch the error thrown if username is not found in db
     // But don't do anything since, it means the username is available
   }
-  if (existingUsername) throw `Error: User already exists with that username`;
+  if (existingUsername) throw { message: "User already exists with that username" } ;
 
   let newUser = {
     fName: fName, //.toLowerCase(),
@@ -224,7 +224,6 @@ const updateUserLikes = async (userId, likeMovieId, operation) => {
     }
 
     updatedUser.value._id = updatedUser.value._id.toString();
-
     return updatedUser.value;
   } else {
     throw "Error: Operation can only be 'add' or 'remove'";
@@ -260,7 +259,6 @@ const updateUserWatchlist = async (userId, watchlistMovieId, operation) => {
     if (updatedUser.lastErrorObject.n === 0) {
       throw `Error: Could not add movie with id: ${likeMovieId} to user ${userId} watchlist`;
     }
-
     updatedUser.value._id = updatedUser.value._id.toString();
 
     return updatedUser.value;
@@ -273,7 +271,7 @@ const updateUserWatchlist = async (userId, watchlistMovieId, operation) => {
       { _id: new ObjectId(userId) },
       { $pull: { watchlist: watchlistMovieId } },
       {
-        projection: { _id: 1, watchlistMovieId: 1 },
+        projection: { _id: 1, watchlist: 1 },
         returnDocument: "after",
       }
     );
@@ -303,6 +301,7 @@ const updateUserFollowing = async (userId, followingUserId, operation) => {
   const userCollection = await users();
 
   if (operation === "add") {
+    if(userId === followingUserId) throw `Error: User cannot follow own profile`;
     const existingUser = await getUserById(userId);
     if (existingUser.following.includes(followingUserId))
       throw `Error: User ${followingUserId} already exist in ${userId} follow list`;
@@ -436,7 +435,6 @@ const checkUpdate = (existingUser, updatedUserInfo) => {
 const calculateRecommendationsForUser = async (userId) => {
   let user = await getUserById(userId);
   let userLikes = user.likes;
-  //console.log(userLikes);
   let allRecos = await userLikes.reduce(async (previousPromise, movie) => {
     let all = await previousPromise;
     let movieRecos = await helper.getRecommendationsByMovieId(movie);

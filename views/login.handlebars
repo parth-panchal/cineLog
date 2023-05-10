@@ -2,17 +2,19 @@
     <div class="card" style="width: 18rem;">
         <div class="card-header">Login</div>
         <div class="card-body">
-            <form action="/login" method="POST">
+            <form action="/login" method="POST" id="loginForm">
                 <div class="mb-3">
                     <label for="usernameInput" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="usernameInput" name="usernameInput">
+                    <input type="text" class="form-control" id="usernameInput" name="usernameInput" required>
                 </div>
                 <div class="mb-3">
                     <label for="passwordInput" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="passwordInput" name="passwordInput">
+                    <input type="password" class="form-control" id="passwordInput" name="passwordInput" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit</button>
+
+                <div id="loginErrorDiv" class="error" hidden></div>
             </form>
         </div>
     </div>

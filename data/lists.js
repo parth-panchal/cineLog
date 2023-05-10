@@ -38,13 +38,21 @@ const createList = async (userId, title, movies) => {
   return newList;
 };
 
+const findUserIdByListId = async (listId) => {
+  listId = validation.checkId(listId, "List ID");
+  const userCollection = await users();
+  const user = await userCollection.findOne({ 'lists': { $elemMatch: { '_id': new ObjectId(listId) } } });
+  user._id = user._id.toString();
+  return user._id;
+}
+
 const getAllLists = async (userId) => {
   //check userID
   userId = validation.checkId(userId, "User ID");
   const user = await userData.getUserById(userId);
 
   let movieList = user.lists;
-  if (movieList.length === 0) throw "No lists present for this user Id";
+  // if (movieList.length === 0) throw "No lists present for this user Id";
   movieList.forEach((element) => {
     element._id = element._id.toString();
   });
@@ -134,8 +142,13 @@ const updateList = async (listId, title, movies) => {
   if (updatedInfo.lastErrorObject.n === 0) {
     throw "could not update the list successfully";
   }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  // updatedInfo.value._id = updatedInfo.value._id.toString();
+  // return updatedInfo.value;
+  const latestList = updatedInfo.value.lists.find(
+    (list) => list._id.toString() === listId
+  );
+  
+  return latestList;
 };
 
-export { createList, getAllLists, getListById, deleteList, updateList };
+export { createList, getAllLists, getListById, deleteList, updateList, findUserIdByListId };

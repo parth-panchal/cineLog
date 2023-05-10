@@ -1,0 +1,16 @@
+<form id="editListForm" action="/list/{{list._id}}" method="POST" data-list-id="{{list._id}}">
+    <input type="hidden" name="_method" value="PUT">
+    <label for="listName">List Name:</label>
+    <input type="text" id="listName" name="listName" value="{{list.title}}" required />
+    <br />
+    <label for="searchMovie">Search Movie:</label>
+    <input type="text" id="searchMovie" name="searchMovie" />
+    <button type="button">Search</button>
+    <ul id="searchResults"></ul>
+    <br />
+    <label>Selected Movies:</label>
+    <ul id="selectedMovies"></ul>
+    <br />
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+<script defer src="/public/js/scriptEditList.js"></script>

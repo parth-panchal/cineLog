@@ -1,17 +1,29 @@
-<h1>My Lists</h1>
-
+{{#unless searchedUser}}
+    <h1>My Lists</h1>
+{{/unless}}
 {{#if lists}}
 <ul>
     {{#each lists}}
     <li>
-        <a href="/lists/{{this.id}}">{{this.title}}</a>
+
+        <a href="/list/{{_id}}">{{title}}</a>
+
     </li>
     {{/each}}
 </ul>
 {{else}}
-<p>You haven't created any lists yet.</p>
+    {{#unless searchedUser}}
+        <p>You haven't created any lists yet.</p>
+    {{else}}
+        <p>No lists available</p>
+    {{/unless}}
 {{/if}}
 
-<form method="GET" action="/lists/createList">
-    <button type="submit">Create New List</button>
-</form>
+{{#unless searchedUser}}
+
+    <form method="GET" action="/profile/lists/newList">
+        <button type="submit" class="btn btn-primary">Create New List</button>
+    </form>
+
+
+{{/unless}}

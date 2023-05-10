@@ -1,0 +1,23 @@
+<div id="headerBtn">
+    <h1>{{username}}'s Profile</h1>
+    {{#if isAuthenticated}}
+        {{#unless sameUser}}
+            {{#if alreadyFollowing}}
+                <button class="btn btn-primary" disabled>Following User</button>
+            {{else}}
+                <button class="btn btn-primary" id="addToFollowBtn">Follow User</button>
+                <div id="backendError" class="error" hidden></div>
+            {{/if}}
+        {{/unless}}
+    {{/if}}
+</div>
+<h2>Activity</h2>
+{{> activity }}
+<h2>Likes</h2>
+{{> likes }}
+<h2>Watchlist</h2>
+{{> watchlist }}
+<h2>Lists</h2>
+{{> lists }}
+<h2>Following</h2>
+{{> following }}

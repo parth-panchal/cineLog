@@ -1,0 +1,143 @@
+{{#if isAuthenticated}}
+<h1 id="activityById">Activity Logs</h1>
+    {{#if results}}
+    <img src="https://image.tmdb.org/t/p/w500{{poster_path}}" alt="Poster for {{title}}" class="img-thumbnail">
+    <br>
+    <table>
+          <tr>
+            <th class="table_class" style="">Movie Name</th>
+            <td class="table_class" id="old_movieName">{{movieName}}</td>
+          </tr>
+          <tr>
+            <th class="table_class">Movie ID</th>
+            <td class="table_class" id="old_movieid">{{results.movieId}}</td>
+          </tr>
+          <tr>
+            <th class="table_class">User ID</th>
+            <td class="table_class" id="old_userId">{{results.userId}}</td>
+          </tr>
+          <tr>
+            <th class="table_class">Review</th>
+            <td class="table_class" id="old_review">{{results.review}}</td>
+          </tr>
+          <tr>
+            <th class="table_class">Rating</th>
+            <td class="table_class" id="old_rating">{{results.rating}}</td>
+          </tr>
+          <tr>
+            <th class="table_class">Date</th>
+            <td class="table_class" id="old_date">{{results.date}}</td>
+          </tr>
+      </table>
+      <div id="err_c">
+                {{#if error}}
+                <p>{{error}}</p>
+                {{/if}}
+      </div>
+      <button type="button" class="btn btn-danger" onClick= "showDelete()">DELETE</button>
+      <button type="button" class="btn btn-primary" onClick= "showEdit()">EDIT</button>
+    
+  <script>
+    function showDelete() {
+      $('#deleteModal').modal('show');
+    }
+    function showEdit() {
+      $('#editModal').modal('show');
+    }
+    function hideDelete() {
+      $('#deleteModal').modal('hide');
+      window.location.href = '/profile/';
+      alert("Activity has been deleted!");
+    }
+    function cancelDelete() {
+      $('#deleteModal').modal('hide');
+      
+    }
+    function cancelEdit() {
+      $('#editModal').modal('hide');
+    }
+
+
+    function hideEdit() 
+    { 
+      $('#editModal').modal('hide');
+    }
+</script>
+
+  <!-- DELETE modal -->
+  <div class="modal" id="deleteModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirm Delete</h4>
+        <button type="button" class="close" onClick= "cancelDelete()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this log?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onClick= "cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" onClick= "hideDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT modal -->
+  <div class="modal" id="editModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Edit Log</h4>
+          <button type="button" class="close" data-dismiss="modal" onClick= "cancelEdit()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="/{{activityId}}" id="update-form">
+            <input type="hidden" name="_method" value="PATCH">
+            
+            <div class="form-group">
+              <p><strong>Movie Name: </strong> {{movieName}} </p>
+            </div>
+
+            <div class="form-group">
+              <p><strong>User ID: </strong> <a id="userId">{{results.userId}}</a> </p>
+            </div>
+
+            <div class="form-group">
+              <p><strong>Movie ID: </strong> <span id="movieId">{{results.movieId}}</span> </p>
+            </div>
+            
+
+
+            <div class="form-group">
+              <label for="review">Review:</label>
+              <input type="text" class="form-control" id="review" value="{{results.review}}">
+            </div>
+
+            <div class="form-group">
+                    <label for="rating">Rating: </label>
+                    <input type="number" class="form-control" id="rating" min="0.5" max="5" step="0.5" value="{{results.rating}}">
+            </div> 
+
+            <div class="form-group">
+              <label for="date">Date:</label>
+              <input type="text" class="form-control" id="date" value="{{results.date}}">
+            </div>
+            
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick= "cancelEdit()">Cancel</button>
+              <button type="button" class="btn btn-danger" id = "submit" onClick= "hideEdit()">Save Changes</button>
+            </div>      
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<script src = "/public/js/script_activityById.js"> </script>
+      
+  {{else}}
+    <p>No activity logs found.</p>
+  {{/if}}
+
+{{/if}}

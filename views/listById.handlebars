@@ -1,0 +1,29 @@
+<section class="list-details">
+    <h1>{{list.title}}</h1>
+    {{!-- <p>Created by: {{user.username}}</p> --}}
+    {{!-- <p>Total movies: {{list.movies.length}}</p> --}}
+</section>
+
+<div class="movies horizontal-list">
+    <ul>
+        {{#each movieList}}
+        <li>
+            <img src="https://image.tmdb.org/t/p/w500{{poster_path}}" alt="Poster for {{title}}" class="img-thumbnail">
+            <div class="movie-details">
+                <h3><a href="/movie/{{id}}" class="searchResult-Title">{{title}}</a></h3>
+                <p>{{release_date}}</p>
+                {{!-- <p>Director: {{this.director}}</p>
+                <p>Rating: {{this.rating}}</p> --}}
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+
+<form id="deleteListForm" method="POST" action="/list/{{list._id}}">
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit" class="btn btn-primary">Delete List</button>
+</form>
+<form id="editListBtn" method="GET" action="/list/{{list._id}}/edit">
+    <button type="submit" class="btn btn-primary">Edit List</button>
+</form>

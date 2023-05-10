@@ -9,12 +9,12 @@ const updateTrending = async (activityId, date, action) => {
   const trendingData = await trending();
   if (action === "add") {
     const existingTrend = await trendingData.findOne({ date: date });
-    if (!existingTrend)
-      await trendingData.insertOne({
+    if (!existingTrend) {
+      let addition = await trendingData.insertOne({
         date: date,
         activityIds: [activityId],
       });
-    else
+    } else
       await trendingData.findOneAndUpdate(
         { date: date },
         { $push: { activityIds: activityId } },
@@ -26,7 +26,7 @@ const updateTrending = async (activityId, date, action) => {
       { $pull: { activityIds: activityId } },
       { returnDocument: "after" }
     );
-    if (deletedTrend.activityIds.length === 0)
+    if (deletedTrend.value.activityIds.length === 0)
       await trendingData.deleteOne({ date: date });
   }
 };
@@ -46,7 +46,12 @@ const calculateTrending = async () => {
     if (movieDict[movieId]) movieDict[movieId]++;
     else movieDict[movieId] = 1;
   }
-  return movieDict;
+  let answer = Object.entries(movieDict).sort((a, b) => b[1] - a[1]);
+  let sortedMovieDict = {};
+  answer.forEach((item) => {
+    sortedMovieDict[item[0]] = item[1];
+  });
+  return sortedMovieDict;
 };
 
 //trending for a specific date
@@ -64,4 +69,3 @@ const calculateTrendingForDate = async (date) => {
 };
 
 export { updateTrending, calculateTrending, calculateTrendingForDate };
-

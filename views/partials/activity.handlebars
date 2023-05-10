@@ -1,15 +1,18 @@
-<h1>My Lists</h1>
-
+{{#unless searchedUser}}
+    <h1>My Activity</h1>
+{{/unless}}
 {{#if logs}}
-<ul>
-    {{#each logs}}
-    <li>
-        {{!-- how do i make the call to get the movie title here? --}}
-        <a href="/activity/{{this._id}}">{{this.movieId}} logged on {{this.date}}</a>
-    </li>
-    {{/each}}
-</ul>
+    <ul>
+        {{#each logs}}
+        <li>
+            <a href="/activity/{{_id}}">{{movieTitle}} logged on {{date}}</a>
+        </li>
+        {{/each}}
+    </ul>
 {{else}}
-<p>You haven't logged any movies yet.</p>
+    {{#unless searchedUser}}
+        <p>You haven't logged any movies yet.</p>
+    {{else}}
+        <p>No activity available</p>
+    {{/unless}}
 {{/if}}
-
