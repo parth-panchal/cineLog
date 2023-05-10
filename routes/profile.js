@@ -309,7 +309,7 @@ router
   //middleware such that only logged in users should be able to create a list
   .get(async (req, res) => {
     //code here for GET
-    return res.render("createNewList", { title: "New list page" });
+    return res.render("createNewList", { isAuthenticated: true,title: "New list page" });
   })
   .post(async (req, res) => {
     //code to POST lists for a user

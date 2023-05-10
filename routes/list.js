@@ -11,6 +11,7 @@ router
   .all(middleware.ensureCorrectUser)
   .get(async (req, res) => {
     //code to GET a list with listId
+    let isAuthenticated = req.session.user ? true : false;
     let listId;
     try {
       listId = validation.checkId(xss(req.params.listId), "List ID");
@@ -25,7 +26,7 @@ router
       movieData.forEach((elem) => {
         elem.release_date = elem.release_date.slice(0, 4);
       });
-      return res.status(200).render("listById", { list, movieList: movieData });
+      return res.status(200).render("listById", { isAuthenticated, list, movieList: movieData });
     } catch (e) {
       return res.status(404).render("error", {error:e});
     }
@@ -77,6 +78,8 @@ router
   .route("/:listId/edit")
   .all(middleware.ensureCorrectUser)
   .get(async (req, res) => {
+    let isAuthenticated = req.session.user ? true : false;
+
     let listId;
     try {
       listId = validation.checkId(xss(req.params.listId), "List ID");
@@ -91,7 +94,7 @@ router
       movieData.forEach((elem) => {
         elem.release_date = elem.release_date.slice(0, 4);
       });
-      return res.status(200).render("editList", { list, movieList: movieData });
+      return res.status(200).render("editList", { isAuthenticated, list, movieList: movieData });
     } catch (e) {
       return res.status(404).render("error", {error:e});
     }
