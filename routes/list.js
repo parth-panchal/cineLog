@@ -13,6 +13,7 @@ router
     //code to GET a list with listId
     let isAuthenticated = req.session.user ? true : false;
     let listId;
+    let isAuthenticated = req.session.user ? true : false;
     try {
       listId = validation.checkId(xss(req.params.listId), "List ID");
     } catch (error) {
@@ -83,6 +84,7 @@ router
     let isAuthenticated = req.session.user ? true : false;
 
     let listId;
+    let isAuthenticated = req.session.user ? true : false;
     try {
       listId = validation.checkId(xss(req.params.listId), "List ID");
     } catch (error) {
