@@ -1,3 +1,4 @@
+{{#if isAuthenticated}}
 <h1 id="activityById">Activity Logs</h1>
     {{#if results}}
     <h2 id="activityById_mname"></h2>
@@ -139,5 +140,4 @@
     <p>No activity logs found.</p>
   {{/if}}
 
-</body>
-
+{{/if}}
