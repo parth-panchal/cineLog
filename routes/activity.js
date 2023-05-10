@@ -14,6 +14,7 @@ router
     .route('/:id')
     .all(middleware.ensureCorrectUserActivity)
     .get(async (req, res) => {
+        let isAuthenticated = req.session.user ? true : false;
         let activityId = xss(req.params.id); 
         let isAuthenticated = req.session.user ? true : false;
 
@@ -32,11 +33,14 @@ router
             //render the error handlebar for all the catch
             return;
         }
+    }
     })
 
     .delete(async (req,res) => {
-        let activityId = xss(req.params.id);
+        let isAuthenticated = req.session.user ? true : false;
 
+        let activityId = xss(req.params.id);
+        if (isAuthenticated) { 
         try {
             activityId = await validation.checkId(activityId)
         } catch (error) {
@@ -55,10 +59,12 @@ router
         } catch (error) {
             res.status(500).json({ error});
         }
-
+    }
     })
 
     .patch(async (req, res) => {
+        let isAuthenticated = req.session.user ? true : false;
+
         let activityInfo = req.body;
         let activityId = xss(req.params.id);
         let userId = xss(req.session.user._id);
@@ -69,6 +75,7 @@ router
 
         //here user id will remain the same
         //the only things that the user can change are review rating movie id and date
+        if (isAuthenticated) { 
 
         try{
             const updatedActivity = await activityData.editLog(activityId, movieId, userId, review, rating, date);
@@ -76,6 +83,7 @@ router
         } catch (error) {
             return res.status(400).render('error', { error: error.toString() });
         }
+    }
     })
 
 export default router;
