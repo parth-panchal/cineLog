@@ -132,7 +132,7 @@ router
         script_partial: "watchlist",
       });
     } catch (e) {
-      console.log(e);
+      return res.render("error",{error:e});
     }
   })
   .patch(async (req, res) => {
@@ -158,7 +158,7 @@ router
         throw `Movie does not exist in user watchlist`;
       }
     } catch (e) {
-      console.log(e);
+      return res.render("error",{error:e});
     }
     try {
       const updatedWatchlistNumbersObject = await userData.updateUserWatchlist(
@@ -179,7 +179,7 @@ router
         script_partial: "watchlist",
       });
     } catch (e) {
-      console.log(e);
+      return res.render("error",{error:e});
     }
   });
 
@@ -207,7 +207,7 @@ router
         script_partial: "likes",
       });
     } catch (e) {
-      console.log(e);
+      return res.render("error",{error:e});
     }
   })
   .patch(async (req, res) => {
@@ -233,7 +233,7 @@ router
         throw `Movie does not exist in user likes`;
       }
     } catch (e) {
-      console.log(e);
+      return res.render("error",{error:e});
     }
     try {
       const userUpdatedResp = await userData.updateUserLikes(
@@ -254,7 +254,7 @@ router
         script_partial: "likes",
       });
     } catch (e) {
-      console.log(e);
+      return res.render("error",{error:e});
     }
   });
 
@@ -263,7 +263,7 @@ router.route("/activity").get(async (req, res) => {
   try {
     req.session.user._id = validation.checkId(req.session.user._id);
   } catch (e) {
-    console.log(e); //change this later
+    return res.render("error",{error:e}); //change this later
   }
   try {
     let logsWithoutMovieTitle = await activityData.getLogsByUserId(
@@ -330,10 +330,12 @@ router
       userId = req.session.user._id;
       userId = validation.checkId(userId, "User ID");
     } catch (error) {
-      return res.status(400).render("error", {
-        error: "User must be authenticated",
-        isAuthenticated: isAuthenticated,
-      });
+      return res
+        .status(400)
+        .render("error", {
+          error: "User must be authenticated",
+          isAuthenticated: isAuthenticated,
+        });
     }
     const listInfo = req.body;
     try {
@@ -386,7 +388,7 @@ router
         throw `User does not exist in user following`;
       }
     } catch (e) {
-      console.log(e);
+      return res.render("error",{error:e});
     }
     try {
       const updatedFollowingIdsObject = await userData.updateUserFollowing(
