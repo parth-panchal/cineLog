@@ -393,6 +393,34 @@ export default async function main() {
         console.log(error);
     }
 
+    try {
+        let result = await userData.updateUserWatchlist(kimId, 550, "add");
+        if(result) console.log(`Movie added to watchlist for: ${kimUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserWatchlist(monId, 550, "add");
+        if(result) console.log(`Movie added to watchlist for: ${parshUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserWatchlist(gregId, 550, "add");
+        if(result) console.log(`Movie added to watchlist for: ${parshUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserWatchlist(kimId, 341, "add");
+        if(result) console.log(`Movie added to watchlist for: ${parshUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
     console.log("================================= Likes Seeding =================================");
     try {
         let result = await userData.updateUserLikes(parshId, 341, "add");
@@ -407,10 +435,137 @@ export default async function main() {
     } catch (error) {
         console.log(error);
     }
+
+    try {
+        let result = await userData.updateUserLikes(jayanId, 341, "add");
+        if(result) console.log(`Movie added to likes for: ${jayanUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserLikes(parthId, 550, "add");
+        if(result) console.log(`Movie added to likes for: ${parthUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserLikes(lisaId, 341, "add");
+        if(result) console.log(`Movie added to likes for: ${lisaUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserLikes(gregId, 550, "add");
+        if(result) console.log(`Movie added to likes for: ${gregUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserLikes(monId, 341, "add");
+        if(result) console.log(`Movie added to likes for: ${monUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserLikes(monId, 550, "add");
+        if(result) console.log(`Movie added to likes for: ${monUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserLikes(kimId, 341, "add");
+        if(result) console.log(`Movie added to likes for: ${kimUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserLikes(timId, 550, "add");
+        if(result) console.log(`Movie added to likes for: ${timUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserLikes(timId, 341, "add");
+        if(result) console.log(`Movie added to likes for: ${timUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserLikes(chrisId, 550, "add");
+        if(result) console.log(`Movie added to likes for: ${chrisUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
     console.log("================================= Follower Seeding =================================");
     try {
         let result = await userData.updateUserFollowing(parshId, parthId, "add");
         if(result) console.log(`User added to following for: ${parshUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserFollowing(jayanId, parshId, "add");
+        if(result) console.log(`User added to following for: ${jayanUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserFollowing(patId, kimId, "add");
+        if(result) console.log(`User added to following for: ${patUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserFollowing(kimId, parthId, "add");
+        if(result) console.log(`User added to following for: ${kimUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserFollowing(parshId, timId, "add");
+        if(result) console.log(`User added to following for: ${parshUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserFollowing(timId, lisaId, "add");
+        if(result) console.log(`User added to following for: ${timUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserFollowing(jayanId, gregId, "add");
+        if(result) console.log(`User added to following for: ${jayanUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserFollowing(chrisId, monId, "add");
+        if(result) console.log(`User added to following for: ${chrisUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await userData.updateUserFollowing(chrisId, mayId, "add");
+        if(result) console.log(`User added to following for: ${chrisUsername}`);
     } catch (error) {
         console.log(error);
     }
@@ -422,4 +577,51 @@ export default async function main() {
     } catch (error) {
         console.log(error);
     }
+
+    try {
+        let result = await listData.createList(parshId, "Best Movies of 2022", [550, 551, 552]);
+        if(result) console.log(`List created for: ${parshUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await listData.createList(mayId, "Anime", [550, 551, 552]);
+        if(result) console.log(`List created for: ${mayUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await listData.createList(timId, "My List", [550, 551, 552]);
+        if(result) console.log(`List created for: ${timUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await listData.createList(gregId, "Anime", [550, 551, 552]);
+        if(result) console.log(`List created for: ${gregUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await listData.createList(parthId, "My Waifus", [550, 551, 552]);
+        if(result) console.log(`List created for: ${parshUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        let result = await listData.createList(mayId, "Anime 2014", [550, 551, 552]);
+        if(result) console.log(`List created for: ${parshUsername}`);
+    } catch (error) {
+        console.log(error);
+    }
+
+    console.log("=================================");
+    console.log(`Note: 3 Users ${atharUsername} - ${lukeUsername} - ${natUsername} are blank accounts with no activity/watchlist/likes/lists/followers
+Note: All users have the same password for simple testing purposes`);
+    console.log("================================="); 
 }
