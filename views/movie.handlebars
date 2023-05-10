@@ -1,48 +1,52 @@
-<img src="https://image.tmdb.org/t/p/w500{{movieInfo.poster_path}}" alt="Poster for {{movieInfo.title}}" class="img-thumbnail">
 <h2>{{movieInfo.title}}</h2>
+<img src="https://image.tmdb.org/t/p/w500{{movieInfo.poster_path}}" alt="Poster for {{movieInfo.title}}"
+    class="img-thumbnail">
+<br>
 <p>{{movieInfo.overview}}</p>
 <p>Release Date: <span id="movieReleaseDate">{{movieInfo.release_date}}</span></p>
-<p>Genres: 
+<p>Genres:
     {{#each movieInfo.genres}}
-        {{name}} &ensp;
-    {{/each}} 
+    {{name}} &ensp;
+    {{/each}}
 </p>
-<p>Cast: 
+<p>Cast:
     {{#each movieCast}}
-        {{name}} &ensp;
+    {{name}} &ensp;
     {{/each}}
 </p>
 <p>Average Rating: {{activityInfo.averageRating}}</p>
 <p>Number of Times Watched By Users: {{activityInfo.timesWatched}}</p>
 <p>Reviews:</p>
 {{#each activityInfo.reviews}}
-    <p>{{this}}</p>
+<p>{{this}}</p>
 {{else}}
-    <p>No Reviews Yet</p>
+<p>No Reviews Yet</p>
 {{/each}}
 
 {{#if isAuthenticated}}
-    <p>People You Follow Who've Watched This: 
-        {{#each followingInfo}}
-            {{this}} &ensp;
-        {{else}}
-            None
-        {{/each}}
-    </p>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#activityModal">Add to Activity</button>
-    {{#if alreadyPresentWatchlist}}
-        <button type="button" class="btn btn-primary" disabled>Added to Watchlist</button>
+<p>People You Follow Who've Watched This:
+    {{#each followingInfo}}
+    {{this}} &ensp;
     {{else}}
-        <button type="button" class="btn btn-primary" id="addToWatchlistBtn">Add to Watchlist</button>
-    {{/if}}
-    {{#if alreadyPresentLikes}}
-        <button type="button" class="btn btn-primary" disabled>Added to Likes</button>
-    {{else}}
-        <button type="button" class="btn btn-primary" id="addToLikesBtn">Add to Likes</button>
-    {{/if}}
-    <div id="backendError" class="error" hidden></div>
+    None
+    {{/each}}
+</p>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#activityModal">Add to
+    Activity</button>
+{{#if alreadyPresentWatchlist}}
+<button type="button" class="btn btn-primary" disabled>Added to Watchlist</button>
+{{else}}
+<button type="button" class="btn btn-primary" id="addToWatchlistBtn">Add to Watchlist</button>
+{{/if}}
+{{#if alreadyPresentLikes}}
+<button type="button" class="btn btn-primary" disabled>Added to Likes</button>
+{{else}}
+<button type="button" class="btn btn-primary" id="addToLikesBtn">Add to Likes</button>
+{{/if}}
+<div id="backendError" class="error" hidden></div>
 
-    <div class="modal fade" id="activityModal" tabindex="-1" role="dialog" aria-labelledby="activityModal" aria-hidden="true">
+<div class="modal fade" id="activityModal" tabindex="-1" role="dialog" aria-labelledby="activityModal"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
         <div class="modal-header">
@@ -52,15 +56,15 @@
             </button>
         </div>
         <div class="modal-body">
-            <form action="" method="post" id="activityCreateForm" name="activityCreateForm">
+            <form action="/" method="post" id="activityCreateForm" name="activityCreateForm">
                 <div class="mb-3">
                     <label for="formCreateRating" class="form-label">Rating: </label>
-                    <input type="range" class="form-range" name="formCreateRating" id="formCreateRating" min="0.5" max="5" step="0.5" value="2.5" required>
+                    <input type="range" class="form-range" name="formCreateRating" id="formCreateRating" min="0.5" max="5" step="0.5" value="2.5">
                     <output id="ratingValue">2.5</output>/5 stars
                 </div> 
                 <div class="mb-3">           
                     <label for="formCreateReview" class="form-label">Review: </label>
-                    <input type="textarea" class="form-control" name="formCreateReview" id="formCreateReview" rows="3" required>
+                    <input  class="form-control" name="formCreateReview" id="formCreateReview">
                 </div>
                 <div class="mb-3">
                     <label for="formCreateDate">Date Watched: </label>
@@ -75,14 +79,5 @@
         </div>
         </div>
     </div>
-    </div>
+</div>
 {{/if}}
-{{!-- 
-    Synopsis                -- Done
-    Cast                    -- Done              
-    Year of Release         -- Done
-    Movie Rating from our users -- Done
-    Number of times a movie has been watched by all users: Go through the activity for all users and find the movieID   -- Done
-    Reviews of that movie provided by different users       -- Done
-    Logged in User:, show activity on the movie based on profiles followed by the user
- --}}

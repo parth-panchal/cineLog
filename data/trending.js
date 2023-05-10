@@ -14,7 +14,6 @@ const updateTrending = async (activityId, date, action) => {
         date: date,
         activityIds: [activityId],
       });
-      console.log(addition);
     } else
       await trendingData.findOneAndUpdate(
         { date: date },
@@ -27,8 +26,6 @@ const updateTrending = async (activityId, date, action) => {
       { $pull: { activityIds: activityId } },
       { returnDocument: "after" }
     );
-    console.log("here");
-    console.log(deletedTrend);
     if (deletedTrend.value.activityIds.length === 0)
       await trendingData.deleteOne({ date: date });
   }

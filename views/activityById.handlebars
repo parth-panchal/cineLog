@@ -1,7 +1,8 @@
+{{#if isAuthenticated}}
 <h1 id="activityById">Activity Logs</h1>
     {{#if results}}
-    <h2 id="activityById_mname"></h2>
     <img src="https://image.tmdb.org/t/p/w500{{poster_path}}" alt="Poster for {{title}}" class="img-thumbnail">
+    <br>
     <table>
           <tr>
             <th class="table_class" style="">Movie Name</th>
@@ -17,7 +18,7 @@
           </tr>
           <tr>
             <th class="table_class">Review</th>
-            <td class="table_class" id="old_review">{{results.review}}</td>=
+            <td class="table_class" id="old_review">{{results.review}}</td>
           </tr>
           <tr>
             <th class="table_class">Rating</th>
@@ -68,7 +69,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" href="profile/activity">Confirm Delete</h4>
+        <h4 class="modal-title">Confirm Delete</h4>
         <button type="button" class="close" onClick= "cancelDelete()">&times;</button>
       </div>
       <div class="modal-body">
@@ -91,7 +92,8 @@
           <button type="button" class="close" data-dismiss="modal" onClick= "cancelEdit()">&times;</button>
         </div>
         <div class="modal-body">
-          <form method="PATCH" action="/{{activityId}}" id="update-form">
+          <form method="POST" action="/{{activityId}}" id="update-form">
+            <input type="hidden" name="_method" value="PATCH">
             
             <div class="form-group">
               <p><strong>Movie Name: </strong> {{movieName}} </p>
@@ -138,5 +140,4 @@
     <p>No activity logs found.</p>
   {{/if}}
 
-</body>
-
+{{/if}}

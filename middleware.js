@@ -3,7 +3,7 @@
     2: Authenticate that user is logged in at every route
 */
 import { activityData } from "./data/index.js";
-import {findUserIdByListId} from "./data/lists.js"
+import { findUserIdByListId } from "./data/lists.js";
 
 const exportedMethods = {
   rewriteUnsupportedBrowserMethods(req, res, next) {
@@ -56,21 +56,25 @@ const exportedMethods = {
     const correctUserId = await findUserIdByListId(req.params.listId); // this should be the ID of the user who owns the list
     const userId = req.session.user._id; // this should be the ID of the logged-in user
     if (correctUserId !== userId) {
-      return res.status(403).render("error",{error:"You are not authorized to access this page.", isAuthenticated: true});
+      return res.status(403).render("error", {
+        error: "You are not authorized to access this page.",
+        isAuthenticated: true,
+      });
     }
-  
+
     next();
   },
   async ensureCorrectUserActivity(req, res, next) {
     const { userId } = await activityData.getLogById(req.params.id);
     const loggedInUserId = req.session.user._id;
     if (userId !== loggedInUserId) {
-      return res.status(403).render("error", {error: "You are not authorized to access this page.", isAuthenticated: true});
+      return res.status(403).render("error", {
+        error: "You are not authorized to access this page.",
+        isAuthenticated: true,
+      });
     }
-     next();
-  }
-  
-  
+    next();
+  },
 };
 
 export default exportedMethods;
