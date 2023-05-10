@@ -237,7 +237,7 @@ export default async function main() {
 
     try {
         let newLog = await activityData.createLog(
-            556,
+            551,
             parshId,
             "Eh",
             1.5,
