@@ -143,6 +143,12 @@ const checkString = (strVal, name) => {
     return operation;
   };
 
+  const checkAlphaNumeric = (givenString, name) => {
+    checkString(givenString, name);
+    let alphaNumericRegex = /^[a-zA-Z0-9]+$/;
+    if(!givenString.match(alphaNumericRegex)) throw `Error: ${name} can only be letters and numbers`;
+  }
+
 (function ($) { 
 
     // ===================== Sign Up =====================
@@ -228,7 +234,7 @@ const checkString = (strVal, name) => {
         
     })
 
-    // ===================== Sign Up =====================
+    // ===================== Login =====================
 
     let loginForm = $('#loginForm'),
         loginErrorDiv = $('#loginErrorDiv');
@@ -270,8 +276,8 @@ const checkString = (strVal, name) => {
 
         if(errors.length > 0) {
             event.preventDefault();
-            signupErrorDiv.text(errors);
-            signupErrorDiv.removeAttr("hidden");
+            loginErrorDiv.text(errors);
+            loginErrorDiv.removeAttr("hidden");
             return;
         }
     })
@@ -309,7 +315,7 @@ const checkString = (strVal, name) => {
         if(searchChoice !== 'movies' && searchChoice !== 'users') errors.push("Search choice must only be 'Movies' or 'Users'");
 
         try {
-            searchTerm = checkString(searchTerm, "Search Term");
+            searchTerm = checkAlphaNumeric(searchTerm, "Search Term");
         } catch (error) {
             errors.push(error);
         }
@@ -332,12 +338,14 @@ const checkString = (strVal, name) => {
         addToLikesBtn = $(`#addToLikesBtn`),
         errorDiv = $(`#error`),
         backendErrorDiv = $(`#backendError`);
+        movieReleaseDate = $(`#movieReleaseDate`);
 
     activityForm.submit(async (event) => {
         event.preventDefault();
         let activityRating = activityRatingInput.val();
         let activityReview = activityReviewInput.val();
         let activityDate = activityDateInput.val();
+        let movieRD = movieReleaseDate.html();
 
         let errors = [];
         errorDiv.text('');
@@ -377,6 +385,10 @@ const checkString = (strVal, name) => {
 
         try {
             activityDate = checkDate(activityDate, "Date");
+            const actDate = new Date(activityDate.replace(/-/g, '\/'));
+            const movieDate = new Date(movieRD.replace(/-/g, '\/'));
+
+            if(actDate < movieDate || actDate > new Date()) throw "Error: Date cannot be before release date or after current date";
         } catch (error) {
             errors.push(error);
         }

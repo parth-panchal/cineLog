@@ -83,13 +83,15 @@ const editLog = async (activityId, movieId, userId, review, rating, date) => {
   
   date = validation.checkDate(date, "Date");
 
-  movieId = validation.checkMovieId(movieId, "Movie ID");
+  validation.checkMovieId(movieId, "Movie ID");
   userId = validation.checkId(userId, "User ID");
 
   const activities = await activity(); 
   const log = await getLogById(activityId);
   
   const update = {
+    movieId: movieId,
+    userId: userId,
     review: review,
     rating: rating,
     date: date,

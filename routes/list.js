@@ -12,6 +12,7 @@ router
   .get(async (req, res) => {
     //code to GET a list with listId
     let listId;
+    let isAuthenticated = req.session.user ? true : false;
     try {
       listId = validation.checkId(xss(req.params.listId), "List ID");
     } catch (error) {
@@ -25,7 +26,7 @@ router
       movieData.forEach((elem) => {
         elem.release_date = elem.release_date.slice(0, 4);
       });
-      return res.status(200).render("listById", { list, movieList: movieData });
+      return res.status(200).render("listById", { list, movieList: movieData, isAuthenticated: isAuthenticated });
     } catch (e) {
       return res.status(404).render("error", {error:e});
     }
@@ -33,6 +34,7 @@ router
   .delete(async (req, res) => {
     //code to DELETE a list
     let listId;
+    let isAuthenticated = req.session.user ? true : false;
     try {
       listId = validation.checkId(xss(req.params.listId), "List ID");
     } catch (error) {
@@ -47,13 +49,14 @@ router
       req.session.deleteSuccess = true;
       return res.redirect("/profile/lists");
     } catch (e) {
-      return res.status(500).render("error", {error:e});;
+      return res.status(500).render("error", {error:e, isAuthenticated: isAuthenticated});;
     }
   });
 
 router.route("/:listId/in").get(async (req, res) => {
   //code to GET a list with listId
   let listId;
+  let isAuthenticated = req.session.user ? true : false;
   try {
     listId = validation.checkId(xss(req.params.listId), "List ID");
   } catch (error) {
@@ -78,6 +81,7 @@ router
   .all(middleware.ensureCorrectUser)
   .get(async (req, res) => {
     let listId;
+    let isAuthenticated = req.session.user ? true : false;
     try {
       listId = validation.checkId(xss(req.params.listId), "List ID");
     } catch (error) {
@@ -91,9 +95,9 @@ router
       movieData.forEach((elem) => {
         elem.release_date = elem.release_date.slice(0, 4);
       });
-      return res.status(200).render("editList", { list, movieList: movieData });
+      return res.status(200).render("editList", { list, movieList: movieData, isAuthenticated: isAuthenticated });
     } catch (e) {
-      return res.status(404).render("error", {error:e});
+      return res.status(404).render("error", {error:e, isAuthenticated: isAuthenticated});
     }
   })
   .put(async (req, res) => {
@@ -106,7 +110,7 @@ router
       const updatedlist = await listData.updateList(listId, title, movies);
       return res.status(200).json(updatedlist);
     } catch (e) {
-      return res.status(404).render("error", {error:e});
+      return res.status(404).render("error", {error:e, isAuthenticated: isAuthenticated});
     }
   });
 
