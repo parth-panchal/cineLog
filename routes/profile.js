@@ -40,6 +40,7 @@ router
       let userDetails = await userData.getUserById(req.session.user._id); //not sure if this is the right way to get the user id
       return res.render("profile", {
         isAuthenticated: true,
+        title: "Profile",
         userDetails: userDetails,
         script_partial: "userInfo",
       }); //use id userDetails in homepage hbs to get details
@@ -125,6 +126,7 @@ router
       );
 
       return res.render("profile", {
+        title: "Watchlist",
         isAuthenticated: true,
         userWatchlist: userWatchlist,
         script_partial: "watchlist",
@@ -171,6 +173,7 @@ router
       );
 
       return res.render("profile", {
+        title: "Watchlist",
         isAuthenticated: true,
         userWatchlist: updatedWatchlist,
         script_partial: "watchlist",
@@ -198,6 +201,7 @@ router
       );
 
       return res.render("profile", {
+        title: "Likes",
         isAuthenticated: true,
         userLikes: userLikes,
         script_partial: "likes",
@@ -244,6 +248,7 @@ router
       );
 
       return res.render("profile", {
+        title: "Likes",
         isAuthenticated: true,
         userLikes: updatedLikes,
         script_partial: "likes",
@@ -274,6 +279,7 @@ router.route("/activity").get(async (req, res) => {
       return new Date(b.date) - new Date(a.date);
     });
     return res.render("profile", {
+      title: "Activity",
       isAuthenticated: true,
       logs: logs,
       script_partial: "activity",
@@ -296,6 +302,7 @@ router.route("/lists").get(async (req, res) => {
   try {
     let lists = await listData.getAllLists(req.session.user._id);
     return res.render("profile", {
+      title: "Lists",
       isAuthenticated: true,
       lists: lists,
       script_partial: "lists",
@@ -304,13 +311,17 @@ router.route("/lists").get(async (req, res) => {
     res.render("error", { error: e });
   }
 });
+
 router
   .route("/lists/newlist")
   //middleware such that only logged in users should be able to create a list
   .get(async (req, res) => {
     //code here for GET
     let isAuthenticated = req.session.user ? true : false;
-    return res.render("createNewList", { title: "New list page", isAuthenticated: isAuthenticated });
+    return res.render("createNewList", {
+      title: "New list page",
+      isAuthenticated: isAuthenticated,
+    });
   })
   .post(async (req, res) => {
     //code to POST lists for a user
@@ -319,9 +330,10 @@ router
       userId = req.session.user._id;
       userId = validation.checkId(userId, "User ID");
     } catch (error) {
-      return res
-        .status(400)
-        .render("error", { error: "User must be authenticated", isAuthenticated: isAuthenticated });
+      return res.status(400).render("error", {
+        error: "User must be authenticated",
+        isAuthenticated: isAuthenticated,
+      });
     }
     const listInfo = req.body;
     try {
@@ -352,6 +364,7 @@ router
       );
 
       return res.render("profile", {
+        title: "Following",
         isAuthenticated: true,
         following: profilesFollowed,
         script_partial: "following",
@@ -388,6 +401,7 @@ router
       );
 
       return res.render("profile", {
+        title: "Following",
         isAuthenticated: true,
         following: updatedFollowing,
         script_partial: "following",
@@ -416,6 +430,7 @@ router.route("/statistics").get(async (req, res) => {
     return res.render("profile", {
       isAuthenticated: true,
       statsAvailable: true,
+      title: "Statistics",
       totalMoviesWatched: statistics.totalMoviesWatched,
       totalTimeWatched: statistics.totalTimeWatched,
       mostWatchedMovie: statistics.mostWatchedMovie,
@@ -432,11 +447,3 @@ router.route("/statistics").get(async (req, res) => {
 });
 
 export default router;
-
-//likes --DONE
-//watchlist --DONE
-//following --DONE
-//activity --DONE
-//lists --DONE
-//stats --DONE
-//userinfo
