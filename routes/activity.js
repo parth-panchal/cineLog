@@ -17,6 +17,7 @@ router
         let isAuthenticated = req.session.user ? true : false;
 
         let activityId = xss(req.params.id); 
+
         
         if (isAuthenticated) { 
         try {
