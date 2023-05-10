@@ -15,9 +15,10 @@ router
     .all(middleware.ensureCorrectUserActivity)
     .get(async (req, res) => {
         let isAuthenticated = req.session.user ? true : false;
-        let activityId = xss(req.params.id); 
-        let isAuthenticated = req.session.user ? true : false;
 
+        let activityId = xss(req.params.id); 
+        
+        if (isAuthenticated) { 
         try {
             activityId = await validation.checkId(activityId)
         } catch (error) {
