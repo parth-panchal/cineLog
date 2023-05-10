@@ -80,6 +80,7 @@ const getRecommendationsByMovieId = async (movieId) => {
       });
       data.results = data.results.concat(newData.results);
     }
+  params.page = 1;
   return data.results; //array of objects returned
 };
 

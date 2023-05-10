@@ -18,6 +18,7 @@ router
 
         try {
             searchTerm = validation.checkString(searchTerm, "Search Term");
+            validation.checkAlphaNumeric(searchTerm, "Search Term");
         } catch (error) {
             return res.status(400).json({error: error});
         }
@@ -42,6 +43,7 @@ router
         let isAuthenticated = req.session.user ? true : false;
         try {
             searchTerm = validation.checkString(searchTerm, "Movie Title");
+            validation.checkAlphaNumeric(searchTerm, "Search Term");
         } catch (error) {
             return res.status(400).json({error: error});
         }
@@ -73,6 +75,7 @@ router
 
         try {
             searchTerm = validation.checkString(searchTerm, "Movie Title");
+            validation.checkAlphaNumeric(searchTerm, "Search Term");
         } catch (error) {
             return res.status(400).json({error: error});
         }

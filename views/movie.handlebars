@@ -3,7 +3,7 @@
     class="img-thumbnail">
 <br>
 <p>{{movieInfo.overview}}</p>
-<p>Release Date: {{movieInfo.release_date}}</p>
+<p>Release Date: <span id="movieReleaseDate">{{movieInfo.release_date}}</span></p>
 <p>Genres:
     {{#each movieInfo.genres}}
     {{name}} &ensp;
@@ -70,8 +70,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="formCreateDate">Date Watched: </label>
-                        <input type="date" name="formCreateDate" id="formCreateDate" min="1980-01-01" max="{{currDate}}"
-                            required>
+                        <input type="date" name="formCreateDate" id="formCreateDate" min="{{movieInfo.release_date}}"
+                            max="{{currDate}}" required>
                     </div>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <button type="submit" class="btn btn-outline-primary btn-sm">Submit</button>
