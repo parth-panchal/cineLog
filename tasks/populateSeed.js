@@ -378,6 +378,170 @@ export default async function main() {
         console.log(e);
     }
 
+
+    try {
+        let newLog = await activityData.createLog(
+            34186,
+            lisaId,
+            "movie very good",
+            5,
+            "2021-12-28"
+        );
+        if (newLog) console.log(`Activity added for: ${lisaUsername}`);
+    } catch (e) {
+        console.log(e);
+    }
+
+    try {
+        let newLog = await activityData.createLog(
+            30794,
+            lisaId,
+            "movie",
+            3,
+            "2021-10-28"
+        );
+        if (newLog) console.log(`Activity added for: ${lisaUsername}`);
+    } catch (e) {
+        console.log(e);
+    }
+
+
+    try {
+        let newLog = await activityData.createLog(
+            34186,
+            natId,
+            "Good movie",
+            4,
+            "2018-01-28"
+        );
+        if (newLog) console.log(`Activity added for: ${natUsername}`);
+    } catch (e) {
+        console.log(e);
+    }
+
+    try {
+        let newLog = await activityData.createLog(
+            438590,
+            natId,
+            "Bad movie",
+            1,
+            "2019-01-28"
+        );
+        if (newLog) console.log(`Activity added for: ${natUsername}`);
+    } catch (e) {
+        console.log(e);
+    }
+
+
+    try {
+        let newLog = await activityData.createLog(
+            438590,
+            kimId,
+            "Great movie review",
+            4,
+            "2022-01-28"
+        );
+        if (newLog) console.log(`Activity added for: ${kimUsername}`);
+    } catch (e) {
+        console.log(e);
+    }
+
+    try {
+        let newLog = await activityData.createLog(
+            34186,
+            kimId,
+            "Great movie review again",
+            5,
+            "2022-01-10"
+        );
+        if (newLog) console.log(`Activity added for: ${kimUsername}`);
+    } catch (e) {
+        console.log(e);
+    }
+
+
+    try {
+        let newLog = await activityData.createLog(
+            438590,
+            chrisId,
+            "Atharva P review again",
+            5,
+            "2022-12-10"
+        );
+        if (newLog) console.log(`Activity added for: ${chrisUsername}`);
+    } catch (e) {
+        console.log(e);
+    }
+
+    try {
+        let newLog = await activityData.createLog(
+            34186,
+            chrisId,
+            "Atharva P review",
+            5,
+            "2021-12-06"
+        );
+        if (newLog) console.log(`Activity added for: ${chrisUsername}`);
+    } catch (e) {
+        console.log(e);
+    }
+
+    try {
+        let newLog = await activityData.createLog(
+            852046,
+            monId,
+            "This is a review and its ugh",
+            1,
+            "2021-10-06"
+        );
+        if (newLog) console.log(`Activity added for: ${monUsername}`);
+    } catch (e) {
+        console.log(e);
+    }
+
+    try {
+        let newLog = await activityData.createLog(
+            852046,
+            monId,
+            "This is a review and its bad",
+            2,
+            "2022-02-06"
+        );
+        if (newLog) console.log(`Activity added for: ${monUsername}`);
+    } catch (e) {
+        console.log(e);
+    }
+
+    try {
+        let newLog = await activityData.createLog(
+            852046,
+            atharId,
+            "This is a review and its nice",
+            3,
+            "2021-02-06"
+        );
+        if (newLog) console.log(`Activity added for: ${atharUsername}`);
+    } catch (e) {
+        console.log(e);
+    }
+
+    try {
+        let newLog = await activityData.createLog(
+            119441,
+            atharId,
+            "This is a review and its nice",
+            5,
+            "2021-01-06"
+        );
+        if (newLog) console.log(`Activity added for: ${atharUsername}`);
+    } catch (e) {
+        console.log(e);
+    }
+
+    //
+
+
+
     console.log("================================= Watchlist Seeding =================================");
     try {
         let result = await userData.updateUserWatchlist(parshId, 341, "add");
