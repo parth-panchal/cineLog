@@ -40,7 +40,6 @@ const getLogById = async (activityId) => {
   return log;
 };
 
-
 // Get all activity logs for a given username
 const getLogsByUserId = async (userId) => {
   const logs = await activity();
@@ -53,9 +52,11 @@ const getLogsByMovieId = async (movieId) => {
   movieId = await validation.checkMovieId(movieId);
 
   const activityCollection = await activity();
-  let activityArr = await activityCollection.find({ 
-    movieId: movieId
-  }).toArray();
+  let activityArr = await activityCollection
+    .find({
+      movieId: movieId,
+    })
+    .toArray();
 
   activityArr = activityArr.map((activity) => {
     activity._id = activity._id.toString();
@@ -63,7 +64,7 @@ const getLogsByMovieId = async (movieId) => {
   });
 
   return activityArr;
-}
+};
 
 const getAllLogs = async () => {
   const logs = await activity();
@@ -80,15 +81,15 @@ const editLog = async (activityId, movieId, userId, review, rating, date) => {
   review = validation.checkString(review, "Review");
 
   rating = validation.checkRating(rating, "Rating");
-  
+
   date = validation.checkDate(date, "Date");
 
   validation.checkMovieId(movieId, "Movie ID");
   userId = validation.checkId(userId, "User ID");
 
-  const activities = await activity(); 
+  const activities = await activity();
   const log = await getLogById(activityId);
-  
+
   const update = {
     movieId: movieId,
     userId: userId,
@@ -130,7 +131,7 @@ const deleteLog = async (activityId) => {
   if (deletedLog.lastErrorObject.n === 0)
     throw "Error: could not delete activity";
   await updateTrending(activityId, deleteDate.date, "delete");
-  return { activityId: activityId, deleted: true }; 
+  return { activityId: activityId, deleted: true };
 };
 
 export {
@@ -140,5 +141,5 @@ export {
   getLogsByMovieId,
   getAllLogs,
   editLog,
-  deleteLog
+  deleteLog,
 };

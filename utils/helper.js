@@ -24,6 +24,7 @@ const searchMovie = async (movieTitle) => {
   const endpoint = "/search/movie";
 
   params.query = movieTitle;
+  params.page = 1;
   const { data } = await axios.get(BASE_URL + endpoint, { params });
   delete params.query;
 
@@ -129,46 +130,47 @@ const getMovieCrew = async (movieId) => {
   }
 };
 
-const calculateMovieStats = movieActivity => {
-  const returnObj = {}
+const calculateMovieStats = (movieActivity) => {
+  const returnObj = {};
 
   returnObj.timesWatched = movieActivity.length;
-  
-  const average = (movieActivity.reduce((acc, obj) => {
-    return acc + obj.rating;
-  }, 0) / movieActivity.length);
-  const averageRoundOne = Math.floor(average * 10) / 10
 
-  if(isNaN(averageRoundOne)) {
+  const average =
+    movieActivity.reduce((acc, obj) => {
+      return acc + obj.rating;
+    }, 0) / movieActivity.length;
+  const averageRoundOne = Math.floor(average * 10) / 10;
+
+  if (isNaN(averageRoundOne)) {
     returnObj.averageRating = "Not Yet Rated";
   } else {
     returnObj.averageRating = averageRoundOne;
   }
-  returnObj.reviews = movieActivity.map(activity => activity.review);
+  returnObj.reviews = movieActivity.map((activity) => activity.review);
 
   return returnObj;
-}
+};
 
 const transformInfo = async (givenArr, type, isActivity) => {
   let responseArr = [];
-  
+
   responseArr = givenArr.reduce(async (previousPromise, currVal) => {
     let tempArr = await previousPromise;
     let infoCall;
-    if(type === 'movieInfo' && isActivity) {
+    if (type === "movieInfo" && isActivity) {
       infoCall = await getMovieInfo(currVal.movieId);
       currVal.movieTitle = infoCall.title;
       return tempArr.concat(currVal);
-    } else if(type === 'movieInfo' && !isActivity) {
+    } else if (type === "movieInfo" && !isActivity) {
       infoCall = await getMovieInfo(currVal);
-    } else if(type === 'userInfo') {
+    } else if (type === "userInfo") {
       infoCall = await userData.getUserById(currVal);
     }
     return tempArr.concat(infoCall);
-  }, Promise.resolve([]));    
+  }, Promise.resolve([]));
 
   return responseArr;
-}
+};
 
 export {
   searchMovie,
@@ -183,5 +185,5 @@ export {
   getMovieCast,
   getMovieCrew,
   calculateMovieStats,
-  transformInfo
+  transformInfo,
 };
