@@ -34,6 +34,7 @@ router
   .delete(async (req, res) => {
     //code to DELETE a list
     let listId;
+    let isAuthenticated = req.session.user ? true : false;
     try {
       listId = validation.checkId(xss(req.params.listId), "List ID");
     } catch (error) {
@@ -48,7 +49,7 @@ router
       req.session.deleteSuccess = true;
       return res.redirect("/profile/lists");
     } catch (e) {
-      return res.status(500).render("error", {error:e});;
+      return res.status(500).render("error", {error:e, isAuthenticated: isAuthenticated});;
     }
   });
 
@@ -96,7 +97,7 @@ router
       });
       return res.status(200).render("editList", { isAuthenticated, list, movieList: movieData });
     } catch (e) {
-      return res.status(404).render("error", {error:e});
+      return res.status(404).render("error", {error:e, isAuthenticated: isAuthenticated});
     }
   })
   .put(async (req, res) => {
@@ -109,7 +110,7 @@ router
       const updatedlist = await listData.updateList(listId, title, movies);
       return res.status(200).json(updatedlist);
     } catch (e) {
-      return res.status(404).render("error", {error:e});
+      return res.status(404).render("error", {error:e, isAuthenticated: isAuthenticated});
     }
   });
 

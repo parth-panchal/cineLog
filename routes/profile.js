@@ -309,7 +309,8 @@ router
   //middleware such that only logged in users should be able to create a list
   .get(async (req, res) => {
     //code here for GET
-    return res.render("createNewList", { isAuthenticated: true,title: "New list page" });
+    let isAuthenticated = req.session.user ? true : false;
+    return res.render("createNewList", { title: "New list page", isAuthenticated: isAuthenticated });
   })
   .post(async (req, res) => {
     //code to POST lists for a user
@@ -320,7 +321,7 @@ router
     } catch (error) {
       return res
         .status(400)
-        .render("error", { error: "User must be authenticated" });
+        .render("error", { error: "User must be authenticated", isAuthenticated: isAuthenticated });
     }
     const listInfo = req.body;
     try {
